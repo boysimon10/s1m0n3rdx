@@ -1,0 +1,8 @@
+@layer reset, base, tokens, recipes, utilities;
+
+body {
+  font-family: 'IBM Plex Mono', monospace;
+  background-color: #EDEDE9;
+  color: #0B0B10;
+  -webkit-font-smoothing: antialiased;
+}
