@@ -1,6 +1,21 @@
 ---
+import { css } from "../../styled-system/css";
+import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
+
+const year = new Date().getFullYear();
 ---
 
-<footer>
-  <p>© {new Date().getFullYear()} s1m0n</p>
+<footer class={css({ px: "clamp(14px, 4vw, 40px)", py: "12" })}>
+  <div class={css({ maxW: "container", mx: "auto", borderTop: "1px solid", borderTopColor: "border", pt: "12", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4" })}>
+    <span class={css({ textStyle: "label", color: "textMuted" })}>
+      Tous droits réservés Simon M. A. Diouf © {year}
+    </span>
+    <a
+      href="/rss.xml"
+      class={css({ display: "inline-flex", alignItems: "center", gap: "2", fontFamily: "heading", fontWeight: "500", color: "textMuted", fontSize: "0.95rem", _hover: { color: "text", borderBottom: "2px solid", borderBottomColor: "text" }, pb: "2px" })}
+    >
+      <span class={css({ w: "14px", h: "14px", display: "flex", alignItems: "center" })} set:html={IconRss} />
+      s'abonner au flux RSS
+</a>
+  </div>
 </footer>

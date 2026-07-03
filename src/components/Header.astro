@@ -1,2 +1,72 @@
 ---
+import { css } from "../../styled-system/css";
+import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
+import IconSun from "iconoir/icons/regular/sun-light.svg?raw";
+import IconMoon from "iconoir/icons/regular/moon-sat.svg?raw";
+
+const currentPath = Astro.url.pathname;
+const currentLang = currentPath.startsWith("/fr") ? "fr" : "en";
+
+const navLinks = [
+  { label: "Blog", href: "/blog" },
+  { label: "Projects", href: "/projects" },
+  { label: "About", href: "/about" },
+];
+
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(href + "/");
 ---
+
+<header class={css({ py: "8", textAlign: "center" })}>
+
+  <!-- Avatar -->
+  <div class={css({ mb: "4" })}>
+    <img
+      src="https://avatars.githubusercontent.com/u/47926032?v=4"
+      alt="s1m0n"
+      width="48"
+      height="48"
+      class={css({ w: "48px", h: "48px", rounded: "full", mx: "auto", display: "block" })}
+    />
+  </div>
+
+  <!-- Nav -->
+  <nav class={css({ display: "flex", alignItems: "center", justifyContent: "center", gap: "8", mb: "3" })}>
+    {navLinks.map(({ label, href }) => (
+      <a
+        href={href}
+        class={css({
+          fontFamily: "display",
+          fontSize: "1.1rem",
+          fontWeight: "700",
+          color: "text",
+          pb: "1px",
+          borderBottom: isActive(href) ? "2px solid" : "2px solid transparent",
+          borderBottomColor: isActive(href) ? "text" : "transparent",
+          _hover: { borderBottomColor: "text" },
+        })}
+      >
+        {label}
+      </a>
+    ))}
+    <a
+      href="/rss.xml"
+      class={css({ display: "flex", alignItems: "center", color: "textMuted", _hover: { color: "text" } })}
+      aria-label="RSS"
+    >
+      <span class={css({ w: "18px", h: "18px", display: "flex" })} set:html={IconRss} />
+    </a>
+  </nav>
+
+  <!-- Lang switcher + theme toggle -->
+  <div class={css({ display: "flex", alignItems: "center", justifyContent: "center", gap: "4" })}>
+    <a href="/" class={css({ textStyle: "label", color: currentLang === "en" ? "accent" : "textMuted", _hover: { color: "text" } })}>EN</a>
+    <a href="/fr" class={css({ textStyle: "label", color: currentLang === "fr" ? "accent" : "textMuted", _hover: { color: "text" } })}>FR</a>
+    {/* TODO: dark mode
+    <button id="theme-toggle" aria-label="Toggle theme" class={css({ display: "flex", alignItems: "center", color: "textMuted", cursor: "pointer", bg: "transparent", border: "none", p: "0", lineHeight: "1" })}>
+      <span id="icon-sun" class={css({ w: "16px", h: "16px", display: "flex", alignItems: "center" })} set:html={IconSun} />
+      <span id="icon-moon" class={css({ w: "16px", h: "16px", display: "none" })} set:html={IconMoon} />
+    </button>
+    */}
+  </div>
+
+</header>
