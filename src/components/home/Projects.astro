@@ -1,54 +1,12 @@
 ---
 import { css } from "../../../styled-system/css";
-import { createElement } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import * as DevIcons from "developer-icons";
-
-type IconName = keyof typeof DevIcons;
-
-function getIconSvg(name: IconName, size = 16): string {
-  const Icon = DevIcons[name] as (props: { size: number }) => React.ReactElement;
-  if (!Icon) return "";
-  return renderToStaticMarkup(createElement(Icon, { size }));
-}
-
-const projects = [
-  {
-    num: "01",
-    name: "Project A",
-    desc: "Description courte du projet.",
-    tags: [
-      { label: "Go", icon: "Go" as IconName },
-      { label: "GraphQL", icon: "GraphQL" as IconName },
-    ],
-    href: "#",
-  },
-  {
-    num: "02",
-    name: "Project B",
-    desc: "Description courte du projet.",
-    tags: [
-      { label: "React Native", icon: "React" as IconName },
-      { label: "NestJS", icon: "NestJS" as IconName },
-    ],
-    href: "#",
-  },
-  {
-    num: "03",
-    name: "Project C",
-    desc: "Description courte du projet.",
-    tags: [
-      { label: "NestJS", icon: "NestJS" as IconName },
-      { label: "GraphQL", icon: "GraphQL" as IconName },
-    ],
-    href: "#",
-  },
-];
+import { projects } from "../../data/projects";
+import { getIconSvg } from "../../utils/icons";
 ---
 
-<section class={css({ py: "12", borderBottom: "1px solid", borderBottomColor: "border" })}>
+<section class={css({ py: "12" })}>
   <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: "8" })}>
-    <p class={css({ textStyle: "eyebrow", color: "textMuted" })}>projets</p>
+    <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted" })}>projets</p>
     <a href="/projects" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>
       voir tout <span style="color: var(--colors-accent)">→</span>
     </a>
@@ -58,6 +16,8 @@ const projects = [
     {projects.map(({ num, name, desc, tags, href }) => (
       <a
         href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         class={css({ display: "flex", alignItems: "baseline", gap: "6", py: "5", borderBottom: "1px solid", borderBottomColor: "border", _hover: { opacity: "0.75" } })}
       >
         <span class={css({ textStyle: "label", color: "accent", flexShrink: "0" })}>{num}</span>
@@ -66,9 +26,9 @@ const projects = [
           <p class={css({ textStyle: "body", color: "textMuted", fontSize: "0.9rem", mt: "1" })}>{desc}</p>
         </div>
         <div class={css({ display: "flex", gap: "3", flexWrap: "wrap", flexShrink: "0" })}>
-          {tags.map(({ label, icon }) => (
+          {tags.map(({ label, icon, iconSource }) => (
             <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "label", color: "textMuted" })}>
-              <span set:html={getIconSvg(icon)} />
+              <span set:html={getIconSvg(icon, iconSource)} />
               {label}
             </span>
           ))}

@@ -1,32 +1,34 @@
 ---
 import { css } from "../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
-import IconSun from "iconoir/icons/regular/sun-light.svg?raw";
-import IconMoon from "iconoir/icons/regular/moon-sat.svg?raw";
 
 const currentPath = Astro.url.pathname;
 const currentLang = currentPath.startsWith("/fr") ? "fr" : "en";
 
 const navLinks = [
+  { label: "Accueil", href: "/" },
   { label: "Blog", href: "/blog" },
   { label: "Projects", href: "/projects" },
   { label: "About", href: "/about" },
 ];
 
-const isActive = (href: string) => currentPath === href || currentPath.startsWith(href + "/");
+const isActive = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath === href || currentPath.startsWith(href + "/");
 ---
 
 <header class={css({ py: "8", textAlign: "center" })}>
 
   <!-- Avatar -->
   <div class={css({ mb: "4" })}>
-    <img
-      src="https://avatars.githubusercontent.com/u/47926032?v=4"
-      alt="s1m0n"
-      width="48"
-      height="48"
-      class={css({ w: "48px", h: "48px", rounded: "full", mx: "auto", display: "block" })}
-    />
+    <a href="/">
+      <img
+        src="https://avatars.githubusercontent.com/u/47926032?v=4"
+        alt="s1m0n"
+        width="48"
+        height="48"
+        class={css({ w: "48px", h: "48px", rounded: "full", mx: "auto", display: "block", _hover: { opacity: "0.8" } })}
+      />
+    </a>
   </div>
 
   <!-- Nav -->

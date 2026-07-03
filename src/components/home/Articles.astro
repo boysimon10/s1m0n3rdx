@@ -1,27 +1,28 @@
 ---
+import { getCollection } from "astro:content";
 import { css } from "../../../styled-system/css";
 
-const articles = [
-  { date: "2026-06-01", title: "Article title here", slug: "#" },
-  { date: "2026-05-15", title: "Another article title", slug: "#" },
-  { date: "2026-04-20", title: "One more article", slug: "#" },
-];
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
 ---
 
-<section class={css({ py: "12" })}>
+<section class={css({ py: "12", borderBottom: "1px solid", borderBottomColor: "border" })}>
   <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: "8" })}>
-    <p class={css({ textStyle: "eyebrow", color: "textMuted" })}>articles</p>
+    <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted" })}>blog</p>
     <a href="/blog" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>voir tout <span style="color: var(--colors-accent)">→</span></a>
   </div>
 
   <div class={css({ display: "flex", flexDir: "column" })}>
-    {articles.map(({ date, title, slug }) => (
+    {posts.map(post => (
       <a
-        href={slug}
-        class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "4", py: "4", borderTop: "1px solid", borderColor: "border", _hover: { color: "textMuted" },  })}
+        href={`/blog/${post.id}`}
+        class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "4", py: "4", borderTop: "1px solid", borderTopColor: "border", _hover: { color: "textMuted" } })}
       >
-        <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{title}</span>
-        <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0" })}>{date}</span>
+        <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{post.data.title}</span>
+        <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0" })}>
+          {post.data.date.toISOString().split("T")[0]}
+        </span>
       </a>
     ))}
   </div>

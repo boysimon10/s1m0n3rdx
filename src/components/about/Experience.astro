@@ -1,0 +1,28 @@
+---
+import { css } from "../../../styled-system/css";
+import { getIconSvg } from "../../utils/icons";
+import { experience } from "../../data/experience";
+---
+
+<div class={css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
+  <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>expérience</p>
+  <div class={css({ display: "flex", flexDir: "column", gap: "6" })}>
+    {experience.map(({ role, company, period, tags }) => (
+      <div>
+        <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "4", mb: "1", flexWrap: "wrap" })}>
+          <span class={css({ fontFamily: "heading", fontWeight: "600", fontSize: "1rem" })}>{role}</span>
+          <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0" })}>{period}</span>
+        </div>
+        <span class={css({ textStyle: "label", color: "accent", display: "block", mb: "3" })}>{company}</span>
+        <div class={css({ display: "flex", gap: "3", flexWrap: "wrap" })}>
+          {tags.map(({ label, icon, iconSource }) => (
+            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "label", color: "textMuted" })}>
+              <span set:html={getIconSvg(icon, iconSource)} />
+              {label}
+            </span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

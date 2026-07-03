@@ -1,0 +1,16 @@
+---
+import Page from "../layouts/Page.astro";
+import { css } from "../../styled-system/css";
+---
+
+<Page title="404 - s1m0n3rdx">
+  <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
+    <div class={css({ maxW: "container", mx: "auto", py: "20", textAlign: "center" })}>
+      <p class={css({ fontFamily: "display", fontSize: "clamp(4rem, 15vw, 10rem)", lineHeight: "1", color: "border", mb: "6" })}>404</p>
+      <p class={css({ textStyle: "body", color: "textMuted", mb: "8" })}>Cette page n'existe pas.</p>
+      <a href="/" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>
+        retour à l'accueil <span style="color: var(--colors-accent)">→</span>
+      </a>
+    </div>
+  </div>
+</Page>
