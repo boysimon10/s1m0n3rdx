@@ -1,20 +1,72 @@
 ---
 import { css } from "../../../styled-system/css";
+import { getIconSvg } from "../../utils/icons";
+import { site, socials } from "../../data/site";
+
 import IconGithub from "iconoir/icons/regular/github.svg?raw";
+import IconLinkedin from "iconoir/icons/regular/linkedin.svg?raw";
+import IconX from "iconoir/icons/regular/x.svg?raw";
+import IconInstagram from "iconoir/icons/regular/instagram.svg?raw";
+import IconYoutube from "iconoir/icons/regular/youtube.svg?raw";
+import IconMail from "iconoir/icons/regular/mail.svg?raw";
+import IconCopy from "iconoir/icons/regular/copy.svg?raw";
+
+const iconMap: Record<string, string> = {
+  github: IconGithub,
+  linkedin: IconLinkedin,
+  x: IconX,
+  instagram: IconInstagram,
+  youtube: IconYoutube,
+  mail: IconMail,
+};
+
+const spotifyTrack = {
+  title: "jolagreen23",
+  artists: "0.92",
+};
 ---
 
-<section class={css({ py: "16", borderBottom: "1px solid", borderBottomColor: "border" })}>
-  <p class={css({ textStyle: "eyebrow", color: "textMuted", textTransform: "none" })}>s1m0n3rdx - self taught software engineer</p>
-  <h1 class={css({ textStyle: "giant", fontSize: "clamp(2.4rem, 7vw, 5.5rem)", mt: "4", mb: "6" })}>
-    I build<br />things<span style="color: var(--colors-accent)">.</span>
-  </h1>
-  <a
-    href="https://github.com/boysimon10"
-    target="_blank"
-    rel="noopener noreferrer"
-    class={css({ display: "inline-flex", alignItems: "center", gap: "2", fontFamily: "mono", fontSize: "0.82rem", fontWeight: "500", border: "1.5px solid", borderColor: "text", px: "5", py: "3", rounded: "pill", _hover: { bg: "text", color: "surface" }, transition: "all 0.15s ease" })}
-  >
-    <span class={css({ w: "16px", h: "16px", display: "flex", alignItems: "center", flexShrink: "0" })} set:html={IconGithub} />
-    github <span style="color: var(--colors-accent)">→</span>
-  </a>
+<section class={css({ py: "10", borderBottom: "1px solid", borderBottomColor: "border" })}>
+  <div class={css({ mb: "5" })}>
+    <p class={css({ fontFamily: "heading", fontWeight: "700", fontSize: "1.2rem", lineHeight: "1.2", mb: "1" })}>{site.author}</p>
+    <div class={css({ display: "flex", alignItems: "center", gap: "2", flexWrap: "wrap" })}>
+      <span class={css({ textStyle: "label", color: "textMuted" })}>{site.role} · {site.location} · {site.email}</span>
+      <button
+        id="copy-email"
+        aria-label="Copy email"
+        class={css({ display: "inline-flex", alignItems: "center", color: "textMuted", _hover: { color: "text" }, transition: "color 0.15s", cursor: "pointer", bg: "transparent", border: "none", p: "0" })}
+        set:html={IconCopy}
+      />
+    </div>
+  </div>
+
+  <p class={css({ fontSize: "0.9rem", color: "text", mb: "4", maxW: "520px" })}>{site.bio}</p>
+
+  <div class={css({ display: "flex", alignItems: "center", gap: "2", mb: "5", fontSize: "0.82rem", color: "textMuted", flexWrap: "wrap" })}>
+    <span set:html={getIconSvg("siSpotify", "si", 16)} />
+    <span>Last played</span>
+    <span>-</span>
+    <span class={css({ color: "text" })}>{spotifyTrack.title}</span>
+    <span>·</span>
+    <span>{spotifyTrack.artists}</span>
+  </div>
+
+  <div class={css({ display: "flex", alignItems: "center", gap: "4" })}>
+    {socials.map(({ href, icon, label }) => (
+      <a
+        href={href}
+        target={href.startsWith("mailto") ? undefined : "_blank"}
+        rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+        aria-label={label}
+        class={css({ display: "flex", alignItems: "center", color: "textMuted", _hover: { color: "text" }, transition: "color 0.15s" })}
+        set:html={iconMap[icon]}
+      />
+    ))}
+  </div>
 </section>
+
+<script define:vars={{ email: site.email }}>
+  document.getElementById("copy-email")?.addEventListener("click", () => {
+    navigator.clipboard.writeText(email);
+  });
+</script>
