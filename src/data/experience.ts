@@ -9,15 +9,30 @@ export type ExpTag = {
 export type Experience = {
   role: string;
   company: string;
+  url?: string;
   period: string;
   tags: ExpTag[];
 };
 
 export const experience: Experience[] = [
   {
-    role: "Développeur Full-Stack",
+    role: "Software Engineer - Lead Backend & Mobile",
+    company: "Made In Senegal Center",
+    url: "https://misen.sn",
+    period: "Jan. 2026 - Present",
+    tags: [
+      { label: "React Native", icon: "React", iconSource: "dev" },
+      { label: "Expo", icon: "siExpo", iconSource: "si" },
+      { label: "TypeScript", icon: "TypeScript", iconSource: "dev" },
+      { label: "Go", icon: "Go", iconSource: "dev" },
+      { label: "NestJS", icon: "NestJS", iconSource: "dev" },
+    ],
+  },
+  {
+    role: "Full-Stack Developer",
     company: "Way2Tech.ai",
-    period: "Juin 2025 - Déc. 2025",
+    url: "https://way2tech.ai",
+    period: "Jun. 2025 - Dec. 2025",
     tags: [
       { label: "React Native", icon: "React", iconSource: "dev" },
       { label: "Expo", icon: "siExpo", iconSource: "si" },
@@ -29,9 +44,10 @@ export const experience: Experience[] = [
     ],
   },
   {
-    role: "Développeur Full-Stack / Mobile",
-    company: "MonaxTech (co-fondateur - Freelance)",
-    period: "Juil. 2024 - Présent",
+    role: "Founding Engineer",
+    company: "MonaxTech",
+    url: "",
+    period: "Jul. 2024 - Present",
     tags: [
       { label: "React Native", icon: "React", iconSource: "dev" },
       { label: "Expo", icon: "siExpo", iconSource: "si" },
@@ -43,8 +59,9 @@ export const experience: Experience[] = [
     ],
   },
   {
-    role: "Développeur Full-Stack",
+    role: "Full-Stack Developer",
     company: "Senyone SAS",
+    url: "",
     period: "Oct. 2024 - Jan. 2025",
     tags: [
       { label: "Next.js", icon: "NextJs", iconSource: "dev" },
