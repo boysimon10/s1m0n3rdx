@@ -4,6 +4,7 @@ export type StackItem = {
   label: string;
   icon: string;
   iconSource: IconSource;
+  related?: StackItem[];
 };
 
 export type StackCategory = {
@@ -25,12 +26,26 @@ export const stack: StackCategory[] = [
   {
     category: "frontend web",
     items: [
-      { label: "TanStack Start", icon: "siTanstack", iconSource: "si" },
-      { label: "React", icon: "React", iconSource: "dev" },
-      { label: "Next.js", icon: "NextJs", iconSource: "dev" },
-      { label: "Vue.js", icon: "VueJs", iconSource: "dev" },
-      { label: "Nuxt.js", icon: "NuxtJs", iconSource: "dev" },
+      {
+        label: "React",
+        icon: "React",
+        iconSource: "dev",
+        related: [
+          { label: "TanStack Start", icon: "siTanstack", iconSource: "si" },
+          { label: "Next.js", icon: "NextJs", iconSource: "dev" },
+        ],
+      },
+      {
+        label: "Vue.js",
+        icon: "VueJs",
+        iconSource: "dev",
+        related: [
+          { label: "Nuxt.js", icon: "NuxtJs", iconSource: "dev" },
+        ],
+      },
       { label: "Astro", icon: "Astro", iconSource: "dev" },
+      { label: "Inertia.js", icon: "siInertia", iconSource: "si" },
+      { label: "HTMX", icon: "siHtmx", iconSource: "si" },
     ],
   },
   {
@@ -51,10 +66,16 @@ export const stack: StackCategory[] = [
   {
     category: "frontend mobile",
     items: [
-      { label: "React Native", icon: "React", iconSource: "dev" },
-      { label: "Expo", icon: "siExpo", iconSource: "si" },
-      { label: "Nativewind", icon: "TailwindCSS", iconSource: "dev" },
-      { label: "Tamagui", icon: "", iconSource: "dev" },
+      {
+        label: "React Native",
+        icon: "React",
+        iconSource: "dev",
+        related: [
+          { label: "Expo", icon: "siExpo", iconSource: "si" },
+          { label: "Nativewind", icon: "TailwindCSS", iconSource: "dev" },
+          { label: "Tamagui", icon: "", iconSource: "dev" },
+        ],
+      },
     ],
   },
   {
@@ -67,13 +88,28 @@ export const stack: StackCategory[] = [
   {
     category: "backend",
     items: [
-      { label: "Node.js", icon: "NodeJs", iconSource: "dev" },
-      { label: "NestJS", icon: "NestJS", iconSource: "dev" },
-      { label: "tRPC", icon: "TRPC", iconSource: "dev" },
-      { label: "Express.js", icon: "JavaScript", iconSource: "dev" },
-      { label: "Go Fiber", icon: "Go", iconSource: "dev" },
-      { label: "Gin", icon: "Go", iconSource: "dev" },
-      { label: "AdonisJS", icon: "siAdonisjs", iconSource: "si" },
+      {
+        label: "Node.js",
+        icon: "NodeJs",
+        iconSource: "dev",
+        related: [
+          { label: "NestJS", icon: "NestJS", iconSource: "dev" },
+          { label: "Express.js", icon: "siExpress", iconSource: "si" },
+          { label: "AdonisJS", icon: "siAdonisjs", iconSource: "si" },
+          { label: "tRPC", icon: "TRPC", iconSource: "dev" },
+        ],
+      },
+      {
+        label: "Go",
+        icon: "Go",
+        iconSource: "dev",
+        related: [
+          { label: "Go Fiber", icon: "Go", iconSource: "dev" },
+          { label: "Gin", icon: "siGin", iconSource: "si" },
+          { label: "Echo", icon: "Go", iconSource: "dev" },
+          { label: "Chi", icon: "Go", iconSource: "dev" },
+        ],
+      },
       { label: "GraphQL", icon: "GraphQL", iconSource: "dev" },
       { label: "WebSockets", icon: "", iconSource: "dev" },
     ],
@@ -110,7 +146,7 @@ export const stack: StackCategory[] = [
       { label: "GitHub Actions", icon: "siGithubactions", iconSource: "si" },
       { label: "Coolify", icon: "siCoolify", iconSource: "si" },
       { label: "Dokploy", icon: "", iconSource: "dev" },
-      { label: "Traefik", icon: "", iconSource: "dev" },
+      { label: "Traefik", icon: "siTraefikproxy", iconSource: "si" },
       { label: "Nginx", icon: "siNginx", iconSource: "si" },
       { label: "Cloudflare", icon: "Cloudflare", iconSource: "dev" },
     ],
@@ -122,6 +158,30 @@ export const stack: StackCategory[] = [
       { label: "Cypress", icon: "Cypress", iconSource: "dev" },
       { label: "Postman", icon: "Postman", iconSource: "dev" },
       { label: "Insomnia", icon: "Insomnia", iconSource: "dev" },
+    ],
+  },
+  {
+    category: "messaging",
+    items: [
+      {
+        label: "Redis",
+        icon: "siRedis",
+        iconSource: "si",
+        related: [
+          { label: "Caching", icon: "siRedis", iconSource: "si" },
+          { label: "Rate Limiting", icon: "siRedis", iconSource: "si" },
+          { label: "BullMQ", icon: "siRedis", iconSource: "si" },
+        ],
+      },
+      { label: "RabbitMQ", icon: "siRabbitmq", iconSource: "si" },
+    ],
+  },
+  {
+    category: "iot",
+    items: [
+      { label: "Arduino", icon: "siArduino", iconSource: "si" },
+      { label: "MQTT", icon: "siMqtt", iconSource: "si" },
+      { label: "BLE", icon: "siBluetooth", iconSource: "si" },
     ],
   },
   {
