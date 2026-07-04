@@ -22,6 +22,10 @@ export const ui = {
     "contract.contract": "Contract",
     "contract.internship": "Internship",
     "contract.independent": "Independent",
+    "footer.rights": "All rights reserved",
+    "footer.rss": "subscribe to RSS",
+    "notfound.text": "This page doesn't exist.",
+    "notfound.back": "back to home",
   },
   fr: {
     "nav.home": "Accueil",
@@ -43,6 +47,10 @@ export const ui = {
     "contract.contract": "Contrat",
     "contract.internship": "Stage",
     "contract.independent": "Indépendant",
+    "footer.rights": "Tous droits réservés",
+    "footer.rss": "s'abonner au flux RSS",
+    "notfound.text": "Cette page n'existe pas.",
+    "notfound.back": "retour à l'accueil",
   },
 } as const;
 

@@ -70,6 +70,8 @@ export const experience: Experience[] = [
       { label: "Node.js", icon: "NodeJs", iconSource: "dev" },
       { label: "TypeScript", icon: "TypeScript", iconSource: "dev" },
       { label: "Python", icon: "Python", iconSource: "dev" },
+      { label: "FastAPI", icon: "FastAPI", iconSource: "dev" },
+      { label: "Flask", icon: "siFlask", iconSource: "si" },
       { label: "OpenAI", icon: "OpenAI", iconSource: "dev" },
     ],
   },

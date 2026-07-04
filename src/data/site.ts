@@ -21,5 +21,6 @@ export const socials: Social[] = [
   { label: "X", href: "https://x.com/s1m0n3rdx", icon: "x" },
   { label: "Instagram", href: "https://instagram.com/s1m0n3rdx", icon: "instagram" },
   { label: "YouTube", href: "https://youtube.com/@s1m0n3rdx", icon: "youtube" },
+  { label: "Twitch", href: "https://twitch.tv/s1m0n3rdx", icon: "twitch" },
   { label: "Email", href: `mailto:simondiouf2710@gmail.com`, icon: "mail" },
 ];

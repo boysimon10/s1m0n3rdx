@@ -9,6 +9,10 @@ const articles = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
+    tagIcons: z.record(z.object({
+      icon: z.string(),
+      iconSource: z.enum(["dev", "si"]),
+    })).optional(),
     draft: z.boolean().default(false),
     translationKey: z.string().optional(),
   }),

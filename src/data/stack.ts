@@ -113,6 +113,15 @@ export const stack: StackCategory[] = [
           { label: "Chi", icon: "Go", iconSource: "dev" },
         ],
       },
+      {
+        label: "Python",
+        icon: "Python",
+        iconSource: "dev",
+        related: [
+          { label: "FastAPI", icon: "FastAPI", iconSource: "dev" },
+          { label: "Flask", icon: "siFlask", iconSource: "si" },
+        ],
+      },
       { label: "GraphQL", icon: "GraphQL", iconSource: "dev" },
       { label: "WebSockets", icon: "", iconSource: "dev" },
     ],

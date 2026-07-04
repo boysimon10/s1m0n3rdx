@@ -4,23 +4,18 @@ import { getIconSvg } from "../../utils/icons";
 import { site, socials } from "../../data/site";
 import { getLangFromUrl } from "../../i18n";
 
-import IconGithub from "iconoir/icons/regular/github.svg?raw";
-import IconLinkedin from "iconoir/icons/regular/linkedin.svg?raw";
-import IconX from "iconoir/icons/regular/x.svg?raw";
-import IconInstagram from "iconoir/icons/regular/instagram.svg?raw";
-import IconYoutube from "iconoir/icons/regular/youtube.svg?raw";
-import IconMail from "iconoir/icons/regular/mail.svg?raw";
 import IconCopy from "iconoir/icons/regular/copy.svg?raw";
 
 const lang = getLangFromUrl(Astro.url);
 
 const iconMap: Record<string, string> = {
-  github: IconGithub,
-  linkedin: IconLinkedin,
-  x: IconX,
-  instagram: IconInstagram,
-  youtube: IconYoutube,
-  mail: IconMail,
+  github: getIconSvg("siGithub", "si"),
+  linkedin: getIconSvg("LinkedIn", "dev"),
+  x: getIconSvg("siX", "si"),
+  instagram: getIconSvg("siInstagram", "si"),
+  youtube: getIconSvg("siYoutube", "si"),
+  twitch: getIconSvg("siTwitch", "si"),
+  mail: getIconSvg("siGmail", "si"),
 };
 
 const role = lang === "fr" ? site.role_fr : site.role;

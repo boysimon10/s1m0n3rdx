@@ -3,18 +3,21 @@ import Base from "./Base.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { css } from "../../styled-system/css";
+import { getIconSvg } from "../utils/icons";
+import { resolveTagIcon, type TagIconEntry } from "../utils/tagIcons";
 
 interface Props {
   title: string;
   description?: string;
   date?: Date;
   tags?: string[];
+  tagIcons?: Record<string, TagIconEntry>;
   ogImage?: string;
   translationUrl?: string;
   translationLang?: "en" | "fr";
 }
 
-const { title, description, date, tags = [], ogImage, translationUrl, translationLang } = Astro.props;
+const { title, description, date, tags = [], tagIcons, ogImage, translationUrl, translationLang } = Astro.props;
 
 const formattedDate = date ? date.toISOString().split("T")[0] : null;
 const translationLabel = translationLang === "fr" ? "Lire en français" : "Read in English";
@@ -36,9 +39,15 @@ const translationLabel = translationLang === "fr" ? "Lire en français" : "Read 
         )}
         {tags.length > 0 && (
           <div class={css({ display: "flex", gap: "3", mt: "4", flexWrap: "wrap" })}>
-            {tags.map(tag => (
-              <span class={css({ textStyle: "label", color: "textMuted" })}>{tag}</span>
-            ))}
+            {tags.map(tag => {
+              const iconInfo = resolveTagIcon(tag, tagIcons);
+              return (
+                <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "label", color: "textMuted" })}>
+                  {iconInfo && <span set:html={getIconSvg(iconInfo.icon, iconInfo.iconSource, 13)} />}
+                  {tag}
+                </span>
+              );
+            })}
           </div>
         )}
         {translationUrl && (

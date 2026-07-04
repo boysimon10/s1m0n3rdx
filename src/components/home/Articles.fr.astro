@@ -2,6 +2,8 @@
 import { getCollection } from "astro:content";
 import { css } from "../../../styled-system/css";
 import { getSlugFromId } from "../../i18n";
+import { getIconSvg } from "../../utils/icons";
+import { resolveTagIcon } from "../../utils/tagIcons";
 
 const posts = (
   await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("fr/"))
@@ -25,7 +27,22 @@ const posts = (
         href={`/fr/blog/${getSlugFromId(post.id)}`}
         class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "4", py: "4", borderTop: "1px solid", borderTopColor: "border", _hover: { color: "textMuted" } })}
       >
-        <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{post.data.title}</span>
+        <div class={css({ flex: "1", minW: "0" })}>
+          <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{post.data.title}</span>
+          {post.data.tags.length > 0 && (
+            <div class={css({ display: "flex", gap: "3", mt: "1", flexWrap: "wrap" })}>
+              {post.data.tags.map(tag => {
+                const iconInfo = resolveTagIcon(tag, post.data.tagIcons);
+                return (
+                  <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "label", color: "textMuted" })}>
+                    {iconInfo && <span set:html={getIconSvg(iconInfo.icon, iconInfo.iconSource, 13)} />}
+                    {tag}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+        </div>
         <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0" })}>
           {post.data.date.toISOString().split("T")[0]}
         </span>

@@ -5,7 +5,7 @@ import { css } from "../../../styled-system/css";
 import { getSlugFromId } from "../../i18n";
 
 const entries = (
-  await getCollection("void", ({ data }) => !data.draft)
+  await getCollection("void", ({ id, data }) => !data.draft && id.startsWith("en/"))
 ).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
@@ -17,9 +17,9 @@ const entries = (
         <p class={css({ fontFamily: "mono", fontSize: "0.75rem", color: "textMuted", opacity: "0.4", mb: "4" })}>// you're not supposed to be here</p>
         <p class={css({ fontFamily: "mono", fontSize: "0.78rem", color: "textMuted", lineHeight: "1.8" })}>
           <span style="color: var(--colors-accent)">void</span>()<span class={css({ opacity: "0.4" })}> {`{`}</span><br />
-          &nbsp;&nbsp;<span class={css({ opacity: "0.5" })}>— pas de format.</span><br />
-          &nbsp;&nbsp;<span class={css({ opacity: "0.5" })}>— pas de sujet.</span><br />
-          &nbsp;&nbsp;<span class={css({ opacity: "0.5" })}>— juste des trucs.</span><br />
+          &nbsp;&nbsp;<span class={css({ opacity: "0.5" })}>- no format.</span><br />
+          &nbsp;&nbsp;<span class={css({ opacity: "0.5" })}>- no subject.</span><br />
+          &nbsp;&nbsp;<span class={css({ opacity: "0.5" })}>- just stuff.</span><br />
           <span class={css({ opacity: "0.4" })}>{`}`}</span>
         </p>
       </div>

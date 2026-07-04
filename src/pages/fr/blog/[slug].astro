@@ -28,6 +28,7 @@ const { Content } = await render(post);
   description={post.data.description}
   date={post.data.date}
   tags={post.data.tags}
+  tagIcons={post.data.tagIcons}
   translationUrl={translationSlug ? `/blog/${translationSlug}` : undefined}
   translationLang={translationSlug ? "en" : undefined}
 >
