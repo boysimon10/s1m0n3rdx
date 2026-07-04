@@ -10,13 +10,14 @@ interface Props {
   date?: Date;
   tags?: string[];
   ogImage?: string;
+  translationUrl?: string;
+  translationLang?: "en" | "fr";
 }
 
-const { title, description, date, tags = [], ogImage } = Astro.props;
+const { title, description, date, tags = [], ogImage, translationUrl, translationLang } = Astro.props;
 
-const formattedDate = date
-  ? date.toISOString().split("T")[0]
-  : null;
+const formattedDate = date ? date.toISOString().split("T")[0] : null;
+const translationLabel = translationLang === "fr" ? "Lire en français" : "Read in English";
 ---
 
 <Base title={title} description={description} ogImage={ogImage}>
@@ -39,6 +40,14 @@ const formattedDate = date
               <span class={css({ textStyle: "label", color: "textMuted" })}>{tag}</span>
             ))}
           </div>
+        )}
+        {translationUrl && (
+          <a
+            href={translationUrl}
+            class={css({ display: "inline-block", mt: "4", textStyle: "label", color: "textMuted", borderBottom: "1px dashed", borderBottomColor: "border", _hover: { color: "text", borderBottomColor: "text" } })}
+          >
+            {translationLabel} →
+          </a>
         )}
       </header>
       <div class="prose">

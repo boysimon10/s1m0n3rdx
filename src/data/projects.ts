@@ -10,6 +10,7 @@ export type Project = {
   num: string;
   name: string;
   desc: string;
+  desc_fr?: string;
   tags: ProjectTag[];
   href: string;
   year: string;
@@ -19,7 +20,8 @@ export const projects: Project[] = [
   {
     num: "01",
     name: "Project A",
-    desc: "Description courte du projet.",
+    desc: "Short project description.",
+    desc_fr: "Description courte du projet.",
     tags: [
       { label: "Go", icon: "Go", iconSource: "dev" },
       { label: "GraphQL", icon: "GraphQL", iconSource: "dev" },
@@ -30,7 +32,8 @@ export const projects: Project[] = [
   {
     num: "02",
     name: "Project B",
-    desc: "Description courte du projet.",
+    desc: "Short project description.",
+    desc_fr: "Description courte du projet.",
     tags: [
       { label: "React Native", icon: "React", iconSource: "dev" },
       { label: "Expo", icon: "siExpo", iconSource: "si" },
@@ -42,7 +45,8 @@ export const projects: Project[] = [
   {
     num: "03",
     name: "Project C",
-    desc: "Description courte du projet.",
+    desc: "Short project description.",
+    desc_fr: "Description courte du projet.",
     tags: [
       { label: "NestJS", icon: "NestJS", iconSource: "dev" },
       { label: "GraphQL", icon: "GraphQL", iconSource: "dev" },

@@ -4,13 +4,14 @@ description: "How I approached building a developer CLI tool using Go and cobra 
 date: 2026-06-15
 tags: ["Go", "CLI", "Backend"]
 draft: false
+translationKey: "building-a-cli-go"
 ---
+
+*Placeholder article — fictional content.*
 
 ## Why Go for CLI tools?
 
 Go compiles to a single static binary. No runtime, no dependencies, no version mismatch. You `go build`, you get an executable that runs anywhere. For a CLI tool that's about as good as it gets.
-
-I've been writing Go for backend services but building a CLI felt different - the constraints push you toward thinking about UX in a way HTTP APIs don't.
 
 ## Project structure
 
@@ -57,7 +58,3 @@ if err != nil {
 ## Distribution
 
 `goreleaser` handles cross-compilation and GitHub releases in one config file. Worth setting up from the start - shipping a new version becomes a single tag push.
-
----
-
-Full source is on GitHub if you want to see the structure in context.

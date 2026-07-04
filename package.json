@@ -8,7 +8,7 @@
   "scripts": {
     "prepare": "panda codegen",
     "dev": "concurrently \"panda codegen --watch\" \"astro dev\"",
-    "build": "panda codegen && astro build",
+    "build": "panda codegen && astro check && astro build",
     "preview": "astro preview",
     "lint": "eslint .",
     "format": "prettier --write .",

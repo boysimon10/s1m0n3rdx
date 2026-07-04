@@ -9,12 +9,14 @@ export type StackItem = {
 
 export type StackCategory = {
   category: string;
+  category_fr?: string;
   items: StackItem[];
 };
 
 export const stack: StackCategory[] = [
   {
     category: "languages",
+    category_fr: "langages",
     items: [
       { label: "TypeScript", icon: "TypeScript", iconSource: "dev" },
       { label: "Go", icon: "Go", iconSource: "dev" },
@@ -57,6 +59,7 @@ export const stack: StackCategory[] = [
   },
   {
     category: "state management",
+    category_fr: "gestion d'état",
     items: [
       { label: "Zustand", icon: "", iconSource: "dev" },
       { label: "Redux", icon: "Redux", iconSource: "dev" },
@@ -123,6 +126,7 @@ export const stack: StackCategory[] = [
   },
   {
     category: "database",
+    category_fr: "base de données",
     items: [
       { label: "PostgreSQL", icon: "PostgreSQL", iconSource: "dev" },
       { label: "MongoDB", icon: "MongoDB", iconSource: "dev" },
@@ -162,6 +166,7 @@ export const stack: StackCategory[] = [
   },
   {
     category: "messaging",
+    category_fr: "messagerie",
     items: [
       {
         label: "Redis",
@@ -186,6 +191,7 @@ export const stack: StackCategory[] = [
   },
   {
     category: "ai / ml",
+    category_fr: "ia / ml",
     items: [
       { label: "OpenAI", icon: "OpenAI", iconSource: "dev" },
       { label: "RAG", icon: "", iconSource: "dev" },

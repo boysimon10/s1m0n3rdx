@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import { css } from "../../../styled-system/css";
+import { getSlugFromId } from "../../i18n";
+
+const posts = (
+  await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("fr/"))
+)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<section class={css({ py: "12", borderBottom: "1px solid", borderBottomColor: "border" })}>
+  <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: "8" })}>
+    <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted" })}>blog</p>
+    <a href="/fr/blog" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>voir tout <span style="color: var(--colors-accent)">→</span></a>
+  </div>
+
+  <div class={css({ display: "flex", flexDir: "column" })}>
+    {posts.length === 0 && (
+      <p class={css({ textStyle: "label", color: "textMuted", py: "4" })}>Aucun article en français pour l'instant.</p>
+    )}
+    {posts.map(post => (
+      <a
+        href={`/fr/blog/${getSlugFromId(post.id)}`}
+        class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "4", py: "4", borderTop: "1px solid", borderTopColor: "border", _hover: { color: "textMuted" } })}
+      >
+        <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{post.data.title}</span>
+        <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0" })}>
+          {post.data.date.toISOString().split("T")[0]}
+        </span>
+      </a>
+    ))}
+  </div>
+</section>

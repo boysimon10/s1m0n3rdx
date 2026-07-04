@@ -1,12 +1,28 @@
 ---
 import { css } from "../../../styled-system/css";
+import { getLangFromUrl } from "../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <div class={css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
-  <p class={css({ textStyle: "body", lineHeight: "1.75", mb: "4" })}>
-    Je suis Simon, développeur self-taught basé à Dakar. Je construis des applications web et mobile - principalement du backend en Go et NestJS, du mobile en React Native.
-  </p>
-  <p class={css({ textStyle: "body", lineHeight: "1.75", color: "textMuted" })}>
-    Ce site est mon espace pour écrire sur ce que j'apprends, les projets que je construis, et ce qui m'intéresse dans le développement logiciel.
-  </p>
+  {lang === "fr" ? (
+    <>
+      <p class={css({ textStyle: "body", lineHeight: "1.75", mb: "4" })}>
+        Je suis Simon, développeur self-taught basé à Dakar. Je construis des applications web et mobile — principalement du backend en Go et NestJS, du mobile en React Native.
+      </p>
+      <p class={css({ textStyle: "body", lineHeight: "1.75", color: "textMuted" })}>
+        Ce site est mon espace pour écrire sur ce que j'apprends, les projets que je construis, et ce qui m'intéresse dans le développement logiciel.
+      </p>
+    </>
+  ) : (
+    <>
+      <p class={css({ textStyle: "body", lineHeight: "1.75", mb: "4" })}>
+        I'm Simon, a self-taught developer based in Dakar. I build web and mobile applications — mostly backend in Go and NestJS, mobile in React Native.
+      </p>
+      <p class={css({ textStyle: "body", lineHeight: "1.75", color: "textMuted" })}>
+        This site is my space to write about what I'm learning, the projects I'm building, and what interests me in software development.
+      </p>
+    </>
+  )}
 </div>

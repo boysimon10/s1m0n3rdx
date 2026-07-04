@@ -1,0 +1,51 @@
+---
+title: "Construire un outil CLI en Go"
+description: "Comment j'ai structuré un CLI développeur en Go avec cobra — de l'architecture du projet à la distribution."
+date: 2026-06-15
+tags: ["Go", "CLI", "Backend"]
+draft: false
+translationKey: "building-a-cli-go"
+---
+
+*Article fictif — contenu de test.*
+
+## Pourquoi Go pour un CLI
+
+Go compile en un seul binaire statique. Pas de runtime à installer, pas de dépendances à gérer côté utilisateur — tu distribues un exécutable, c'est tout. Pour un outil CLI, c'est l'argument qui clôt le débat.
+
+## Structure du projet
+
+```
+cmd/
+  root.go
+  build.go
+internal/
+  config/
+  runner/
+main.go
+```
+
+La règle : tout ce qui est dans `internal/` n'est pas exporté hors du module. `cmd/` contient uniquement la définition des commandes cobra, sans logique métier.
+
+## Cobra en pratique
+
+```go
+var rootCmd = &cobra.Command{
+  Use:   "mycli",
+  Short: "Mon outil de dev",
+}
+
+func init() {
+  rootCmd.AddCommand(buildCmd)
+  rootCmd.AddCommand(deployCmd)
+}
+```
+
+## Distribution
+
+```yaml
+# .github/workflows/release.yml
+- uses: goreleaser/goreleaser-action@v5
+```
+
+GoReleaser construit les binaires pour Linux, macOS et Windows en une commande, et pousse les assets sur GitHub Releases.

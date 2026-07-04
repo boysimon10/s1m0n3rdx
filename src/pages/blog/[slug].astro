@@ -1,16 +1,25 @@
 ---
 import { getCollection, render } from "astro:content";
 import Post from "../../layouts/Post.astro";
+import { getSlugFromId } from "../../i18n";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map(post => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const all = await getCollection("articles", ({ data }) => !data.draft);
+  const enPosts = all.filter(p => p.id.startsWith("en/"));
+  const frPosts = all.filter(p => p.id.startsWith("fr/"));
+
+  return enPosts.map(post => {
+    const translation = post.data.translationKey
+      ? frPosts.find(p => p.data.translationKey === post.data.translationKey)
+      : undefined;
+    return {
+      params: { slug: getSlugFromId(post.id) },
+      props: { post, translationSlug: translation ? getSlugFromId(translation.id) : undefined },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, translationSlug } = Astro.props;
 const { Content } = await render(post);
 ---
 
@@ -19,6 +28,8 @@ const { Content } = await render(post);
   description={post.data.description}
   date={post.data.date}
   tags={post.data.tags}
+  translationUrl={translationSlug ? `/fr/blog/${translationSlug}` : undefined}
+  translationLang={translationSlug ? "fr" : undefined}
 >
   <Content />
 </Post>

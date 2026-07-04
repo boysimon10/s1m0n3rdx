@@ -2,21 +2,25 @@
 import { getCollection } from "astro:content";
 import Page from "../../layouts/Page.astro";
 import { css } from "../../../styled-system/css";
+import { getSlugFromId } from "../../i18n";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
-);
+const posts = (
+  await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("en/"))
+).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <Page title="Blog - s1m0n3rdx">
   <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
     <div class={css({ maxW: "container", mx: "auto", py: "12" })}>
-      <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted", mb: "8" })}>blog</p>
+      <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: "8" })}>
+        <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted" })}>blog</p>
+        <a href="/void" class={css({ fontFamily: "mono", fontSize: "0.78rem", color: "textMuted", opacity: "0.5", _hover: { opacity: "1" } })}>{"void() =>"}</a>
+      </div>
 
       <div class={css({ display: "flex", flexDir: "column" })}>
         {posts.map(post => (
           <a
-            href={`/blog/${post.id}`}
+            href={`/blog/${getSlugFromId(post.id)}`}
             class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "6", py: "5", borderTop: "1px solid", borderTopColor: "border", _hover: { color: "textMuted" } })}
           >
             <div class={css({ flex: "1", minW: "0" })}>

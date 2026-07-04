@@ -1,8 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 import { css } from "../../../styled-system/css";
+import { getSlugFromId } from "../../i18n";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
+const posts = (
+  await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("en/"))
+)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 ---
@@ -10,13 +13,13 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
 <section class={css({ py: "12", borderBottom: "1px solid", borderBottomColor: "border" })}>
   <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: "8" })}>
     <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted" })}>blog</p>
-    <a href="/blog" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>voir tout <span style="color: var(--colors-accent)">→</span></a>
+    <a href="/blog" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>see all <span style="color: var(--colors-accent)">→</span></a>
   </div>
 
   <div class={css({ display: "flex", flexDir: "column" })}>
     {posts.map(post => (
       <a
-        href={`/blog/${post.id}`}
+        href={`/blog/${getSlugFromId(post.id)}`}
         class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "4", py: "4", borderTop: "1px solid", borderTopColor: "border", _hover: { color: "textMuted" } })}
       >
         <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{post.data.title}</span>

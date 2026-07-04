@@ -3,8 +3,10 @@ export const site = {
   author: "Simon Diouf",
   email: "simondiouf2710@gmail.com",
   bio: "Full-stack & mobile engineer. I build products from idea to deployment.",
+  bio_fr: "Ingénieur full-stack & mobile. Je construis des produits de l'idée au déploiement.",
   location: "Dakar",
   role: "Software Engineer",
+  role_fr: "Ingénieur Logiciel",
 };
 
 export type Social = {
