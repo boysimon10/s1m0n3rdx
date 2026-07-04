@@ -1,0 +1,22 @@
+---
+import { css } from "../../../styled-system/css";
+import { getLangFromUrl, useTranslations } from "../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<div class={css({ py: "8" })}>
+  <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted", mb: "5" })}>{t("section.contact")}</p>
+  <div class={css({ display: "flex", flexDir: "column", gap: "3" })}>
+    <a href="https://github.com/boysimon10" target="_blank" rel="noopener noreferrer" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>
+      github <span style="color: var(--colors-accent)">→</span>
+    </a>
+    <a href="https://linkedin.com/in/s1m0n-codes" target="_blank" rel="noopener noreferrer" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>
+      linkedin <span style="color: var(--colors-accent)">→</span>
+    </a>
+    <a href="mailto:simondiouf2710@gmail.com" class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>
+      simondiouf2710@gmail.com <span style="color: var(--colors-accent)">→</span>
+    </a>
+  </div>
+</div>

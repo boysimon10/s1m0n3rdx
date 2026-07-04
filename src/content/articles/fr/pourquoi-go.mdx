@@ -1,0 +1,31 @@
+---
+title: "Pourquoi j'ai adopté Go pour mes backends"
+description: "Simplicité, performance, compilation statique — Go s'est imposé naturellement dans ma stack backend. Retour d'expérience."
+date: 2026-06-01
+tags: ["Go", "Backend", "Architecture"]
+draft: false
+---
+
+*Article fictif — contenu de test.*
+
+## Le problème avec Node
+
+Pendant longtemps, Node.js était ma réponse par défaut pour tout backend. C'est rapide à démarrer, l'écosystème est énorme, et si tu fais déjà du TypeScript côté client, tu restes dans le même univers mental.
+
+Mais au fil du temps, quelques frictions sont apparues.
+
+La gestion des erreurs est chaotique — entre les callbacks, les promises mal chainées et les exceptions non catchées, le code devient vite du spaghetti défensif. Et les performances sous charge, même avec du clustering, restent en deçà de ce qu'on peut faire avec un langage compilé.
+
+## Pourquoi Go et pas Rust
+
+Rust aurait pu être la réponse, mais l'investissement en apprentissage est massif. Le borrow checker, la gestion de la mémoire explicite — c'est puissant mais pas ce dont j'avais besoin pour construire des APIs rapidement.
+
+Go est ennuyeux dans le bon sens du terme. La syntaxe est minimaliste, il n'y a pas de magie, et le compilateur te force à gérer les erreurs explicitement. C'est verbeux parfois, mais le code se lit comme il s'exécute.
+
+## Ce que j'ai gardé de Node
+
+Je n'ai pas tout jeté. Pour des projets qui nécessitent un écosystème riche (intégrations tierces, prototypage rapide), NestJS reste dans ma toolbox. Go et Node coexistent bien — chacun à sa place.
+
+## En pratique
+
+Aujourd'hui Go tourne sur mes services les plus critiques : gestion des websockets, workers de traitement d'images, APIs à fort trafic. Node reste pour les services BFF et les projets où la vitesse d'itération prime.

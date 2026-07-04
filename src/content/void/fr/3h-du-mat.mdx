@@ -1,0 +1,18 @@
+---
+title: "3h du mat et un bug qui n'existe pas"
+description: "Sur le fait de chercher un problème dans le mauvais endroit pendant trop longtemps."
+date: 2026-06-20
+draft: false
+---
+
+Deux heures à chercher pourquoi ma websocket se déconnectait toutes les 30 secondes.
+
+J'ai relu le code trois fois. J'ai ajouté des logs partout. J'ai ouvert cinq onglets de documentation. J'ai reécrit la logique de reconnexion.
+
+Le problème : un timeout configuré côté nginx que j'avais oublié d'ajuster sur le nouveau serveur.
+
+Une ligne de config. Deux heures de spirale.
+
+Ce genre de soirée m'a appris que quand tu cherches depuis plus d'une heure, tu cherches probablement au mauvais endroit. Prendre 10 minutes pour remonter d'un niveau — réseau, config, environnement — avant de continuer à creuser dans le code.
+
+C'est con mais j'oublie à chaque fois.

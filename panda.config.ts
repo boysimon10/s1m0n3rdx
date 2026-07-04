@@ -7,6 +7,16 @@ export default defineConfig({
 
   exclude: [],
 
+  globalCss: {
+    body: {
+      fontFamily: "body",
+      fontSize: "18px",
+      bg: "bg",
+      color: "text",
+      WebkitFontSmoothing: "antialiased",
+    },
+  },
+
   theme: {
     extend: {
       tokens: {
@@ -32,6 +42,10 @@ export default defineConfig({
           sm:   { value: "12px" },
           md:   { value: "20px" },
           pill: { value: "999px" },
+        },
+
+        sizes: {
+          container: { value: "820px" },
         },
       },
 
@@ -62,17 +76,17 @@ export default defineConfig({
           value: {
             fontFamily: "heading",
             fontWeight: "600",
-            fontSize: "1.5rem",
+            fontSize: "1.75rem",
             letterSpacing: "-0.02em",
           },
         },
         body: {
-          value: { fontFamily: "body", fontWeight: "400", fontSize: "0.95rem", lineHeight: "1.55" },
+          value: { fontFamily: "body", fontWeight: "400", fontSize: "1.1rem", lineHeight: "1.55" },
         },
         label: {
           value: {
             fontFamily: "mono",
-            fontSize: "0.72rem",
+            fontSize: "0.85rem",
             fontWeight: "500",
             letterSpacing: "0.02em",
           },
@@ -80,7 +94,7 @@ export default defineConfig({
         eyebrow: {
           value: {
             fontFamily: "mono",
-            fontSize: "0.7rem",
+            fontSize: "0.82rem",
             fontWeight: "400",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
