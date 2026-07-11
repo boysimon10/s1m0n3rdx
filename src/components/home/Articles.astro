@@ -4,6 +4,7 @@ import { css } from "../../../styled-system/css";
 import { getSlugFromId } from "../../i18n";
 import { getIconSvg } from "../../utils/icons";
 import { resolveTagIcon } from "../../utils/tagIcons";
+import { formatDate } from "../../utils/formatDate";
 
 const posts = (
   await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("en/"))
@@ -41,7 +42,7 @@ const posts = (
           )}
         </div>
         <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0" })}>
-          {post.data.date.toISOString().split("T")[0]}
+          {formatDate(post.data.date, "en")}
         </span>
       </a>
     ))}
