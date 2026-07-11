@@ -54,7 +54,7 @@ function translationValidator() {
 }
 
 export default defineConfig({
-  site: "https://s1mon.dev",
+  site: process.env.SITE_URL,
 
   i18n: {
     defaultLocale: "en",

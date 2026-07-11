@@ -1,0 +1,43 @@
+---
+import { css } from "../../styled-system/css";
+import IconSun from "iconoir/icons/regular/sun-light.svg?raw";
+import IconMoon from "iconoir/icons/regular/half-moon.svg?raw";
+---
+
+<button
+  id="theme-toggle"
+  aria-label="Toggle theme"
+  class={css({
+    display: "flex",
+    alignItems: "center",
+    color: "textMuted",
+    _hover: { color: "text" },
+    bg: "transparent",
+    border: "none",
+    p: "0",
+    cursor: "pointer",
+  })}
+>
+  <span id="icon-sun"  class={css({ w: "18px", h: "18px", display: "flex" })} set:html={IconSun} />
+  <span id="icon-moon" class={css({ w: "18px", h: "18px", display: "none" })} set:html={IconMoon} />
+</button>
+
+<script>
+  const btn  = document.getElementById("theme-toggle")!;
+  const sun  = document.getElementById("icon-sun")!;
+  const moon = document.getElementById("icon-moon")!;
+
+  function applyTheme(isDark: boolean) {
+    document.documentElement.classList.toggle("dark", isDark);
+    sun.style.display  = isDark ? "none" : "flex";
+    moon.style.display = isDark ? "flex" : "none";
+  }
+
+  applyTheme(document.documentElement.classList.contains("dark"));
+
+  btn.addEventListener("click", () => {
+    const isDark = !document.documentElement.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    applyTheme(isDark);
+  });
+</script>

@@ -50,7 +50,7 @@ const frUrl = lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath;
       </a>
     ))}
     <a
-      href="/rss.xml"
+      href={lang === "fr" ? "/fr/rss.xml" : "/rss.xml"}
       class={css({ display: "flex", alignItems: "center", color: "textMuted", _hover: { color: "text" } })}
       aria-label="RSS"
     >
