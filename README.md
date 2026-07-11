@@ -1,22 +1,44 @@
 # s1m0n3rdx
 
-Portfolio & blog personnel. Astro 7, PandaCSS, TypeScript strict, bilingue EN/FR.
+Personal blogfolio. Astro 7, PandaCSS, TypeScript strict, bilingual EN/FR.
 
 ## Stack
 
 - **Framework** - Astro 7
 - **Style** - PandaCSS
-- **Contenu** - MDX + Content Collections
-- **Deploy** - Cloudflare Pages
+- **Content** - MDX + Content Collections
+- **Icons** - Iconoir / developer-icons / simple-icons
+- **i18n** - Built-in Astro i18n (EN/FR)
+- **RSS** - @astrojs/rss
+- **Linting** - ESLint + Prettier
+- **Type checking** - TypeScript strict
 
-## Commandes
+## Commands
 
-| Commande | Action |
+| Command | Action |
 | :--- | :--- |
-| `npm install` | Installe les dépendances |
-| `npm run dev` | Dev server sur `localhost:4321` |
-| `npm run build` | Build production |
-| `npm run preview` | Preview du build |
+| `npm install` | Install dependencies |
+| `npm run dev` | Dev server at `localhost:4321` |
+| `npm run build` | Production build |
+| `npm run preview` | Preview build |
 | `npm run lint` | ESLint |
 | `npm run format` | Prettier |
 | `npm run typecheck` | Astro check |
+
+## Environment variables
+
+Copy `.env.example` to `.env` and fill in your values.
+
+| Variable | Required | Description |
+| :--- | :--- | :--- |
+| `SITE_URL` | Yes | Your site's base URL (e.g. `https://your-domain.com`) |
+
+## License
+
+[MIT](./LICENSE)
+
+## Inspirations
+
+- [sleek-portfolio](https://github.com/ramxcodes/sleek-portfolio) - ramxcodes
+- [blog](https://github.com/Christopher2K/blog) - Christopher2K
+- [puang](https://github.com/puang59/puang) - puang59
