@@ -25,6 +25,7 @@ const voidCollection = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     draft: z.boolean().default(false),
+    showInBlog: z.boolean().default(false),
   }),
 });
 

@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Page from "../../../layouts/Page.astro";
 import { css } from "../../../../styled-system/css";
 import { getSlugFromId } from "../../../i18n";
+import { formatDate } from "../../../utils/formatDate";
 
 const entries = (
   await getCollection("void", ({ id, data }) => !data.draft && id.startsWith("fr/"))
@@ -38,7 +39,7 @@ const entries = (
               <p class={css({ textStyle: "body", color: "textMuted", fontSize: "0.88rem", mt: "1" })}>{entry.data.description}</p>
             </div>
             <span class={css({ fontFamily: "mono", fontSize: "0.75rem", color: "textMuted", opacity: "0.5", flexShrink: "0" })}>
-              {entry.data.date.toISOString().split("T")[0]}
+              {formatDate(entry.data.date, "fr")}
             </span>
           </a>
         ))}

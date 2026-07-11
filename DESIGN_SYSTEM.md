@@ -1,153 +1,140 @@
 # Design System - s1m0n3rdx
 
-Style brutaliste/éditorial. Orange signature sur fond blanc cassé, tout en IBM Plex Mono sauf les moments display (Archivo Black).
+Brutalist/editorial style. Signature orange on off-white background, all IBM Plex Mono except display moments (Archivo Black).
 
 ---
 
-## Icônes
+## Icons
 
-### UI generales
-Source : [Iconoir](https://iconoir.com) - stroke 1.5, style linéaire cohérent.
+Three sources depending on the icon type. All resolved via `getIconSvg()` in `src/utils/icons.ts`.
 
-SVG téléchargés manuellement dans `src/assets/icons/`, importés en `?raw` dans les composants Astro.
+### General UI - Iconoir
+npm package `iconoir` - stroke 1.5, consistent linear style. Imported via `?raw`.
 
 ```astro
-import IconGithub from "../../assets/icons/github.svg?raw";
-<span set:html={IconGithub} />
+import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
+<span set:html={IconRss} />
 ```
 
-Toujours remplacer `stroke="#000000"` par `stroke="currentColor"` pour que l'icône hérite la couleur du parent.
+Iconoir SVGs use `currentColor` natively - color follows the CSS parent.
 
-### Logos technos
-Source : [developer-icons](https://github.com/xandemon/developer-icons) - logos des stacks (React, Go, NestJS, GraphQL, etc.)
+### Tech logos - developer-icons
+Colored stack logos (React, Go, TypeScript, etc.)
 
-Utilisé via `renderToStaticMarkup` dans le frontmatter Astro - pas de `@astrojs/react` nécessaire.
+```ts
+getIconSvg("TypeScript", "dev", 16)
+```
 
-```astro
----
-import { createElement } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Go } from "developer-icons";
+### Brand logos - simple-icons
+Brand icons (GitHub, Twitch, Gmail, etc.) SI icons use the official brand hex color by default.
 
-const goSvg = renderToStaticMarkup(createElement(Go, { size: 16 }));
----
-<span set:html={goSvg} />
+```ts
+getIconSvg("siGithub", "si", 16)
+```
+
+### Article tag icons
+Resolved via `resolveTagIcon(tag, tagIcons?)` - checks article frontmatter first, then the global `tagIconMap` in `src/utils/tagIcons.ts`.
+
+Per-article override via MDX frontmatter:
+```yaml
+tagIcons:
+  CLI: { icon: "siGnubash", iconSource: "si" }
 ```
 
 ---
 
-## Couleurs
+## Colors
 
-### Tokens bruts
-| Token | Valeur | Usage |
+### Raw tokens
+| Token | Value | Usage |
 |---|---|---|
-| `brand` | `#EC9B5A` | Accent orange signature |
-| `brandDeep` | `#C9762F` | Hover / dégradé accent |
-| `ink` | `#0B0B10` | Noir texte |
-| `paper` | `#EDEDE9` | Fond général blanc cassé |
-| `card` | `#FFFFFF` | Surface carte |
-| `line` | `#DCDCD6` | Séparateurs, borders fins |
-| `muted` | `#6A6A73` | Texte secondaire |
+| `brand` | `#EC9B5A` | Signature orange accent |
+| `brandDeep` | `#C9762F` | Hover / accent gradient |
+| `ink` | `#0B0B10` | Text black |
+| `paper` | `#EDEDE9` | Off-white background |
+| `card` | `#FFFFFF` | Card surface |
+| `line` | `#DCDCD6` | Separators, thin borders |
+| `muted` | `#6A6A73` | Secondary text |
 
-### Tokens sémantiques (à utiliser dans les composants)
-| Token | Pointe vers | Rôle |
+### Semantic tokens (use these in components)
+| Token | Points to | Role |
 |---|---|---|
-| `bg` | `paper` | Fond page |
-| `surface` | `card` | Fond carte |
-| `text` | `ink` | Texte principal |
-| `textMuted` | `muted` | Texte secondaire |
+| `bg` | `paper` | Page background |
+| `surface` | `card` | Card background |
+| `text` | `ink` | Primary text |
+| `textMuted` | `muted` | Secondary text |
 | `border` | `line` | Borders |
-| `accent` | `brand` | Couleur accent |
-| `accentFg` | `#FFFFFF` | Texte sur fond accent |
+| `accent` | `brand` | Accent color |
+| `accentFg` | `#FFFFFF` | Text on accent background |
 
 ---
 
-## Typographie
+## Typography
 
-### Polices
-| Token | Police | Usage |
+### Fonts
+| Token | Font | Usage |
 |---|---|---|
 | `display` | Archivo Black | Hero title, nav links |
-| `heading` | IBM Plex Mono 600 | Titres de section, noms projets |
-| `body` | IBM Plex Mono 400 | Corps de texte |
+| `heading` | IBM Plex Mono 600 | Section titles, project names |
+| `body` | IBM Plex Mono 400 | Body text |
 | `mono` | IBM Plex Mono 500 | Labels, dates, tags, eyebrows |
 
-### Text styles PandaCSS
-| Style | Police | Taille | Usage |
+### PandaCSS text styles
+| Style | Font | Size | Usage |
 |---|---|---|---|
 | `giant` | display | `clamp(3.2rem, 11vw, 8.6rem)` | Hero title |
-| `heading` | heading | `1.75rem` | Titres h2 section |
-| `body` | body | `1.1rem` | Paragraphes |
+| `heading` | heading | `1.75rem` | Section h2 titles |
+| `body` | body | `1.1rem` | Paragraphs |
 | `label` | mono | `0.85rem` | Dates, tags, meta |
-| `eyebrow` | mono | `0.82rem` | Labels de section uppercase |
+| `eyebrow` | mono | `0.82rem` | Uppercase section labels |
 
 ---
 
-## Espacements & Layout
+## Spacing & Layout
 
-| Variable | Valeur | Usage |
+| Variable | Value | Usage |
 |---|---|---|
-| `sizes.container` | `820px` | `maxW: "container"` - wrapper global centré |
-| `px` global | `clamp(14px, 4vw, 40px)` | Padding horizontal responsive |
-| `radii.sm` | `12px` | Petits éléments arrondis |
-| `radii.md` | `20px` | Panneaux, boutons larges |
-| `radii.pill` | `999px` | Pills, boutons ronds |
+| `sizes.container` | `820px` | `maxW: "container"` - centered global wrapper |
+| global `px` | `clamp(14px, 4vw, 40px)` | Responsive horizontal padding |
+| `radii.sm` | `12px` | Small rounded elements |
+| `radii.md` | `20px` | Panels, wide buttons |
+| `radii.pill` | `999px` | Pills, round buttons |
 
 ### Borders
-Toujours utiliser les propriétés côté-spécifiques pour éviter le reset CSS shorthand :
+Always use side-specific properties to avoid CSS shorthand reset:
 ```astro
 borderBottom: "1px solid", borderBottomColor: "border"  // ok
-borderBottom: "1px solid", borderColor: "border"        // bug - shorthand écrase
+borderBottom: "1px solid", borderColor: "border"        // bug - shorthand overrides
 ```
 
 ---
 
-## Patterns UI
+## UI Patterns
 
 ### Eyebrow
-Label de section. Mono uppercase, letter-spacing large, couleur muted.
+Section label. Mono uppercase, wide letter-spacing, muted color.
 ```
 textStyle: "eyebrow" | color: "textMuted"
 ```
 
-### Tag techno
-Icone developer-icons + label texte, inline-flex, gap 1.
+### Tech tag
+Icon + text label, inline-flex, gap 1. Resolve icon via `resolveTagIcon`.
 ```
 display: inline-flex | alignItems: center | gap: 1
 textStyle: "label" | color: "textMuted"
 ```
 
-### Lien nav header
-Archivo Black, `1.1rem`, `fontWeight: 700`. Active state : `borderBottom: 2px solid`.
+### Header nav link
+Archivo Black, `1.1rem`, `fontWeight: 700`. Active state: `borderBottom: 2px solid`.
 
-### Bouton pill (GitHub hero)
+### Pill button
 `rounded: pill | bg: text | color: bg | px: 5 | py: 2`
-Icone SVG inline + label + flèche accent.
+Inline SVG icon + label + accent arrow.
 
-### Séparateur de section
-`borderBottom: "1px solid" | borderBottomColor: "border"` sur la section.
-Ne pas doubler : si une section a `borderBottom`, la suivante ne met pas `borderTop`.
+### Section separator
+`borderBottom: "1px solid" | borderBottomColor: "border"` on the section.
+Don't double up: if a section has `borderBottom`, the next one skips `borderTop`.
 
----
-
-## Structure de page
-
-```
-Header (centré)
-  avatar (GitHub)
-  nav - Blog / Projects / About + icone RSS
-  lang switcher - EN / FR
-
-index.astro
-  Hero     - eyebrow + h1 giant + bouton GitHub
-  Projects - liste avec num accent, nom, desc, tags technos
-  Articles - liste avec titre et date
-
-Footer (centré, maxW: container)
-  copyright + lien RSS
-```
-
-### Hiérarchie des layouts
-- `Base.astro` - shell HTML, SEO, fonts, ViewTransitions
-- `Page.astro` - Header + `<slot />` + Footer
-- `index.astro` - `px` responsive + `maxW: container` wrappant les sections
+### void() in blog
+Void entries with `showInBlog: true` appear in the `/blog` feed sorted by date.
+Differentiated rendering: title in `fontFamily: mono`, `void()` label below, no tags.
