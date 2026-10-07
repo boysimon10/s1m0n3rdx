@@ -15,6 +15,10 @@ export default defineConfig({
       color: "text",
       WebkitFontSmoothing: "antialiased",
     },
+    "::selection": {
+      bg: "accent",
+      color: "text",
+    },
   },
 
   theme: {
