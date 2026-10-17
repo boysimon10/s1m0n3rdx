@@ -1,0 +1,24 @@
+---
+import { css } from "../../../../styled-system/css";
+import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class={css({ px: "clamp(14px, 4vw, 40px)", py: "12" })}>
+  <div class={css({ maxW: "classic", mx: "auto", borderTop: "1px solid", borderTopColor: "border", pt: "12", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4" })}>
+    <span class={css({ textStyle: "classic.label", color: "textMuted" })}>
+      {t("footer.rights")} Simon M. A. Diouf © {year}
+    </span>
+    <a
+      href={lang === "fr" ? "/fr/rss.xml" : "/rss.xml"}
+      class={css({ display: "inline-flex", alignItems: "center", gap: "2", fontFamily: "heading", fontWeight: "500", color: "textMuted", fontSize: "0.95rem", _hover: { color: "text", borderBottom: "2px solid", borderBottomColor: "text" }, pb: "2px" })}
+    >
+      <span class={css({ w: "14px", h: "14px", display: "flex", alignItems: "center" })} set:html={IconRss} />
+      {t("footer.rss")}
+    </a>
+  </div>
+</footer>

@@ -1,0 +1,71 @@
+---
+import { css } from "../../../../styled-system/css";
+import IconArrowRight from "iconoir/icons/regular/arrow-right.svg?raw";
+import Diamond from "./Diamond.astro";
+
+interface Props {
+  label: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { label, href, linkLabel } = Astro.props;
+---
+
+<div class={css({ display: "flex", alignItems: "center", gap: "14px" })}>
+  <span
+    class={css({
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "8px",
+      py: "8px",
+      px: "14px",
+      border: "1.5px solid {colors.border}",
+      rounded: "pill",
+      bg: "surface",
+      fontFamily: "mono",
+      fontWeight: "500",
+      fontSize: "13px",
+      lineHeight: "1",
+      letterSpacing: "0.02em",
+    })}
+  >
+    <Diamond />
+    {label}
+  </span>
+  <span class={css({ flex: "1", h: "1.5px", bg: "border" })}></span>
+  {href && (
+    <a
+      href={href}
+      class={css({
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "10px",
+        flex: "none",
+        fontFamily: "mono",
+        fontWeight: "500",
+        fontSize: "13px",
+        lineHeight: "1",
+        whiteSpace: "nowrap",
+        "&:hover > span": { bg: "text", color: "inverse" },
+      })}
+    >
+      {linkLabel}
+      <span
+        class={css({
+          w: "36px",
+          h: "36px",
+          rounded: "full",
+          bg: "accent",
+          border: "1.5px solid {colors.border}",
+          display: "grid",
+          placeItems: "center",
+          transition: "background 0.15s",
+          "& svg": { w: "16px", h: "16px" },
+        })}
+        set:html={IconArrowRight}
+      />
+    </a>
+  )}
+  <slot name="right" />
+</div>

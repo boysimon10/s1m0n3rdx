@@ -1,0 +1,51 @@
+---
+import { css } from "../../../../styled-system/css";
+import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer
+  class={css({
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px 24px",
+    py: "12px",
+    pr: "12px",
+    pl: "22px",
+    rounded: "lg",
+    bg: "text",
+  })}
+>
+  <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1.5", color: "inverse" })}>
+    {t("footer.rights")}. Simon M. A. Diouf © {year}
+  </span>
+  <a
+    href={lang === "fr" ? "/fr/rss.xml" : "/rss.xml"}
+    aria-label={t("footer.rss")}
+    class={css({
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "8px",
+      py: "11px",
+      pr: "16px",
+      pl: "12px",
+      rounded: "pill",
+      bg: "accent",
+      color: "text",
+      fontFamily: "mono",
+      fontWeight: "600",
+      fontSize: "13px",
+      lineHeight: "1",
+      "& svg": { w: "16px", h: "16px" },
+    })}
+  >
+    <span class={css({ display: "flex" })} set:html={IconRss} />
+    RSS
+  </a>
+</footer>

@@ -65,6 +65,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
+      filter: (page) => !/^\/(fr\/)?classic(\/|$)/.test(new URL(page).pathname),
       i18n: {
         defaultLocale: "en",
         locales: { en: "en-US", fr: "fr-FR" },

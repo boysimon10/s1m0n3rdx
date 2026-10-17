@@ -1,0 +1,81 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import Page from "../../../../themes/classic/layouts/Page.astro";
+import { css } from "../../../../../styled-system/css";
+import { getSlugFromId } from "../../../../i18n";
+import { getIconSvg } from "../../../../utils/icons";
+import { resolveTagIcon } from "../../../../utils/tagIcons";
+import { formatDate } from "../../../../utils/formatDate";
+
+type FeedItem =
+  | { type: "article"; post: CollectionEntry<"articles"> }
+  | { type: "void"; post: CollectionEntry<"void"> };
+
+const articles = (
+  await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("fr/"))
+).map(post => ({ type: "article" as const, post }));
+
+const voids = (
+  await getCollection("void", ({ id, data }) => data.showInBlog && !data.draft && id.startsWith("fr/"))
+).map(post => ({ type: "void" as const, post }));
+
+const feed: FeedItem[] = [...articles, ...voids]
+  .sort((a, b) => b.post.data.date.getTime() - a.post.data.date.getTime());
+---
+
+<Page title="Blog - s1m0n3rdx">
+  <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
+    <div class={css({ maxW: "classic", mx: "auto", py: "12" })}>
+      <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: "8" })}>
+        <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted" })}>blog</p>
+        <a href="/fr/classic/void" class={css({ fontFamily: "mono", fontSize: "0.78rem", color: "textMuted", opacity: "0.5", _hover: { opacity: "1" } })}>{"void() =>"}</a>
+      </div>
+
+      <div class={css({ display: "flex", flexDir: "column" })}>
+        {feed.length === 0 && (
+          <p class={css({ textStyle: "classic.label", color: "textMuted", py: "4" })}>Aucun article en français pour l'instant.</p>
+        )}
+        {feed.map(item => item.type === "void" ? (
+          <a
+            href={`/fr/classic/void/${getSlugFromId(item.post.id)}`}
+            class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "6", py: "5", borderTop: "1px solid", borderTopColor: "border", _hover: { color: "textMuted" } })}
+          >
+            <div class={css({ flex: "1", minW: "0" })}>
+              <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "0.95rem" })}>{item.post.data.title}</span>
+              <p class={css({ textStyle: "classic.body", color: "textMuted", fontSize: "0.88rem", mt: "1" })}>{item.post.data.description}</p>
+              <span class={css({ fontFamily: "mono", fontSize: "0.72rem", color: "textMuted", opacity: "0.5", display: "block", mt: "1" })}>void()</span>
+            </div>
+            <span class={css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0" })}>
+              {formatDate(item.post.data.date, "fr")}
+            </span>
+          </a>
+        ) : (
+          <a
+            href={`/fr/classic/blog/${getSlugFromId(item.post.id)}`}
+            class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "6", py: "5", borderTop: "1px solid", borderTopColor: "border", _hover: { color: "textMuted" } })}
+          >
+            <div class={css({ flex: "1", minW: "0" })}>
+              <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{item.post.data.title}</span>
+              <p class={css({ textStyle: "classic.body", color: "textMuted", fontSize: "0.88rem", mt: "1" })}>{item.post.data.description}</p>
+              <div class={css({ display: "flex", gap: "3", mt: "2", flexWrap: "wrap" })}>
+                {item.post.data.tags.map(tag => {
+                  const iconInfo = resolveTagIcon(tag, item.post.data.tagIcons);
+                  return (
+                    <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
+                      {iconInfo && <span set:html={getIconSvg(iconInfo.icon, iconInfo.iconSource, 13)} />}
+                      {tag}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+            <span class={css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0" })}>
+              {formatDate(item.post.data.date, "fr")}
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</Page>

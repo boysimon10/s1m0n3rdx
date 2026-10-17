@@ -1,0 +1,9 @@
+---
+import { css } from "../../../../styled-system/css";
+import Diamond from "./Diamond.astro";
+---
+
+<span class={css({ display: "inline-flex", alignItems: "center", gap: "8px", textStyle: "eyebrow", fontSize: "12px" })}>
+  <Diamond size={7} />
+  <slot />
+</span>

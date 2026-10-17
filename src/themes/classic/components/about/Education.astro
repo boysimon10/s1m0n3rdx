@@ -1,0 +1,14 @@
+---
+import { css } from "../../../../../styled-system/css";
+import { getLangFromUrl, useTranslations } from "../../../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<div class={css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
+  <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("section.education")}</p>
+  <p class={css({ textStyle: "classic.body", color: "textMuted", fontSize: "0.9rem", lineHeight: "1.6" })}>
+    {t("education.text")}
+  </p>
+</div>

@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import { css } from "../../../../../styled-system/css";
+import { getLangFromUrl, getSlugFromId, localePath, useTranslations } from "../../../../i18n";
+import { resolveTagIcon } from "../../../../utils/tagIcons";
+import { formatDate } from "../../../../utils/formatDate";
+import SectionHeader from "../SectionHeader.astro";
+import Tag from "../Tag.astro";
+import IconArrowRight from "iconoir/icons/regular/arrow-right.svg?raw";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const posts = (await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith(`${lang}/`)))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<section class={css({ display: "flex", flexDir: "column", gap: "20px" })}>
+  <SectionHeader label={t("blog.heading")} href={localePath(lang, "modern", "/blog")} linkLabel={t("blog.seeAll")} />
+
+  <div class={css({ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))", gap: "16px" })}>
+    {posts.map((post) => (
+      <a
+        href={localePath(lang, "modern", `/blog/${getSlugFromId(post.id)}`)}
+        class={css({
+          display: "flex",
+          flexDir: "column",
+          gap: "14px",
+          minH: "200px",
+          p: "22px",
+          border: "1.5px solid {colors.border}",
+          rounded: "lg",
+          bg: "surface",
+          transition: "background 0.15s",
+          _hover: { bg: "accentSoft" },
+        })}
+      >
+        <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" })}>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1", color: "textMuted" })}>
+            {formatDate(post.data.date, lang)}
+          </span>
+          <span
+            class={css({ w: "32px", h: "32px", rounded: "full", border: "1.5px solid {colors.border}", display: "grid", placeItems: "center", "& svg": { w: "14px", h: "14px" } })}
+            set:html={IconArrowRight}
+          />
+        </div>
+        <h3 class={css({ flex: "1", m: "0", textStyle: "h3", textWrap: "pretty" })}>{post.data.title}</h3>
+        {post.data.tags.length > 0 && (
+          <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+            {post.data.tags.map((tag) => {
+              const info = resolveTagIcon(tag, post.data.tagIcons);
+              return <Tag label={tag} icon={info?.icon} iconSource={info?.iconSource} />;
+            })}
+          </div>
+        )}
+      </a>
+    ))}
+  </div>
+</section>

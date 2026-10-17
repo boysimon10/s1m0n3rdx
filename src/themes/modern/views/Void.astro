@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import Page from "../layouts/Page.astro";
+import VoidCard from "../components/VoidCard.astro";
+import { css } from "../../../../styled-system/css";
+import { getLangFromUrl, getSlugFromId, localePath, useTranslations } from "../../../i18n";
+import { formatDate } from "../../../utils/formatDate";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const entries = (await getCollection("void", ({ id, data }) => !data.draft && id.startsWith(`${lang}/`))).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const line = css({ whiteSpace: "pre", pl: "2ch", color: "code.muted" });
+---
+
+<Page title="Void">
+  <div class={css({ display: "flex", flexDir: "column", gap: "20px" })}>
+    <p class={css({ m: "0", fontFamily: "mono", fontSize: "13px", lineHeight: "1", color: "textFaint" })}>{t("void.comment")}</p>
+
+    <div class={css({ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "flex-start" })}>
+      <div
+        class={css({
+          flex: "1 1 420px",
+          minW: "0",
+          p: "clamp(22px, 3.4vw, 40px)",
+          border: "1.5px solid {colors.border}",
+          rounded: "lg",
+          bg: "code.bg",
+          color: "code.text",
+          fontFamily: "mono",
+          fontWeight: "500",
+          fontSize: "clamp(1.25rem, 3vw, 2rem)",
+          lineHeight: "1.6",
+          overflowX: "auto",
+        })}
+      >
+        <div class={css({ whiteSpace: "pre" })}><span class={css({ color: "accent" })}>void</span>() {"{"}</div>
+        <div class={line}>{t("void.line1")}</div>
+        <div class={line}>{t("void.line2")}</div>
+        <div class={line}>{t("void.line3")}</div>
+        <div class={css({ whiteSpace: "pre" })}>{"}"}</div>
+      </div>
+
+      <div class={css({ flex: "1 1 420px", minW: "0", display: "flex", flexDir: "column", gap: "12px" })}>
+        {entries.length === 0 && <p class={css({ m: "0", fontFamily: "mono", fontSize: "13px", color: "textFaint" })}>{t("void.empty")}</p>}
+        {entries.map((entry) => (
+          <VoidCard
+            href={localePath(lang, "modern", `/void/${getSlugFromId(entry.id)}`)}
+            title={entry.data.title}
+            description={entry.data.description}
+            date={formatDate(entry.data.date, lang)}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</Page>

@@ -1,0 +1,13 @@
+---
+import ProjectDetail from "../../../themes/modern/views/ProjectDetail.astro";
+import { getProjects, type ProjectEntry } from "../../../utils/projects";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.filter((p) => p.data.page).map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props as { project: ProjectEntry };
+---
+
+<ProjectDetail project={project} />
