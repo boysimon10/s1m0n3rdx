@@ -1,0 +1,53 @@
+---
+import Page from "../layouts/Page.astro";
+import { css } from "../../../../styled-system/css";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
+import IconArrowRight from "iconoir/icons/regular/arrow-right.svg?raw";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Page title="404">
+  <div class={css({ display: "flex", flexDir: "column", alignItems: "flex-start", gap: "28px", pt: "clamp(16px, 5vw, 64px)", pb: "clamp(24px, 6vw, 80px)" })}>
+    <div
+      aria-hidden="true"
+      class={css({
+        fontFamily: "display",
+        fontWeight: "900",
+        fontSize: "clamp(8.5rem, 36vw, 24rem)",
+        lineHeight: "0.8",
+        letterSpacing: "-0.06em",
+        color: "surfaceAlt",
+        WebkitTextStroke: "2px {colors.border}",
+        textShadow: "10px 10px 0 {colors.accent}",
+      })}
+    >
+      404
+    </div>
+    <p class={css({ m: "0", fontFamily: "heading", fontWeight: "600", fontSize: "clamp(1.4rem, 3vw, 2rem)", lineHeight: "1.2", letterSpacing: "-0.02em" })}>
+      {t("notfound.text")}
+    </p>
+    <a
+      href={localePath(lang, "modern")}
+      class={css({
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "14px",
+        py: "6px",
+        pr: "6px",
+        pl: "22px",
+        rounded: "pill",
+        bg: "text",
+        color: "inverse",
+        textStyle: "nav",
+      })}
+    >
+      {t("notfound.back")}
+      <span
+        class={css({ w: "40px", h: "40px", rounded: "full", bg: "accent", color: "text", display: "grid", placeItems: "center", "& svg": { w: "17px", h: "17px" } })}
+        set:html={IconArrowRight}
+      />
+    </a>
+  </div>
+</Page>

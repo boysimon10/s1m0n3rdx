@@ -1,0 +1,20 @@
+---
+import Page from "../layouts/Page.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import { css } from "../../../../styled-system/css";
+import { projects } from "../../../data/projects";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Page title={lang === "fr" ? "Projets" : "Projects"}>
+  <div class={css({ display: "flex", flexDir: "column", gap: "20px" })}>
+    <SectionHeader label={t("projects.heading")} />
+    <div class={css({ display: "flex", flexDir: "column", gap: "12px" })}>
+      {projects.map((project) => <ProjectRow project={project} showYear />)}
+    </div>
+  </div>
+</Page>

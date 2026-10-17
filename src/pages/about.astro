@@ -1,24 +1,5 @@
 ---
-import Page from "../themes/classic/layouts/Page.astro";
-import { css } from "../../styled-system/css";
-import Bio from "../themes/classic/components/about/Bio.astro";
-import Experience from "../themes/classic/components/about/Experience.astro";
-import Education from "../themes/classic/components/about/Education.astro";
-import Stack from "../themes/classic/components/about/Stack.astro";
-import Contact from "../themes/classic/components/about/Contact.astro";
+import About from "../themes/modern/views/About.astro";
 ---
 
-<Page title="About - s1m0n3rdx">
-  <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
-    <div class={css({ maxW: "classic", mx: "auto", py: "12" })}>
-      <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted", mb: "8" })}>about</p>
-      <div class={css({ display: "flex", flexDir: "column" })}>
-        <Bio />
-        <Stack />
-        <Experience />
-        <Education />
-        <Contact />
-      </div>
-    </div>
-  </div>
-</Page>
+<About />

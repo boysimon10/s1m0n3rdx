@@ -1,21 +1,5 @@
 ---
-import Page from "../themes/classic/layouts/Page.astro";
-import { css } from "../../styled-system/css";
-import { getLangFromUrl, useTranslations } from "../i18n";
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const home = lang === "fr" ? "/fr" : "/";
+import NotFound from "../themes/modern/views/NotFound.astro";
 ---
 
-<Page title="404 - s1m0n3rdx">
-  <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
-    <div class={css({ maxW: "classic", mx: "auto", py: "20", textAlign: "center" })}>
-      <p class={css({ fontFamily: "display", fontSize: "clamp(4rem, 15vw, 10rem)", lineHeight: "1", color: "border", mb: "6" })}>404</p>
-      <p class={css({ textStyle: "classic.body", color: "textMuted", mb: "8" })}>{t("notfound.text")}</p>
-      <a href={home} class={css({ textStyle: "classic.label", color: "textMuted", _hover: { color: "text" } })}>
-        {t("notfound.back")} <span style="color: var(--colors-accent)">→</span>
-      </a>
-    </div>
-  </div>
-</Page>
+<NotFound />
