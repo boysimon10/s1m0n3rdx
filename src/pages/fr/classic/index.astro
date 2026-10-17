@@ -1,0 +1,17 @@
+---
+import Page from "../../../themes/classic/layouts/Page.astro";
+import Hero from "../../../themes/classic/components/home/Hero.astro";
+import Projects from "../../../themes/classic/components/home/Projects.astro";
+import Articles from "../../../themes/classic/components/home/Articles.fr.astro";
+import { css } from "../../../../styled-system/css";
+---
+
+<Page title="s1m0n3rdx">
+  <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
+    <div class={css({ maxW: "classic", mx: "auto" })}>
+      <Hero />
+      <Articles />
+      <Projects />
+    </div>
+  </div>
+</Page>

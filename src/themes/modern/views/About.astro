@@ -1,0 +1,179 @@
+---
+import Page from "../layouts/Page.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import CardLabel from "../components/CardLabel.astro";
+import Tag from "../components/Tag.astro";
+import Diamond from "../components/Diamond.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { getIconSvg } from "../../../utils/icons";
+import { stack } from "../../../data/stack";
+import { experience, contractType } from "../../../data/experience";
+import { socials, site } from "../../../data/site";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+import IconArrowRight from "iconoir/icons/regular/arrow-right.svg?raw";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const contractLabels: Record<contractType, string> = {
+  [contractType.FULL_TIME]: t("contract.fulltime"),
+  [contractType.PART_TIME]: t("contract.parttime"),
+  [contractType.CONTRACT]: t("contract.contract"),
+  [contractType.INTERNSHIP]: t("contract.internship"),
+  [contractType.INDEPENDENT]: t("contract.independent"),
+};
+
+const contactKeys = ["github", "linkedin", "mail"];
+const contacts = socials
+  .filter((s) => contactKeys.includes(s.icon))
+  .map((s) => ({ href: s.href, label: s.icon === "mail" ? site.email : s.label.toLowerCase(), external: s.icon !== "mail" }));
+
+const card = css({ border: "1.5px solid {colors.border}", rounded: "lg", bg: "surface" });
+const listCard = css({ display: "flex", flexDir: "column", pt: "clamp(18px, 2.6vw, 28px)", px: "clamp(18px, 2.6vw, 28px)", pb: "8px" });
+const rowDivider = css({ borderTop: "1px solid {colors.hairline}" });
+---
+
+<Page title={lang === "fr" ? "À propos" : "About"}>
+  <div class={css({ display: "flex", flexDir: "column", gap: "16px" })}>
+    <div class={css({ mb: "4px" })}>
+      <SectionHeader label={t("about.heading")} />
+    </div>
+
+    <div class={cx(card, css({ display: "flex", flexDir: "column", gap: "16px", p: "clamp(22px, 3.4vw, 40px)" }))}>
+      <p class={css({ m: "0", maxW: "30em", fontFamily: "body", fontWeight: "500", fontSize: "clamp(1.3rem, 2.8vw, 2rem)", lineHeight: "1.25", letterSpacing: "-0.02em", textWrap: "pretty" })}>
+        {t("about.p1")}
+      </p>
+      <p class={css({ m: "0", maxW: "44em", fontFamily: "body", fontSize: "clamp(1.05rem, 1.6vw, 1.2rem)", lineHeight: "1.55", color: "textMuted", textWrap: "pretty" })}>
+        {t("about.p2")}
+      </p>
+    </div>
+
+    <div class={cx(card, listCard)}>
+      <div class={css({ mb: "14px" })}><CardLabel>{t("section.stack")}</CardLabel></div>
+      {stack.map(({ category, category_fr, items }) => (
+        <div class={cx(rowDivider, css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px 16px", py: "14px" }))}>
+          <span class={css({ flex: "0 0 9rem", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1.3", color: "textMuted" })}>
+            {lang === "fr" && category_fr ? category_fr : category}
+          </span>
+          <div class={css({ flex: "1 1 220px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "8px" })}>
+            {items.map(({ label, icon, iconSource, related }) => (
+              <span class={css({ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: "6px", maxW: "100%" })}>
+                <Tag label={label} icon={icon} iconSource={iconSource} />
+                {related && (
+                  <span class={css({ display: "inline-flex", alignItems: "center", gap: "6px", fontFamily: "mono", fontSize: "15px", lineHeight: "1", color: "textMuted" })}>
+                    <span>[</span>
+                    {related.map(({ label: rl, icon: ri, iconSource: rs }) => {
+                      const svg = getIconSvg(ri, rs, 13);
+                      return (
+                        <span
+                          class={css({
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "5px",
+                            py: "4px",
+                            pl: "6px",
+                            pr: "8px",
+                            border: "1px dashed {colors.border}",
+                            rounded: "pill",
+                            fontWeight: "500",
+                            fontSize: "11.5px",
+                            color: "text",
+                            whiteSpace: "nowrap",
+                          })}
+                        >
+                          {svg ? <span class={css({ display: "flex" })} set:html={svg} /> : <Diamond size={6} />}
+                          {rl}
+                        </span>
+                      );
+                    })}
+                    <span>]</span>
+                  </span>
+                )}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class={css({ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "stretch" })}>
+      <div class={cx(card, listCard, css({ flex: "2 1 520px", minW: "0" }))}>
+        <div class={css({ mb: "14px" })}><CardLabel>{t("section.experience")}</CardLabel></div>
+        {experience.map(({ role, company, url, contractType: ct, period, tags }) => (
+          <div class={cx(rowDivider, css({ display: "flex", flexDir: "column", gap: "10px", py: "18px" }))}>
+            <div class={css({ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: "8px 16px" })}>
+              <h3 class={css({ flex: "1 1 240px", m: "0", fontFamily: "heading", fontWeight: "700", fontSize: "1.2rem", lineHeight: "1.25", letterSpacing: "-0.015em" })}>
+                {role}
+              </h3>
+              <span class={css({ flex: "none", py: "6px", px: "10px", border: "1px solid {colors.border}", rounded: "pill", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1", whiteSpace: "nowrap" })}>
+                {period}
+              </span>
+            </div>
+            <div class={css({ fontFamily: "body", fontWeight: "500", fontSize: "15.5px", lineHeight: "1.4" })}>
+              {url ? (
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={css({ color: "accentText", textDecoration: "underline", textDecorationThickness: "1.5px", textUnderlineOffset: "3px", _hover: { bg: "accent", color: "text" } })}
+                >
+                  {company}
+                </a>
+              ) : (
+                <span class={css({ color: "accentText" })}>{company}</span>
+              )}
+              {ct && <span class={css({ color: "textMuted" })}> · {contractLabels[ct]}</span>}
+            </div>
+            <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+              {tags.map(({ label, icon, iconSource }) => <Tag label={label} icon={icon} iconSource={iconSource} />)}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class={css({ flex: "1 1 300px", display: "flex", flexDir: "column", gap: "16px" })}>
+        <div class={css({ display: "flex", flexDir: "column", gap: "16px", p: "clamp(18px, 2.6vw, 28px)", border: "1.5px solid {colors.border}", rounded: "lg", bg: "accent" })}>
+          <CardLabel>{t("section.education")}</CardLabel>
+          <p class={css({ m: "0", fontFamily: "heading", fontWeight: "700", fontSize: "clamp(1.4rem, 2.4vw, 1.75rem)", lineHeight: "1.15", letterSpacing: "-0.025em", textWrap: "pretty" })}>
+            {t("education.text")}
+          </p>
+        </div>
+
+        <div class={cx(card, css({ flex: "1", display: "flex", flexDir: "column", gap: "10px", p: "clamp(18px, 2.6vw, 28px)" }))}>
+          <div class={css({ mb: "6px" })}><CardLabel>{t("section.contact")}</CardLabel></div>
+          {contacts.map(({ href, label, external }) => (
+            <a
+              href={href}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noopener noreferrer" : undefined}
+              class={css({
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "12px",
+                py: "6px",
+                pr: "6px",
+                pl: "18px",
+                minW: "0",
+                border: "1.5px solid {colors.border}",
+                rounded: "pill",
+                fontFamily: "mono",
+                fontWeight: "500",
+                fontSize: "13.5px",
+                lineHeight: "1",
+                transition: "background 0.15s",
+                _hover: { bg: "accent" },
+              })}
+            >
+              <span class={css({ overflow: "hidden", textOverflow: "ellipsis" })}>{label}</span>
+              <span
+                class={css({ flex: "none", w: "34px", h: "34px", rounded: "full", bg: "text", color: "inverse", display: "grid", placeItems: "center", "& svg": { w: "15px", h: "15px" } })}
+                set:html={IconArrowRight}
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</Page>

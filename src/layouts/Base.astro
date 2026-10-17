@@ -1,28 +1,39 @@
 ---
 import "../styles/global.css";
-import { getLangFromUrl } from "../i18n";
+import { getLangFromUrl, getThemeFromUrl, getThemePath, type Theme } from "../i18n";
 
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  theme?: Theme;
 }
 
 const {
   title,
   description = "Portfolio & blog - dev, design, and thoughts.",
   ogImage,
-  canonicalURL = Astro.url.href,
+  theme = "modern",
 } = Astro.props;
 
 const siteTitle = "s1m0n3rdx";
 const fullTitle = title === siteTitle ? title : `${title} - ${siteTitle}`;
 const lang = getLangFromUrl(Astro.url);
+const canonicalURL =
+  Astro.props.canonicalURL ??
+  (getThemeFromUrl(Astro.url) === "classic"
+    ? new URL(getThemePath(Astro.url.pathname, "modern"), Astro.url).href
+    : Astro.url.href);
+
+const fonts = {
+  modern: "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap",
+  classic: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap",
+};
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-theme={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,10 +63,7 @@ const lang = getLangFromUrl(Astro.url);
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href={fonts[theme]} rel="stylesheet" />
   </head>
   <body>
     <slot />

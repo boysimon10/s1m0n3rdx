@@ -1,0 +1,31 @@
+---
+import { css } from "../../../../styled-system/css";
+import Diamond from "./Diamond.astro";
+
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<span
+  class={css({
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "6px",
+    py: "5px",
+    px: "10px",
+    rounded: "pill",
+    bg: "text",
+    color: "accent",
+    fontFamily: "mono",
+    fontWeight: "500",
+    fontSize: "11.5px",
+    lineHeight: "1",
+    whiteSpace: "nowrap",
+  })}
+>
+  <Diamond size={6} />
+  {label}
+</span>

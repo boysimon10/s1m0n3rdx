@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+import Page from "../layouts/Page.astro";
+import { css } from "../../../../styled-system/css";
+import { getIconSvg } from "../../../utils/icons";
+import type { ProjectEntry } from "../../../utils/projects";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
+
+interface Props {
+  project: ProjectEntry;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const pick = (en?: string, frText?: string) => (lang === "fr" && frText ? frText : en);
+
+const desc = pick(data.desc, data.desc_fr);
+const meta = [
+  { label: t("project.role"), value: pick(data.role, data.role_fr) },
+  { label: t("project.context"), value: pick(data.context, data.context_fr) },
+].filter((m) => m.value);
+const intro = pick(data.intro, data.intro_fr);
+const details = pick(data.details, data.details_fr);
+const links = [
+  data.href && { label: t("project.site"), href: data.href },
+  data.repo && { label: t("project.repo"), href: data.repo },
+].filter((l): l is { label: string; href: string } => !!l);
+
+const section = css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" });
+const metaLabel = css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0", w: "24" });
+---
+
+<Page title={data.name} description={desc}>
+  <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
+    <div class={css({ maxW: "classic", mx: "auto", py: "12" })}>
+      <a href={localePath(lang, "classic", "/projects")} class={css({ textStyle: "classic.label", color: "textMuted", _hover: { color: "text" } })}>
+        <span style="color: var(--colors-accent)">←</span> {t("projects.heading")}
+      </a>
+
+      <header class={css({ mt: "8", pb: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
+        <div class={css({ display: "flex", alignItems: "baseline", gap: "4", mb: "3", flexWrap: "wrap" })}>
+          <span class={css({ textStyle: "classic.label", color: "accent" })}>{project.num}</span>
+          <span class={css({ textStyle: "classic.label", color: "textMuted" })}>{data.year}</span>
+          {data.confidential && <span class={css({ textStyle: "classic.label", color: "textMuted" })}>· {t("project.confidential")}</span>}
+        </div>
+        <h1 class={css({ fontFamily: "heading", fontWeight: "600", fontSize: "clamp(1.5rem, 4vw, 2rem)", lineHeight: "1.2", letterSpacing: "-0.02em", mb: "3" })}>
+          {data.name}
+        </h1>
+        <p class={css({ textStyle: "classic.body", color: "textMuted", fontSize: "1rem" })}>{desc}</p>
+      </header>
+
+      <div class={css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border", display: "flex", flexDir: "column", gap: "5" })}>
+        {meta.map(({ label, value }) => (
+          <div class={css({ display: "flex", alignItems: "baseline", gap: "6" })}>
+            <span class={metaLabel}>{label}</span>
+            <span class={css({ textStyle: "classic.label" })}>{value}</span>
+          </div>
+        ))}
+        <div class={css({ display: "flex", alignItems: "baseline", gap: "6" })}>
+          <span class={metaLabel}>{t("project.stack")}</span>
+          <div class={css({ display: "flex", gap: "3", flexWrap: "wrap" })}>
+            {data.tags.map(({ label, icon, iconSource }) => (
+              <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
+                <span set:html={getIconSvg(icon, iconSource)} />
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {(intro || details || links.length > 0) && (
+        <div class={section}>
+          {intro && <p class={css({ textStyle: "classic.body", lineHeight: "1.75", mb: "4" })}>{intro}</p>}
+          {details && <p class={css({ textStyle: "classic.body", lineHeight: "1.75", color: "textMuted" })}>{details}</p>}
+          {links.length > 0 && (
+            <div class={css({ display: "flex", gap: "6", mt: "6" })}>
+              {links.map(({ label, href }) => (
+                <a href={href} target="_blank" rel="noopener noreferrer" class={css({ textStyle: "classic.label", color: "textMuted", _hover: { color: "text" } })}>
+                  {label} <span style="color: var(--colors-accent)">↗</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {data.screens.length > 0 && (
+        <div class={css({ py: "8" })}>
+          <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("project.screens")}</p>
+          <div class={css({ display: "flex", flexDir: "column", gap: "8" })}>
+            {data.screens.map(({ src, caption, caption_fr }) => (
+              <figure>
+                <Image
+                  src={src}
+                  alt={pick(caption, caption_fr) ?? ""}
+                  widths={[640, 960, 1280]}
+                  sizes="(min-width: 820px) 820px, 100vw"
+                  class={css({ display: "block", w: "100%", h: "auto", border: "1px solid", borderColor: "border", borderRadius: "12px" })}
+                />
+                <figcaption class={css({ textStyle: "classic.label", color: "textMuted", mt: "3" })}>{pick(caption, caption_fr)}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</Page>

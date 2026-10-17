@@ -7,6 +7,12 @@ export const site = {
   location: "Dakar",
   role: "Software Engineer",
   role_fr: "Ingénieur Logiciel",
+  avatar: "https://avatars.githubusercontent.com/u/47926032?v=4",
+};
+
+export const lastPlayed = {
+  title: "jolagreen23",
+  artist: "0.92",
 };
 
 export type Social = {

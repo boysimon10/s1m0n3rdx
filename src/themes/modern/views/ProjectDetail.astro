@@ -1,0 +1,186 @@
+---
+import { Image } from "astro:assets";
+import Page from "../layouts/Page.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import Tag from "../components/Tag.astro";
+import ConfidentialBadge from "../components/ConfidentialBadge.astro";
+import { css, cx } from "../../../../styled-system/css";
+import type { ProjectEntry } from "../../../utils/projects";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
+import IconArrowLeft from "iconoir/icons/regular/arrow-left.svg?raw";
+import IconArrowUpRight from "iconoir/icons/regular/arrow-up-right.svg?raw";
+
+interface Props {
+  project: ProjectEntry;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const fr = lang === "fr";
+const pick = (en?: string, frText?: string) => (fr && frText ? frText : en);
+
+const desc = pick(data.desc, data.desc_fr);
+const role = pick(data.role, data.role_fr);
+const context = pick(data.context, data.context_fr);
+const intro = pick(data.intro, data.intro_fr);
+const details = pick(data.details, data.details_fr);
+const links = [
+  data.href && { label: t("project.site"), href: data.href },
+  data.repo && { label: t("project.repo"), href: data.repo },
+].filter((l): l is { label: string; href: string } => !!l);
+
+const smallPill = css({ py: "7px", px: "12px", rounded: "pill", fontFamily: "mono", fontSize: "12.5px", lineHeight: "1", border: "1.5px solid {colors.border}" });
+const metaLabel = css({ textStyle: "eyebrow", fontSize: "11.5px", color: "textMuted" });
+const metaRow = css({ display: "flex", flexDir: "column", gap: "6px", py: "14px" });
+const metaDivider = css({ borderBottom: "1px solid {colors.hairline}" });
+---
+
+<Page title={data.name} description={desc}>
+  <div class={css({ display: "flex", flexDir: "column", gap: "16px" })}>
+    <a
+      href={localePath(lang, "modern", "/projects")}
+      class={css({
+        alignSelf: "flex-start",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "8px",
+        py: "6px",
+        pr: "14px",
+        pl: "6px",
+        border: "1.5px solid {colors.border}",
+        rounded: "pill",
+        fontFamily: "mono",
+        fontWeight: "500",
+        fontSize: "12.5px",
+        lineHeight: "1",
+        transition: "background 0.15s",
+        _hover: { bg: "accent" },
+      })}
+    >
+      <span
+        class={css({ w: "28px", h: "28px", rounded: "full", bg: "text", color: "inverse", display: "grid", placeItems: "center", "& svg": { w: "14px", h: "14px" } })}
+        set:html={IconArrowLeft}
+      />
+      {t("projects.heading")}
+    </a>
+
+    <div class={css({ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "stretch" })}>
+      <div
+        class={css({
+          flex: "999 1 540px",
+          minW: "0",
+          display: "flex",
+          flexDir: "column",
+          justifyContent: "space-between",
+          gap: "28px",
+          p: "clamp(20px, 3vw, 32px)",
+          border: "1.5px solid {colors.border}",
+          rounded: "lg",
+          bg: "surface",
+        })}
+      >
+        <div class={css({ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" })}>
+          <span class={cx(smallPill, css({ bg: "accent", fontWeight: "600" }))}>{project.num}</span>
+          <span class={cx(smallPill, css({ fontWeight: "500" }))}>{data.year}</span>
+          {data.confidential && <ConfidentialBadge label={t("project.confidential")} />}
+        </div>
+        <h1 class={css({ m: "0", fontFamily: "display", fontWeight: "800", fontSize: "clamp(2.75rem, 8vw, 5.5rem)", lineHeight: "0.9", letterSpacing: "-0.045em", textWrap: "balance" })}>
+          {data.name}
+        </h1>
+      </div>
+
+      <div class={css({ flex: "1 1 300px", display: "flex", flexDir: "column", py: "8px", px: "22px", border: "1.5px solid {colors.border}", rounded: "lg", bg: "surfaceAlt" })}>
+        {role && (
+          <div class={cx(metaRow, metaDivider)}>
+            <span class={metaLabel}>{t("project.role")}</span>
+            <span class={css({ fontFamily: "body", fontWeight: "600", fontSize: "16px", lineHeight: "1.35" })}>{role}</span>
+          </div>
+        )}
+        {context && (
+          <div class={cx(metaRow, metaDivider)}>
+            <span class={metaLabel}>{t("project.context")}</span>
+            <span class={css({ textStyle: "small", fontSize: "15.5px" })}>{context}</span>
+          </div>
+        )}
+        <div class={cx(metaRow, css({ gap: "10px" }))}>
+          <span class={metaLabel}>{t("project.stack")}</span>
+          <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+            {data.tags.map(({ label, icon, iconSource }) => <Tag label={label} icon={icon} iconSource={iconSource} surface />)}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {(intro || details || links.length > 0) && (
+      <div class={css({ display: "flex", flexWrap: "wrap", gap: "16px 48px", pt: "clamp(8px, 2vw, 24px)", pb: "clamp(16px, 3vw, 32px)" })}>
+        {intro && (
+          <p class={css({ flex: "1 1 320px", m: "0", fontFamily: "body", fontWeight: "500", fontSize: "clamp(1.2rem, 2.2vw, 1.5rem)", lineHeight: "1.4", letterSpacing: "-0.015em", textWrap: "pretty" })}>
+            {intro}
+          </p>
+        )}
+        <div class={css({ flex: "1 1 320px", display: "flex", flexDir: "column", gap: "20px" })}>
+          {details && <p class={css({ m: "0", fontFamily: "body", fontSize: "17px", lineHeight: "1.7", color: "textMuted", textWrap: "pretty" })}>{details}</p>}
+          {links.length > 0 && (
+            <div class={css({ display: "flex", flexWrap: "wrap", gap: "8px" })}>
+              {links.map(({ label, href }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={css({
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    py: "6px",
+                    pr: "6px",
+                    pl: "18px",
+                    rounded: "pill",
+                    bg: "text",
+                    color: "inverse",
+                    fontFamily: "mono",
+                    fontWeight: "500",
+                    fontSize: "13px",
+                    lineHeight: "1",
+                  })}
+                >
+                  {label}
+                  <span
+                    class={css({ w: "32px", h: "32px", rounded: "full", bg: "accent", color: "text", display: "grid", placeItems: "center", "& svg": { w: "15px", h: "15px" } })}
+                    set:html={IconArrowUpRight}
+                  />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    {data.screens.length > 0 && (
+      <>
+        <SectionHeader label={t("project.screens")}>
+          <span slot="right" class={css({ flex: "none", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1", color: "textMuted" })}>
+            {data.screens.length}
+          </span>
+        </SectionHeader>
+        <div class={css({ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 420px), 1fr))", gap: "16px" })}>
+          {data.screens.map(({ src, caption, caption_fr }) => (
+            <figure class={css({ m: "0", border: "1.5px solid {colors.border}", rounded: "md", overflow: "hidden", bg: "surface" })}>
+              <div aria-hidden="true" class={css({ display: "flex", alignItems: "center", gap: "5px", py: "9px", px: "12px", borderBottom: "1.5px solid {colors.border}" })}>
+                <span class={css({ w: "8px", h: "8px", rounded: "full", bg: "accent" })}></span>
+                <span class={css({ w: "8px", h: "8px", rounded: "full", bg: "accent", border: "1px solid {colors.border}" })}></span>
+                <span class={css({ w: "8px", h: "8px", rounded: "full", border: "1px solid {colors.border}" })}></span>
+              </div>
+              <Image src={src} alt={pick(caption, caption_fr) ?? ""} widths={[640, 960, 1280]} sizes="(min-width: 1180px) 560px, 100vw" class={css({ display: "block", w: "100%", h: "auto" })} />
+              <figcaption class={css({ py: "11px", px: "14px", borderTop: "1.5px solid {colors.border}", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1.3" })}>
+                {pick(caption, caption_fr)}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</Page>

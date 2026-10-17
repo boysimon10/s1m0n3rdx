@@ -1,17 +1,5 @@
 ---
-import Page from "../../layouts/Page.astro";
-import Hero from "../../components/home/Hero.astro";
-import Projects from "../../components/home/Projects.astro";
-import Articles from "../../components/home/Articles.fr.astro";
-import { css } from "../../../styled-system/css";
+import Home from "../../themes/modern/views/Home.astro";
 ---
 
-<Page title="s1m0n3rdx">
-  <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
-    <div class={css({ maxW: "container", mx: "auto" })}>
-      <Hero />
-      <Articles />
-      <Projects />
-    </div>
-  </div>
-</Page>
+<Home />

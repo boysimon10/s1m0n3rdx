@@ -87,3 +87,211 @@
 .prose strong {
   font-weight: 600;
 }
+
+/* modern theme article body */
+.prose-modern {
+  font-family: var(--fonts-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--colors-text);
+}
+
+.prose-modern > :first-child {
+  margin-top: 0;
+}
+
+.prose-modern p {
+  margin: 0 0 20px;
+  text-wrap: pretty;
+}
+
+.prose-modern h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 44px 0 14px;
+  font: 700 1.75rem/1.15 var(--fonts-heading);
+  letter-spacing: -0.025em;
+}
+
+.prose-modern h2::before {
+  content: "";
+  flex: none;
+  width: 11px;
+  height: 11px;
+  background: var(--colors-accent);
+  transform: rotate(45deg);
+}
+
+.prose-modern h3 {
+  margin: 36px 0 12px;
+  font: 700 1.25rem/1.25 var(--fonts-heading);
+  letter-spacing: -0.015em;
+}
+
+.prose-modern strong {
+  font-weight: 700;
+}
+
+.prose-modern a {
+  color: var(--colors-accent-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.prose-modern a:hover {
+  background: var(--colors-accent);
+  color: var(--colors-text);
+}
+
+.prose-modern :not(pre) > code {
+  padding: 2px 7px;
+  border: 1px solid var(--colors-border);
+  border-radius: 6px;
+  background: var(--colors-surface-alt);
+  font: 500 0.86em/1 var(--fonts-mono);
+}
+
+/* code blocks always use the dark shiki palette */
+.prose-modern pre.astro-code {
+  position: relative;
+  margin: 28px 0;
+  padding: 58px 20px 18px;
+  border: 1.5px solid var(--colors-border);
+  border-radius: 18px;
+  background-color: var(--colors-code-bg) !important;
+  color: var(--colors-code-text) !important;
+  font: 400 13.5px/1.7 var(--fonts-mono);
+  overflow-x: auto;
+}
+
+.prose-modern pre.astro-code span {
+  color: var(--shiki-dark) !important;
+}
+
+.prose-modern pre.astro-code::before {
+  content: attr(data-language);
+  position: absolute;
+  inset: 0 0 auto;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--colors-code-border);
+  color: var(--colors-accent);
+  font: 500 12px/1 var(--fonts-mono);
+}
+
+.prose-modern pre.astro-code::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 46px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--colors-accent);
+  box-shadow: 15px 0 0 var(--colors-text-faint), 30px 0 0 var(--colors-inverse);
+}
+
+.prose-modern ul,
+.prose-modern ol {
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prose-modern ol {
+  gap: 10px;
+  counter-reset: item;
+}
+
+.prose-modern li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.prose-modern ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  background: var(--colors-accent);
+  transform: rotate(45deg);
+}
+
+.prose-modern ol > li {
+  padding-left: 42px;
+  counter-increment: item;
+}
+
+.prose-modern ol > li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--colors-border);
+  border-radius: 50%;
+  background: var(--colors-accent);
+  display: grid;
+  place-items: center;
+  font: 500 12.5px/1 var(--fonts-mono);
+}
+
+.prose-modern li > p {
+  margin: 0;
+}
+
+.prose-modern blockquote {
+  display: flex;
+  gap: 16px;
+  margin: 32px 0;
+  padding: 20px 0;
+  border-top: 1.5px solid var(--colors-border);
+  border-bottom: 1.5px solid var(--colors-border);
+}
+
+.prose-modern blockquote::before {
+  content: "\201C";
+  flex: none;
+  font: 800 3.5rem/0.8 var(--fonts-display);
+  color: var(--colors-accent);
+}
+
+.prose-modern blockquote p {
+  margin: 0;
+  font: italic 500 1.3rem/1.45 var(--fonts-body);
+  letter-spacing: -0.01em;
+}
+
+.prose-modern hr {
+  position: relative;
+  height: 1.5px;
+  margin: 40px 0;
+  border: none;
+  background: var(--colors-border);
+  overflow: visible;
+}
+
+.prose-modern hr::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--colors-accent);
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 8px var(--colors-bg);
+}
+
+.prose-modern img {
+  max-width: 100%;
+  border: 1.5px solid var(--colors-border);
+  border-radius: 18px;
+}

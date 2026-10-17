@@ -1,0 +1,39 @@
+---
+import { css, cx } from "../../../../styled-system/css";
+import { getIconSvg, type IconSource } from "../../../utils/icons";
+import Diamond from "./Diamond.astro";
+
+interface Props {
+  label: string;
+  icon?: string;
+  iconSource?: IconSource;
+  surface?: boolean;
+}
+
+const { label, icon, iconSource = "dev", surface = false } = Astro.props;
+const svg = icon ? getIconSvg(icon, iconSource, 14) : "";
+---
+
+<span
+  class={cx(
+    css({
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "6px",
+      py: "5px",
+      pl: "7px",
+      pr: "10px",
+      border: "1px solid {colors.border}",
+      rounded: "pill",
+      fontFamily: "mono",
+      fontWeight: "500",
+      fontSize: "12px",
+      lineHeight: "1",
+      whiteSpace: "nowrap",
+    }),
+    surface && css({ bg: "surface" }),
+  )}
+>
+  {svg ? <span class={css({ display: "flex" })} set:html={svg} /> : <Diamond size={7} class={css({ mx: "3px" })} />}
+  {label}
+</span>

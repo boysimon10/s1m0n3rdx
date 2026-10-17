@@ -39,6 +39,12 @@ Copy `.env.example` to `.env` and fill in your values.
 
 ## Inspirations
 
+### Modern theme
+
+- [romainlanz.com](https://romainlanz.com/) - Romain Lanz
+
+### Classic theme
+
 - [sleek-portfolio](https://github.com/ramxcodes/sleek-portfolio) - ramxcodes
 - [blog](https://github.com/Christopher2K/blog) - Christopher2K
 - [puang](https://github.com/puang59/puang) - puang59
