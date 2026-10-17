@@ -1,0 +1,15 @@
+---
+import Page from "../layouts/Page.astro";
+import Hero from "../components/home/Hero.astro";
+import LatestPosts from "../components/home/LatestPosts.astro";
+import LatestProjects from "../components/home/LatestProjects.astro";
+import { css } from "../../../../styled-system/css";
+---
+
+<Page title="s1m0n3rdx">
+  <div class={css({ display: "flex", flexDir: "column", gap: "clamp(32px, 4vw, 48px)" })}>
+    <Hero />
+    <LatestPosts />
+    <LatestProjects />
+  </div>
+</Page>

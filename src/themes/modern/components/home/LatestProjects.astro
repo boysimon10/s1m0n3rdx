@@ -1,0 +1,17 @@
+---
+import { css } from "../../../../../styled-system/css";
+import { projects } from "../../../../data/projects";
+import { getLangFromUrl, localePath, useTranslations } from "../../../../i18n";
+import SectionHeader from "../SectionHeader.astro";
+import ProjectRow from "../ProjectRow.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class={css({ display: "flex", flexDir: "column", gap: "20px" })}>
+  <SectionHeader label={t("projects.heading")} href={localePath(lang, "modern", "/projects")} linkLabel={t("projects.seeAll")} />
+  <div class={css({ display: "flex", flexDir: "column", gap: "12px" })}>
+    {projects.slice(0, 3).map((project) => <ProjectRow project={project} />)}
+  </div>
+</section>

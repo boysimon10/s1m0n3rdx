@@ -1,0 +1,67 @@
+---
+import { css } from "../../../../styled-system/css";
+import type { Project } from "../../../data/projects";
+import { getLangFromUrl } from "../../../i18n";
+import Diamond from "./Diamond.astro";
+import Tag from "./Tag.astro";
+import IconArrowUpRight from "iconoir/icons/regular/arrow-up-right.svg?raw";
+
+interface Props {
+  project: Project;
+  showYear?: boolean;
+}
+
+const { project, showYear = false } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const desc = lang === "fr" && project.desc_fr ? project.desc_fr : project.desc;
+---
+
+<a
+  href={project.href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class={css({
+    display: "flex",
+    border: "1.5px solid {colors.border}",
+    rounded: "lg",
+    bg: "surface",
+    overflow: "hidden",
+    transition: "background 0.15s",
+    _hover: { bg: "accentSoft" },
+  })}
+>
+  <div
+    class={css({
+      flex: "none",
+      w: "clamp(56px, 8vw, 84px)",
+      bg: "accent",
+      borderRight: "1.5px solid {colors.border}",
+      display: "flex",
+      flexDir: "column",
+      alignItems: "center",
+      justifyContent: "space-between",
+      py: "18px",
+      gap: "16px",
+    })}
+  >
+    <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "1.125rem", lineHeight: "1" })}>{project.num}</span>
+    <Diamond size={10} outlined />
+  </div>
+
+  <div class={css({ flex: "1", minW: "0", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px 24px", py: "18px", px: "clamp(16px, 2.4vw, 24px)" })}>
+    <div class={css({ flex: "1 1 300px", minW: "0", display: "flex", flexDir: "column", gap: "8px" })}>
+      <span class={css({ textStyle: "h3", lineHeight: "1.1" })}>{project.name}</span>
+      <span class={css({ textStyle: "small", fontSize: "15.5px", color: "textMuted" })}>{desc}</span>
+      <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px", mt: "2px" })}>
+        {project.tags.map(({ label, icon, iconSource }) => <Tag label={label} icon={icon} iconSource={iconSource} />)}
+      </div>
+    </div>
+    <div class={css({ flex: "none", display: "flex", alignItems: "center", gap: "14px" })}>
+      {showYear && <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", color: "textMuted" })}>{project.year}</span>}
+      <span
+        class={css({ w: "40px", h: "40px", rounded: "full", bg: "text", color: "inverse", display: "grid", placeItems: "center", "& svg": { w: "17px", h: "17px" } })}
+        set:html={IconArrowUpRight}
+      />
+    </div>
+  </div>
+</a>
