@@ -1,25 +1,31 @@
 ---
 import { css } from "../../../../styled-system/css";
-import type { Project } from "../../../data/projects";
-import { getLangFromUrl } from "../../../i18n";
+import type { ProjectEntry } from "../../../utils/projects";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
 import Diamond from "./Diamond.astro";
 import Tag from "./Tag.astro";
+import ConfidentialBadge from "./ConfidentialBadge.astro";
 import IconArrowUpRight from "iconoir/icons/regular/arrow-up-right.svg?raw";
+import IconArrowRight from "iconoir/icons/regular/arrow-right.svg?raw";
 
 interface Props {
-  project: Project;
+  project: ProjectEntry;
   showYear?: boolean;
 }
 
 const { project, showYear = false } = Astro.props;
+const { data } = project;
 const lang = getLangFromUrl(Astro.url);
-const desc = lang === "fr" && project.desc_fr ? project.desc_fr : project.desc;
+const t = useTranslations(lang);
+const desc = lang === "fr" && data.desc_fr ? data.desc_fr : data.desc;
+const external = !data.page;
+const href = external ? data.href : localePath(lang, "modern", `/projects/${project.id}`);
 ---
 
 <a
-  href={project.href}
-  target="_blank"
-  rel="noopener noreferrer"
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
   class={css({
     display: "flex",
     border: "1.5px solid {colors.border}",
@@ -50,17 +56,20 @@ const desc = lang === "fr" && project.desc_fr ? project.desc_fr : project.desc;
 
   <div class={css({ flex: "1", minW: "0", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px 24px", py: "18px", px: "clamp(16px, 2.4vw, 24px)" })}>
     <div class={css({ flex: "1 1 300px", minW: "0", display: "flex", flexDir: "column", gap: "8px" })}>
-      <span class={css({ textStyle: "h3", lineHeight: "1.1" })}>{project.name}</span>
+      <div class={css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "8px 12px" })}>
+        <span class={css({ textStyle: "h3", lineHeight: "1.1" })}>{data.name}</span>
+        {data.confidential && <ConfidentialBadge label={t("project.confidential")} />}
+      </div>
       <span class={css({ textStyle: "small", fontSize: "15.5px", color: "textMuted" })}>{desc}</span>
       <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px", mt: "2px" })}>
-        {project.tags.map(({ label, icon, iconSource }) => <Tag label={label} icon={icon} iconSource={iconSource} />)}
+        {data.tags.map(({ label, icon, iconSource }) => <Tag label={label} icon={icon} iconSource={iconSource} />)}
       </div>
     </div>
     <div class={css({ flex: "none", display: "flex", alignItems: "center", gap: "14px" })}>
-      {showYear && <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", color: "textMuted" })}>{project.year}</span>}
+      {showYear && <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", color: "textMuted" })}>{data.year}</span>}
       <span
         class={css({ w: "40px", h: "40px", rounded: "full", bg: "text", color: "inverse", display: "grid", placeItems: "center", "& svg": { w: "17px", h: "17px" } })}
-        set:html={IconArrowUpRight}
+        set:html={external ? IconArrowUpRight : IconArrowRight}
       />
     </div>
   </div>

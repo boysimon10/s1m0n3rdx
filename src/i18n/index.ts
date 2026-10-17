@@ -42,6 +42,13 @@ export const ui = {
     "void.line3": "- just stuff.",
     "void.empty": "// nothing yet.",
     "void.back": "// back to void",
+    "project.role": "role",
+    "project.context": "context",
+    "project.stack": "stack",
+    "project.screens": "screens",
+    "project.confidential": "client · confidential",
+    "project.site": "website",
+    "project.repo": "repo",
   },
   fr: {
     "nav.home": "Accueil",
@@ -83,6 +90,13 @@ export const ui = {
     "void.line3": "- juste des trucs.",
     "void.empty": "// rien pour l'instant.",
     "void.back": "// retour au void",
+    "project.role": "rôle",
+    "project.context": "contexte",
+    "project.stack": "stack",
+    "project.screens": "captures",
+    "project.confidential": "client · confidentiel",
+    "project.site": "site",
+    "project.repo": "repo",
   },
 } as const;
 

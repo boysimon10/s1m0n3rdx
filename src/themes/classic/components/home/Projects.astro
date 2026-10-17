@@ -1,11 +1,17 @@
 ---
 import { css } from "../../../../../styled-system/css";
-import { projects } from "../../../../data/projects";
+import { getProjects } from "../../../../utils/projects";
 import { getIconSvg } from "../../../../utils/icons";
 import { getLangFromUrl, getThemeFromUrl, localePath, useTranslations } from "../../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const projects = (await getProjects()).map((p) => ({
+  ...p.data,
+  num: p.num,
+  href: p.data.page ? localePath(lang, "classic", `/projects/${p.id}`) : p.data.href,
+  external: !p.data.page,
+}));
 const theme = getThemeFromUrl(Astro.url);
 ---
 
@@ -18,11 +24,11 @@ const theme = getThemeFromUrl(Astro.url);
   </div>
 
   <div class={css({ display: "flex", flexDir: "column" })}>
-    {projects.map(({ num, name, desc, desc_fr, tags, href }) => (
+    {projects.map(({ num, name, desc, desc_fr, tags, href, external }) => (
       <a
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
         class={css({ display: "flex", alignItems: "baseline", gap: "6", py: "5", borderBottom: "1px solid", borderBottomColor: "border", _hover: { opacity: "0.75" } })}
       >
         <span class={css({ textStyle: "classic.label", color: "accent", flexShrink: "0" })}>{num}</span>

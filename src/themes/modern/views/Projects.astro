@@ -3,11 +3,12 @@ import Page from "../layouts/Page.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import ProjectRow from "../components/ProjectRow.astro";
 import { css } from "../../../../styled-system/css";
-import { projects } from "../../../data/projects";
+import { getProjects } from "../../../utils/projects";
 import { getLangFromUrl, useTranslations } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const projects = await getProjects();
 ---
 
 <Page title={lang === "fr" ? "Projets" : "Projects"}>
