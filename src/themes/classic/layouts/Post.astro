@@ -27,8 +27,9 @@ const translationLabel = translationLang === "fr" ? "Lire en français" : "Read 
 ---
 
 <Base title={title} description={description} ogImage={ogImage} theme="classic">
+  <div class={css({ display: "flex", flexDir: "column", minH: "100dvh" })}>
   <Header />
-  <main class={css({ px: "clamp(14px, 4vw, 40px)" })}>
+  <main class={css({ flex: "1", px: "clamp(14px, 4vw, 40px)" })}>
     <div class={css({ maxW: "classic", mx: "auto", py: "12" })}>
       <header class={css({ mb: "10", pb: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
         {formattedDate && (
@@ -68,4 +69,5 @@ const translationLabel = translationLang === "fr" ? "Lire en français" : "Read 
     </div>
   </main>
   <Footer />
+  </div>
 </Base>

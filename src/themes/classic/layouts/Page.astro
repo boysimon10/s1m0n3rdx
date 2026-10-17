@@ -2,6 +2,7 @@
 import Base from "../../../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { css } from "../../../../styled-system/css";
 
 interface Props {
   title: string;
@@ -13,9 +14,11 @@ const { title, description, ogImage } = Astro.props;
 ---
 
 <Base title={title} description={description} ogImage={ogImage} theme="classic">
-  <Header />
-  <main>
-    <slot />
-  </main>
-  <Footer />
+  <div class={css({ display: "flex", flexDir: "column", minH: "100dvh" })}>
+    <Header />
+    <main class={css({ flex: "1" })}>
+      <slot />
+    </main>
+    <Footer />
+  </div>
 </Base>

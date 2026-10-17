@@ -24,10 +24,11 @@ const { title, description, ogImage } = Astro.props;
       display: "flex",
       flexDir: "column",
       gap: "clamp(28px, 4vw, 48px)",
+      minH: "100dvh",
     })}
   >
     <Header />
-    <main>
+    <main class={css({ flex: "1" })}>
       <slot />
     </main>
     <Footer />
