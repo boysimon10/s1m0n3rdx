@@ -1,0 +1,53 @@
+---
+import { css } from "../../../../styled-system/css";
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  date: string;
+  badge?: boolean;
+}
+
+const { href, title, description, date, badge = false } = Astro.props;
+---
+
+<a
+  href={href}
+  class={css({
+    display: "flex",
+    flexDir: "column",
+    gap: "10px",
+    py: "18px",
+    px: "20px",
+    border: "1.5px dashed {colors.border}",
+    rounded: "lg",
+    transition: "background 0.15s",
+    _hover: { bg: "surfaceAlt" },
+  })}
+>
+  <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px" })}>
+    <h3 class={css({ m: "0", fontFamily: "mono", fontWeight: "500", fontSize: "1.06rem", lineHeight: "1.35", letterSpacing: "-0.01em" })}>{title}</h3>
+    <span class={css({ flex: "none", pt: "3px", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1", color: "textMuted" })}>{date}</span>
+  </div>
+  <span class={css({ textStyle: "small", fontSize: "15px", color: "textMuted" })}>{description}</span>
+  {badge && (
+    <span
+      class={css({
+        alignSelf: "flex-start",
+        mt: "4px",
+        py: "6px",
+        px: "10px",
+        rounded: "pill",
+        bg: "text",
+        color: "accent",
+        fontFamily: "mono",
+        fontWeight: "500",
+        fontSize: "12px",
+        lineHeight: "1",
+      })}
+    >
+      void()
+    </span>
+  )}
+</a>

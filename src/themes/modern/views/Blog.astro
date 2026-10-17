@@ -1,0 +1,88 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Page from "../layouts/Page.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import Tag from "../components/Tag.astro";
+import VoidCard from "../components/VoidCard.astro";
+import { css } from "../../../../styled-system/css";
+import { getLangFromUrl, getSlugFromId, localePath, useTranslations } from "../../../i18n";
+import { resolveTagIcon } from "../../../utils/tagIcons";
+import { formatDate } from "../../../utils/formatDate";
+
+type FeedItem =
+  | { type: "article"; post: CollectionEntry<"articles"> }
+  | { type: "void"; post: CollectionEntry<"void"> };
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const inLang = (id: string) => id.startsWith(`${lang}/`);
+
+const articles = (await getCollection("articles", ({ id, data }) => !data.draft && inLang(id))).map(
+  (post) => ({ type: "article" as const, post }),
+);
+const voids = (await getCollection("void", ({ id, data }) => data.showInBlog && !data.draft && inLang(id))).map(
+  (post) => ({ type: "void" as const, post }),
+);
+const feed: FeedItem[] = [...articles, ...voids].sort((a, b) => b.post.data.date.getTime() - a.post.data.date.getTime());
+---
+
+<Page title="Blog">
+  <div class={css({ display: "flex", flexDir: "column", gap: "20px" })}>
+    <SectionHeader label={t("blog.heading")}>
+      <a
+        slot="right"
+        href={localePath(lang, "modern", "/void")}
+        class={css({ flex: "none", fontFamily: "mono", fontSize: "12px", lineHeight: "1", color: "textFaint", _hover: { color: "text" } })}
+      >
+        {"void() =>"}
+      </a>
+    </SectionHeader>
+
+    {feed.length === 0 && <p class={css({ textStyle: "small", color: "textMuted" })}>{t("blog.empty")}</p>}
+
+    <div class={css({ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 440px), 1fr))", gap: "16px" })}>
+      {feed.map((item) =>
+        item.type === "void" ? (
+          <VoidCard
+            href={localePath(lang, "modern", `/void/${getSlugFromId(item.post.id)}`)}
+            title={item.post.data.title}
+            description={item.post.data.description}
+            date={formatDate(item.post.data.date, lang)}
+            badge
+          />
+        ) : (
+          <a
+            href={localePath(lang, "modern", `/blog/${getSlugFromId(item.post.id)}`)}
+            class={css({
+              display: "flex",
+              flexDir: "column",
+              gap: "12px",
+              p: "22px",
+              border: "1.5px solid {colors.border}",
+              rounded: "lg",
+              bg: "surface",
+              transition: "background 0.15s",
+              _hover: { bg: "accentSoft" },
+            })}
+          >
+            <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px" })}>
+              <h3 class={css({ m: "0", textStyle: "h3", textWrap: "pretty" })}>{item.post.data.title}</h3>
+              <span class={css({ flex: "none", pt: "5px", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1", color: "textMuted" })}>
+                {formatDate(item.post.data.date, lang)}
+              </span>
+            </div>
+            <span class={css({ textStyle: "small", fontSize: "15.5px", color: "textMuted", textWrap: "pretty" })}>{item.post.data.description}</span>
+            {item.post.data.tags.length > 0 && (
+              <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px", mt: "4px" })}>
+                {item.post.data.tags.map((tag) => {
+                  const info = resolveTagIcon(tag, item.post.data.tagIcons);
+                  return <Tag label={tag} icon={info?.icon} iconSource={info?.iconSource} />;
+                })}
+              </div>
+            )}
+          </a>
+        ),
+      )}
+    </div>
+  </div>
+</Page>

@@ -18,10 +18,14 @@ const navLinks = getNavLinks(lang, "modern");
 const homeHref = localePath(lang, "modern");
 
 const norm = (p: string) => p.replace(/\/$/, "") || "/";
-const isActive = (href: string) =>
-  href === homeHref
-    ? norm(currentPath) === href
-    : norm(currentPath) === href || currentPath.startsWith(href + "/");
+const matches = (href: string) => norm(currentPath) === href || currentPath.startsWith(href + "/");
+const blogHref = localePath(lang, "modern", "/blog");
+const voidHref = localePath(lang, "modern", "/void");
+const isActive = (href: string) => {
+  if (href === homeHref) return norm(currentPath) === href;
+  if (href === blogHref) return matches(href) || matches(voidHref);
+  return matches(href);
+};
 
 const langs = [
   { code: "EN", active: lang === "en", href: lang === "fr" ? getAlternatePath(currentPath, "en") : currentPath },

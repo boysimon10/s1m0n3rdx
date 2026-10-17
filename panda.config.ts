@@ -50,6 +50,7 @@ export default defineConfig({
             bg:      { value: "#1B1A16" },
             border:  { value: "#3A382F" },
             text:    { value: "#EEEADB" },
+            muted:   { value: "#CFC9B6" },
             keyword: { value: "#EC9B5A" },
             fn:      { value: "#A8D5C2" },
             type:    { value: "#FF8E66" },

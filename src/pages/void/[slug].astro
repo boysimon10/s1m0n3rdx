@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
-import Post from "../../themes/classic/layouts/Post.astro";
+import Post from "../../themes/modern/layouts/Post.astro";
 import { getSlugFromId } from "../../i18n";
 
 export async function getStaticPaths() {
@@ -19,7 +19,7 @@ const { Content } = await render(entry);
   title={entry.data.title}
   description={entry.data.description}
   date={entry.data.date}
-  tags={[]}
+  variant="void"
 >
   <Content />
 </Post>
