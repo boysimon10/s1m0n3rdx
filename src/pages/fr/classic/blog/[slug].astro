@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from "astro:content";
+import Post from "../../../../themes/classic/layouts/Post.astro";
+import { getSlugFromId } from "../../../../i18n";
+
+export async function getStaticPaths() {
+  const all = await getCollection("articles", ({ data }) => !data.draft);
+  const frPosts = all.filter(p => p.id.startsWith("fr/"));
+  const enPosts = all.filter(p => p.id.startsWith("en/"));
+
+  return frPosts.map(post => {
+    const translation = post.data.translationKey
+      ? enPosts.find(p => p.data.translationKey === post.data.translationKey)
+      : undefined;
+    return {
+      params: { slug: getSlugFromId(post.id) },
+      props: { post, translationSlug: translation ? getSlugFromId(translation.id) : undefined },
+    };
+  });
+}
+
+const { post, translationSlug } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Post
+  title={post.data.title}
+  description={post.data.description}
+  date={post.data.date}
+  tags={post.data.tags}
+  tagIcons={post.data.tagIcons}
+  translationUrl={translationSlug ? `/classic/blog/${translationSlug}` : undefined}
+  translationLang={translationSlug ? "en" : undefined}
+>
+  <Content />
+</Post>

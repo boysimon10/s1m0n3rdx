@@ -1,24 +1,24 @@
 ---
-import { css } from "../../../styled-system/css";
-import { getIconSvg } from "../../utils/icons";
-import { stack } from "../../data/stack";
-import { getLangFromUrl, useTranslations } from "../../i18n";
+import { css } from "../../../../../styled-system/css";
+import { getIconSvg } from "../../../../utils/icons";
+import { stack } from "../../../../data/stack";
+import { getLangFromUrl, useTranslations } from "../../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
 <div class={css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
-  <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("section.stack")}</p>
+  <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("section.stack")}</p>
   <div class={css({ display: "flex", flexDir: "column", gap: "5" })}>
     {stack.map(({ category, category_fr, items }) => (
       <div class={css({ display: "flex", alignItems: "baseline", gap: "6" })}>
-        <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0", w: "20" })}>
+        <span class={css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0", w: "20" })}>
           {lang === "fr" && category_fr ? category_fr : category}
         </span>
         <div class={css({ display: "flex", gap: "4", flexWrap: "wrap", alignItems: "center" })}>
           {items.map(({ label, icon, iconSource, related }) => (
-            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "label", color: "textMuted" })}>
+            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
               <span set:html={getIconSvg(icon, iconSource)} />
               {label}
               {related && (

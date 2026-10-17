@@ -1,7 +1,7 @@
 ---
-import { css } from "../../styled-system/css";
+import { css } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
-import { getLangFromUrl, useTranslations } from "../i18n";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -9,8 +9,8 @@ const year = new Date().getFullYear();
 ---
 
 <footer class={css({ px: "clamp(14px, 4vw, 40px)", py: "12" })}>
-  <div class={css({ maxW: "container", mx: "auto", borderTop: "1px solid", borderTopColor: "border", pt: "12", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4" })}>
-    <span class={css({ textStyle: "label", color: "textMuted" })}>
+  <div class={css({ maxW: "classic", mx: "auto", borderTop: "1px solid", borderTopColor: "border", pt: "12", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "4" })}>
+    <span class={css({ textStyle: "classic.label", color: "textMuted" })}>
       {t("footer.rights")} Simon M. A. Diouf © {year}
     </span>
     <a

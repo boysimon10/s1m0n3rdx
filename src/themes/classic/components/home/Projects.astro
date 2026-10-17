@@ -1,18 +1,18 @@
 ---
-import { css } from "../../../styled-system/css";
-import { projects } from "../../data/projects";
-import { getIconSvg } from "../../utils/icons";
-import { getLangFromUrl, useTranslations } from "../../i18n";
+import { css } from "../../../../../styled-system/css";
+import { projects } from "../../../../data/projects";
+import { getIconSvg } from "../../../../utils/icons";
+import { getLangFromUrl, getThemeFromUrl, localePath, useTranslations } from "../../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const base = lang === "fr" ? "/fr" : "";
+const theme = getThemeFromUrl(Astro.url);
 ---
 
 <section class={css({ py: "12" })}>
   <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: "8" })}>
-    <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted" })}>{t("projects.heading")}</p>
-    <a href={`${base}/projects`} class={css({ textStyle: "label", color: "textMuted", _hover: { color: "text" } })}>
+    <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted" })}>{t("projects.heading")}</p>
+    <a href={localePath(lang, theme, "/projects")} class={css({ textStyle: "classic.label", color: "textMuted", _hover: { color: "text" } })}>
       {t("projects.seeAll")} <span style="color: var(--colors-accent)">→</span>
     </a>
   </div>
@@ -25,14 +25,14 @@ const base = lang === "fr" ? "/fr" : "";
         rel="noopener noreferrer"
         class={css({ display: "flex", alignItems: "baseline", gap: "6", py: "5", borderBottom: "1px solid", borderBottomColor: "border", _hover: { opacity: "0.75" } })}
       >
-        <span class={css({ textStyle: "label", color: "accent", flexShrink: "0" })}>{num}</span>
+        <span class={css({ textStyle: "classic.label", color: "accent", flexShrink: "0" })}>{num}</span>
         <div class={css({ flex: "1", minW: "0" })}>
           <span class={css({ fontFamily: "heading", fontWeight: "600", fontSize: "1rem" })}>{name}</span>
-          <p class={css({ textStyle: "body", color: "textMuted", fontSize: "0.9rem", mt: "1" })}>{lang === "fr" && desc_fr ? desc_fr : desc}</p>
+          <p class={css({ textStyle: "classic.body", color: "textMuted", fontSize: "0.9rem", mt: "1" })}>{lang === "fr" && desc_fr ? desc_fr : desc}</p>
         </div>
         <div class={css({ display: "flex", gap: "3", flexWrap: "wrap", flexShrink: "0" })}>
           {tags.map(({ label, icon, iconSource }) => (
-            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "label", color: "textMuted" })}>
+            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
               <span set:html={getIconSvg(icon, iconSource)} />
               {label}
             </span>

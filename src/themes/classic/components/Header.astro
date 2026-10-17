@@ -1,26 +1,31 @@
 ---
-import { css } from "../../styled-system/css";
+import { css } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
-import { getLangFromUrl, useTranslations, getAlternatePath, getNavLinks } from "../i18n";
+import { getLangFromUrl, getThemeFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
+const theme = getThemeFromUrl(Astro.url);
 const t = useTranslations(lang);
 const currentPath = Astro.url.pathname;
-const navLinks = getNavLinks(lang);
+const navLinks = getNavLinks(lang, theme);
+const homeHref = localePath(lang, theme);
 
+const norm = (p: string) => p.replace(/\/$/, "") || "/";
 const isActive = (href: string) =>
-  href === "/" || href === "/fr"
-    ? currentPath === href
-    : currentPath === href || currentPath.startsWith(href + "/");
+  href === homeHref
+    ? norm(currentPath) === href
+    : norm(currentPath) === href || currentPath.startsWith(href + "/");
 
 const enUrl = lang === "fr" ? getAlternatePath(currentPath, "en") : currentPath;
 const frUrl = lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath;
+const modernUrl = getThemePath(currentPath, "modern");
+const classicUrl = getThemePath(currentPath, "classic");
 ---
 
 <header class={css({ py: "8", textAlign: "center" })}>
 
   <div class={css({ mb: "4" })}>
-    <a href={lang === "fr" ? "/fr" : "/"}>
+    <a href={homeHref}>
       <img
         src="https://avatars.githubusercontent.com/u/47926032?v=4"
         alt="s1m0n"
@@ -59,8 +64,11 @@ const frUrl = lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath;
   </nav>
 
   <div class={css({ display: "flex", alignItems: "center", justifyContent: "center", gap: "4" })}>
-    <a href={enUrl} class={css({ textStyle: "label", color: lang === "en" ? "accent" : "textMuted", _hover: { color: "text" } })}>EN</a>
-    <a href={frUrl} class={css({ textStyle: "label", color: lang === "fr" ? "accent" : "textMuted", _hover: { color: "text" } })}>FR</a>
+    <a href={enUrl} class={css({ textStyle: "classic.label", color: lang === "en" ? "accent" : "textMuted", _hover: { color: "text" } })}>EN</a>
+    <a href={frUrl} class={css({ textStyle: "classic.label", color: lang === "fr" ? "accent" : "textMuted", _hover: { color: "text" } })}>FR</a>
+    <span class={css({ textStyle: "classic.label", color: "border" })}>|</span>
+    <a href={modernUrl} data-set-design="modern" title={t("theme.modern")} class={css({ textStyle: "classic.label", color: theme === "modern" ? "accent" : "textMuted", _hover: { color: "text" } })}>modern</a>
+    <a href={classicUrl} data-set-design="classic" title={t("theme.classic")} class={css({ textStyle: "classic.label", color: theme === "classic" ? "accent" : "textMuted", _hover: { color: "text" } })}>classic</a>
   </div>
 
 </header>

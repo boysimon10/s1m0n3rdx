@@ -1,8 +1,8 @@
 ---
-import { css } from "../../../styled-system/css";
-import { getIconSvg } from "../../utils/icons";
-import { experience, contractType } from "../../data/experience";
-import { getLangFromUrl, useTranslations } from "../../i18n";
+import { css } from "../../../../../styled-system/css";
+import { getIconSvg } from "../../../../utils/icons";
+import { experience, contractType } from "../../../../data/experience";
+import { getLangFromUrl, useTranslations } from "../../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -17,24 +17,24 @@ const contractLabels: Record<contractType, string> = {
 ---
 
 <div class={css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
-  <p class={css({ textStyle: "eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("section.experience")}</p>
+  <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("section.experience")}</p>
   <div class={css({ display: "flex", flexDir: "column", gap: "6" })}>
     {experience.map(({ role, company, url, contractType: ct, period, tags }) => (
       <div>
         <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "4", mb: "1", flexWrap: "wrap" })}>
           <span class={css({ fontFamily: "heading", fontWeight: "600", fontSize: "1rem" })}>{role}</span>
-          <span class={css({ textStyle: "label", color: "textMuted", flexShrink: "0" })}>{period}</span>
+          <span class={css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0" })}>{period}</span>
         </div>
         <div class={css({ display: "flex", alignItems: "center", gap: "2", mb: "3" })}>
           {url
-            ? <a href={url} target="_blank" rel="noopener noreferrer" class={css({ textStyle: "label", color: "accent", _hover: { textDecoration: "underline" } })}>{company}</a>
-            : <span class={css({ textStyle: "label", color: "accent" })}>{company}</span>
+            ? <a href={url} target="_blank" rel="noopener noreferrer" class={css({ textStyle: "classic.label", color: "accent", _hover: { textDecoration: "underline" } })}>{company}</a>
+            : <span class={css({ textStyle: "classic.label", color: "accent" })}>{company}</span>
           }
-          {ct && <span class={css({ textStyle: "label", color: "textMuted" })}>· {contractLabels[ct]}</span>}
+          {ct && <span class={css({ textStyle: "classic.label", color: "textMuted" })}>· {contractLabels[ct]}</span>}
         </div>
         <div class={css({ display: "flex", gap: "3", flexWrap: "wrap" })}>
           {tags.map(({ label, icon, iconSource }) => (
-            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "label", color: "textMuted" })}>
+            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
               <span set:html={getIconSvg(icon, iconSource)} />
               {label}
             </span>

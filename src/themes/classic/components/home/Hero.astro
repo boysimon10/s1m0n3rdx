@@ -1,8 +1,8 @@
 ---
-import { css } from "../../../styled-system/css";
-import { getIconSvg } from "../../utils/icons";
-import { site, socials } from "../../data/site";
-import { getLangFromUrl } from "../../i18n";
+import { css } from "../../../../../styled-system/css";
+import { getIconSvg } from "../../../../utils/icons";
+import { site, socials, lastPlayed } from "../../../../data/site";
+import { getLangFromUrl } from "../../../../i18n";
 
 import IconCopy from "iconoir/icons/regular/copy.svg?raw";
 
@@ -21,17 +21,14 @@ const iconMap: Record<string, string> = {
 const role = lang === "fr" ? site.role_fr : site.role;
 const bio = lang === "fr" ? site.bio_fr : site.bio;
 
-const spotifyTrack = {
-  title: "jolagreen23",
-  artists: "0.92",
-};
+const spotifyTrack = { title: lastPlayed.title, artists: lastPlayed.artist };
 ---
 
 <section class={css({ py: "10", borderBottom: "1px solid", borderBottomColor: "border" })}>
   <div class={css({ mb: "5" })}>
     <p class={css({ fontFamily: "heading", fontWeight: "700", fontSize: "1.2rem", lineHeight: "1.2", mb: "1" })}>{site.author}</p>
     <div class={css({ display: "flex", alignItems: "center", gap: "2", flexWrap: "wrap" })}>
-      <span class={css({ textStyle: "label", color: "textMuted" })}>{role} · {site.location} · {site.email}</span>
+      <span class={css({ textStyle: "classic.label", color: "textMuted" })}>{role} · {site.location} · {site.email}</span>
       <button
         id="copy-email"
         data-email={site.email}

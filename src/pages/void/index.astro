@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Page from "../../layouts/Page.astro";
+import Page from "../../themes/classic/layouts/Page.astro";
 import { css } from "../../../styled-system/css";
 import { getSlugFromId } from "../../i18n";
 import { formatDate } from "../../utils/formatDate";
@@ -12,7 +12,7 @@ const entries = (
 
 <Page title="Void - s1m0n3rdx">
   <div class={css({ px: "clamp(14px, 4vw, 40px)" })}>
-    <div class={css({ maxW: "container", mx: "auto", py: "12" })}>
+    <div class={css({ maxW: "classic", mx: "auto", py: "12" })}>
 
       <div class={css({ mb: "12" })}>
         <p class={css({ fontFamily: "mono", fontSize: "0.75rem", color: "textMuted", opacity: "0.4", mb: "4" })}>// you're not supposed to be here</p>
@@ -36,7 +36,7 @@ const entries = (
           >
             <div class={css({ flex: "1", minW: "0" })}>
               <span class={css({ fontFamily: "heading", fontWeight: "500", fontSize: "1rem" })}>{entry.data.title}</span>
-              <p class={css({ textStyle: "body", color: "textMuted", fontSize: "0.88rem", mt: "1" })}>{entry.data.description}</p>
+              <p class={css({ textStyle: "classic.body", color: "textMuted", fontSize: "0.88rem", mt: "1" })}>{entry.data.description}</p>
             </div>
             <span class={css({ fontFamily: "mono", fontSize: "0.75rem", color: "textMuted", opacity: "0.5", flexShrink: "0" })}>
               {formatDate(entry.data.date, "en")}
