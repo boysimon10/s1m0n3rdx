@@ -39,21 +39,6 @@ const fonts = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <script is:inline>
-      (function () {
-        try {
-          var pref = localStorage.getItem("design");
-          var m = location.pathname.match(/^(\/fr(?=\/|$))?(\/classic(?=\/|$))?(.*)$/);
-          var isClassic = !!m[2];
-          var rest = m[3] || "";
-          var target = null;
-          if (pref === "classic" && !isClassic) target = (m[1] || "") + "/classic" + (rest === "/" ? "" : rest);
-          if (pref === "modern" && isClassic) target = (m[1] || "") + rest || "/";
-          if (target) location.replace(target + location.search + location.hash);
-        } catch (e) {}
-      })();
-    </script>
-
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
@@ -82,11 +67,5 @@ const fonts = {
   </head>
   <body>
     <slot />
-    <script>
-      document.addEventListener("click", (e) => {
-        const link = (e.target as Element).closest<HTMLElement>("[data-set-design]");
-        if (link) localStorage.setItem("design", link.dataset.setDesign!);
-      });
-    </script>
   </body>
 </html>
