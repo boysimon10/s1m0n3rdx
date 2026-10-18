@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import { site } from "../../../data/site";
 import { css } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
 import { getLangFromUrl, getThemeFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath } from "../../../i18n";
@@ -26,11 +28,13 @@ const classicUrl = getThemePath(currentPath, "classic");
 
   <div class={css({ mb: "4" })}>
     <a href={homeHref}>
-      <img
-        src="https://avatars.githubusercontent.com/u/47926032?v=4"
+      <Image
+        src={site.avatar}
         alt="s1m0n"
-        width="48"
-        height="48"
+        width={48}
+        height={48}
+        densities={[1, 2]}
+        loading="eager"
         class={css({ w: "48px", h: "48px", rounded: "full", mx: "auto", display: "block", _hover: { opacity: "0.8" } })}
       />
     </a>
