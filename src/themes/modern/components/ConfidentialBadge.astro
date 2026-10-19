@@ -1,6 +1,5 @@
 ---
 import { css } from "../../../../styled-system/css";
-import Diamond from "./Diamond.astro";
 
 interface Props {
   label: string;
@@ -26,6 +25,5 @@ const { label } = Astro.props;
     whiteSpace: "nowrap",
   })}
 >
-  <Diamond size={6} />
   {label}
 </span>

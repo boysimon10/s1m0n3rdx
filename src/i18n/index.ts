@@ -34,7 +34,7 @@ export const ui = {
     "hero.copy": "copy email",
     "hero.copied": "copied ✓",
     "blog.empty": "No posts yet.",
-    "about.p1": "I'm Simon, a self-taught developer based in Dakar. I build web and mobile applications — mostly backend in Go and NestJS, mobile in React Native.",
+    "about.p1": "I'm Simon, a self-taught developer based in Dakar. I build web and mobile applications, mostly backend in Go and NestJS, and mobile in React Native.",
     "about.p2": "This site is my space to write about what I'm learning, the projects I'm building, and what interests me in software development.",
     "void.comment": "// you're not supposed to be here",
     "void.line1": "- no format.",
@@ -51,7 +51,7 @@ export const ui = {
     "project.repo": "repo",
     "construction.badge": "work in progress",
     "construction.title": "Under construction",
-    "construction.text": "I'm rebuilding this place — articles, projects and all. Come back soon. Meanwhile, you can find me here:",
+    "construction.text": "I'm rebuilding this place, articles and projects included. Come back soon. In the meantime, you can find me here:",
   },
   fr: {
     "nav.home": "Accueil",
@@ -85,7 +85,7 @@ export const ui = {
     "hero.copy": "copier l'email",
     "hero.copied": "copié ✓",
     "blog.empty": "Aucun article en français pour l'instant.",
-    "about.p1": "Je suis Simon, développeur self-taught basé à Dakar. Je construis des applications web et mobile — principalement du backend en Go et NestJS, du mobile en React Native.",
+    "about.p1": "Je suis Simon, développeur self-taught basé à Dakar. Je construis des applications web et mobile, principalement du backend en Go et NestJS, et du mobile en React Native.",
     "about.p2": "Ce site est mon espace pour écrire sur ce que j'apprends, les projets que je construis, et ce qui m'intéresse dans le développement logiciel.",
     "void.comment": "// t'es pas censé être là",
     "void.line1": "- pas de format.",
@@ -102,7 +102,7 @@ export const ui = {
     "project.repo": "repo",
     "construction.badge": "travaux en cours",
     "construction.title": "En construction",
-    "construction.text": "Je reconstruis cet endroit — articles, projets et tout le reste. Reviens bientôt. En attendant, tu me trouves ici :",
+    "construction.text": "Je reconstruis cet endroit, articles et projets compris. Reviens bientôt. En attendant, tu me trouves ici :",
   },
 } as const;
 

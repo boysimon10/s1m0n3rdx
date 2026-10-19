@@ -2,7 +2,6 @@
 import { css } from "../../../../styled-system/css";
 import type { ProjectEntry } from "../../../utils/projects";
 import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
-import Diamond from "./Diamond.astro";
 import Tag from "./Tag.astro";
 import ConfidentialBadge from "./ConfidentialBadge.astro";
 import IconArrowUpRight from "iconoir/icons/regular/arrow-up-right.svg?raw";
@@ -51,7 +50,6 @@ const href = external ? data.href : localePath(lang, "modern", `/projects/${proj
     })}
   >
     <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "1.125rem", lineHeight: "1" })}>{project.num}</span>
-    <Diamond size={10} outlined />
   </div>
 
   <div class={css({ flex: "1", minW: "0", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px 24px", py: "18px", px: "clamp(16px, 2.4vw, 24px)" })}>

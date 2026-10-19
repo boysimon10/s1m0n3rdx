@@ -3,7 +3,6 @@ import { Image } from "astro:assets";
 import { css, cx } from "../../../../styled-system/css";
 import { site } from "../../../data/site";
 import { getAlternatePath, getLangFromUrl, useTranslations } from "../../../i18n";
-import Diamond from "../components/Diamond.astro";
 import SocialLinks from "../components/SocialLinks.astro";
 
 const lang = getLangFromUrl(Astro.url);
@@ -87,7 +86,6 @@ const year = new Date().getFullYear();
           lineHeight: "1",
         })}
       >
-        <Diamond />
         {t("construction.badge")}
       </span>
       <h1 class={css({ m: "0", textStyle: "h1", textWrap: "balance" })}>{t("construction.title")}</h1>

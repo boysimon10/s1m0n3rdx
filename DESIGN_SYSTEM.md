@@ -2,7 +2,7 @@
 
 Two themes share one set of semantic tokens:
 
-- **Modern** (default) - warm beige paper, bordered cards, pill shapes, signature orange and diamond markers. Schibsted Grotesk + Geist Mono.
+- **Modern** (default) - warm beige paper, bordered cards, pill shapes and a signature orange. Schibsted Grotesk + Geist Mono.
 - **Classic** - brutalist/editorial, off-white background, hairline separators, IBM Plex Mono everywhere except display moments in Archivo Black.
 
 Semantic tokens hold the modern values by default and switch to the classic values under `data-theme="classic"`. Components always use semantic tokens, never raw ones.
@@ -15,7 +15,7 @@ Semantic tokens hold the modern values by default and switch to the classic valu
 
 | Token | Value | Usage |
 |---|---|---|
-| `brand` | `#EC9B5A` | Signature orange - accents, highlights, diamonds |
+| `brand` | `#EC9B5A` | Signature orange - accents, highlights |
 | `brandSoft` | `#F7E1CB` | Card hover background |
 | `brandInk` | `#A0541A` | Orange readable as text (links, company names) |
 | `brandDeep` | `#C9762F` | Deep orange |
@@ -58,7 +58,7 @@ Semantic tokens hold the modern values by default and switch to the classic valu
 | `inverse` | `paper` | `classic.paper` | Text on dark fills |
 | `border` | `ink` | `classic.line` | Card and pill borders (modern), separators (classic) |
 | `hairline` | `line` | `classic.line` | Thin dividers inside cards |
-| `accent` | `brand` | `brand` | Accent fills, diamonds, active states |
+| `accent` | `brand` | `brand` | Accent fills, active states |
 | `accentSoft` | `brandSoft` | `brandSoft` | Hover background |
 | `accentText` | `brandInk` | `brand` | Orange text |
 | `accentFg` | `ink` | `#FFFFFF` | Text on accent background |
@@ -160,9 +160,6 @@ Sizes: 14px in tags, 15-17px in arrow buttons, 18px in nav, 22px in social butto
 
 ## Modern patterns
 
-### Diamond
-Square rotated 45deg, `accent` fill. Sizes 6 / 7 / 8 / 10 / 11px. On an `accent` background use the outlined variant (`1.5px` ink border). Used as bullet, label marker, separator and fallback tag icon.
-
 ### Card
 `1.5px` ink border, radius `lg`, `surface` background. Variants:
 - `surfaceAlt` - meta panels, asides
@@ -181,10 +178,10 @@ Radius `pill`, mono 12-13px, line height 1. Variants:
 - badge - `text` background, `accent` text (`void()`, confidential)
 
 ### Section header
-Outlined surface pill (diamond + label) - `1.5px` ink rule filling the row - optional "see all" link ending in a 36px `accent` arrow circle.
+Outlined surface pill label - `1.5px` ink rule filling the row - optional "see all" link ending in a 36px `accent` arrow circle.
 
 ### Tag
-`1px` ink border, pill, mono 12px, 14px icon. No icon: 7px diamond. Related items: dashed border, 11.5px, wrapped in `[ ]`.
+`1px` ink border, pill, mono 12px, 14px icon (label only when there is no icon). Related items: dashed border, 11.5px, wrapped in `[ ]`.
 
 ### Arrow button
 Circle with an Iconoir arrow:
@@ -205,20 +202,19 @@ Mobile: avatar + switches on the first row, nav as a full-width pill below.
 Intro card (`h1` + info pills) on top, then bio card (`lead`) next to the social card (52px outlined circles, hover `accent`).
 
 ### Project row
-`accent` number column (mono 600 + outlined diamond) with an ink right border, then name (`h3`), confidential badge, description, tags, optional year and arrow button.
+`accent` number column (mono 600) with an ink right border, then name (`h3`), confidential badge, description, tags, optional year and arrow button.
 
 ### Project detail
 Title card (number, year, badge, display title) next to a `surfaceAlt` meta panel (role, context, stack separated by hairlines). Intro in `lead`-like 500 weight, details in muted body. Screenshots in frames: radius `md`, top bar with three dots, mono caption under a `1.5px` rule.
 
 ### Article body
-- `h2` preceded by an 11px diamond
-- Unordered lists: 8px diamond bullets
+- Unordered lists: 7px round `accent` bullets
 - Ordered lists: numbers in 28px `accent` circles with ink border
 - Links: `accentText`, `1.5px` underline offset 3px, hover `accent` background
 - Inline code: `surfaceAlt` background, `1px` border, radius `xs`
 - Code blocks: `code.bg`, `1.5px` border, radius `md`, top bar with language label in `accent` and three dots
 - Blockquote: ink rules top and bottom, large `accent` opening quote, italic 500
-- `hr`: ink rule with a centered diamond
+- `hr`: plain `1.5px` ink rule
 
 ### Void
 Code-like card (`code.bg`, mono, `void` keyword in `accent`), dashed entry cards, `void()` badge, discreet `// comments` in `textFaint`.

@@ -106,21 +106,9 @@
 }
 
 .prose-modern h2 {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   margin: 44px 0 14px;
   font: 700 1.75rem/1.15 var(--fonts-heading);
   letter-spacing: -0.025em;
-}
-
-.prose-modern h2::before {
-  content: "";
-  flex: none;
-  width: 11px;
-  height: 11px;
-  background: var(--colors-accent);
-  transform: rotate(45deg);
 }
 
 .prose-modern h3 {
@@ -216,11 +204,11 @@
   content: "";
   position: absolute;
   left: 0;
-  top: 0.62em;
-  width: 8px;
-  height: 8px;
+  top: 0.6em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: var(--colors-accent);
-  transform: rotate(45deg);
 }
 
 .prose-modern ol > li {
@@ -270,24 +258,10 @@
 }
 
 .prose-modern hr {
-  position: relative;
   height: 1.5px;
   margin: 40px 0;
   border: none;
   background: var(--colors-border);
-  overflow: visible;
-}
-
-.prose-modern hr::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  background: var(--colors-accent);
-  transform: translate(-50%, -50%) rotate(45deg);
-  box-shadow: 0 0 0 8px var(--colors-bg);
 }
 
 .prose-modern img {

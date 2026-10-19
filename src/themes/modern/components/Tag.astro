@@ -1,7 +1,6 @@
 ---
 import { css, cx } from "../../../../styled-system/css";
 import { getIconSvg, type IconSource } from "../../../utils/icons";
-import Diamond from "./Diamond.astro";
 
 interface Props {
   label: string;
@@ -21,7 +20,6 @@ const svg = icon ? getIconSvg(icon, iconSource, 14) : "";
       alignItems: "center",
       gap: "6px",
       py: "5px",
-      pl: "7px",
       pr: "10px",
       border: "1px solid {colors.border}",
       rounded: "pill",
@@ -31,9 +29,10 @@ const svg = icon ? getIconSvg(icon, iconSource, 14) : "";
       lineHeight: "1",
       whiteSpace: "nowrap",
     }),
+    svg ? css({ pl: "7px" }) : css({ pl: "10px" }),
     surface && css({ bg: "surface" }),
   )}
 >
-  {svg ? <span class={css({ display: "flex" })} set:html={svg} /> : <Diamond size={7} class={css({ mx: "3px" })} />}
+  {svg && <span class={css({ display: "flex" })} set:html={svg} />}
   {label}
 </span>
