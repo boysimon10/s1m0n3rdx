@@ -32,10 +32,14 @@ Copy `.env.example` to `.env` and fill in your values.
 | Variable | Required | Description |
 | :--- | :--- | :--- |
 | `SITE_URL` | Yes | Your site's base URL (e.g. `https://your-domain.com`) |
+| `UNDER_CONSTRUCTION` | No | Set to `true` to replace every page with an "under construction" page (modern theme, `noindex`, empty RSS, no sitemap). Read at build time: redeploy after changing it. |
 
 ## License
 
-[MIT](./LICENSE)
+The code is released under the [MIT](./LICENSE) license.
+
+The content is not: articles, void entries, project write-ups, photos and images
+(`src/content/`, `src/assets/`, `public/`) are © Simon Diouf, all rights reserved.
 
 ## Inspirations
 
