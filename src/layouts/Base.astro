@@ -32,6 +32,10 @@ const canonicalURL =
     ? new URL(getThemePath(Astro.url.pathname, "modern"), Astro.url).href
     : Astro.url.href);
 
+// link previews need an absolute image URL
+const ogImageURL = new URL(underConstruction || !ogImage ? "/og.png" : ogImage, Astro.site ?? Astro.url).href;
+const ogLocale = lang === "fr" ? "fr_FR" : "en_US";
+
 const fonts = {
   modern: "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap",
   classic: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap",
@@ -55,13 +59,18 @@ const fonts = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:type" content="website" />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={siteTitle} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <meta name="twitter:image" content={ogImageURL} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
