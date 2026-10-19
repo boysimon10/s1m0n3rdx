@@ -3,7 +3,6 @@ import { css, cx } from "../../../../../styled-system/css";
 import { getIconSvg } from "../../../../utils/icons";
 import { site, lastPlayed } from "../../../../data/site";
 import { getLangFromUrl, useTranslations } from "../../../../i18n";
-import Diamond from "../Diamond.astro";
 import SocialLinks from "../SocialLinks.astro";
 import IconCopy from "iconoir/icons/regular/copy.svg?raw";
 
@@ -24,10 +23,7 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
     <h1 class={css({ textStyle: "h1", m: "0" })}>{t("hero.greeting")} {firstName}</h1>
     <div class={css({ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" })}>
       <span class={cx(pill, css({ py: "11px", px: "16px", bg: "text", color: "inverse" }))}>{role}</span>
-      <span class={cx(pill, outlined)}>
-        <Diamond />
-        {site.location}
-      </span>
+      <span class={cx(pill, outlined)}>{site.location}</span>
       <span
         class={cx(
           pill,
@@ -61,7 +57,7 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
       </span>
       <span class={cx(pill, outlined)}>
         <span class={css({ display: "flex" })} set:html={getIconSvg("siSpotify", "si", 16)} />
-        <span class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} —</span>
+        <span class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} ·</span>
         {lastPlayed.title}
         <span class={css({ color: "textMuted" })}>· {lastPlayed.artist}</span>
       </span>

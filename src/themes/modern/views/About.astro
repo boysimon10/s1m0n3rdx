@@ -3,7 +3,6 @@ import Page from "../layouts/Page.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import CardLabel from "../components/CardLabel.astro";
 import Tag from "../components/Tag.astro";
-import Diamond from "../components/Diamond.astro";
 import { css, cx } from "../../../../styled-system/css";
 import { getIconSvg } from "../../../utils/icons";
 import { stack } from "../../../data/stack";
@@ -81,7 +80,7 @@ const rowDivider = css({ borderTop: "1px solid {colors.hairline}" });
                             whiteSpace: "nowrap",
                           })}
                         >
-                          {svg ? <span class={css({ display: "flex" })} set:html={svg} /> : <Diamond size={6} />}
+                          {svg && <span class={css({ display: "flex" })} set:html={svg} />}
                           {rl}
                         </span>
                       );
