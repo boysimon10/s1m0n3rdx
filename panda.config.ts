@@ -3,6 +3,9 @@ import { defineConfig } from "@pandacss/dev";
 export default defineConfig({
   preflight: true,
 
+  // v2 no longer adds these automatically: base = utilities and conditions, panda = default tokens
+  presets: ["@pandacss/preset-base", "@pandacss/preset-panda"],
+
   include: ["./src/**/*.{js,jsx,ts,tsx,astro}"],
 
   exclude: [],
