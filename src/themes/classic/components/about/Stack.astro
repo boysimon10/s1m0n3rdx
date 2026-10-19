@@ -17,10 +17,10 @@ const t = useTranslations(lang);
           {lang === "fr" && category_fr ? category_fr : category}
         </span>
         <div class={css({ display: "flex", gap: "4", flexWrap: "wrap", alignItems: "center" })}>
-          {items.map(({ label, icon, iconSource, related }) => (
+          {items.map(({ label, label_fr, icon, iconSource, related }) => (
             <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
               <span set:html={getIconSvg(icon, iconSource)} />
-              {label}
+              {lang === "fr" && label_fr ? label_fr : label}
               {related && (
                 <span class={css({ display: "inline-flex", alignItems: "center", gap: "2" })}>
                   <span>[</span>

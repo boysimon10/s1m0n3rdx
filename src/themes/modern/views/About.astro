@@ -56,9 +56,9 @@ const rowDivider = css({ borderTop: "1px solid {colors.hairline}" });
             {lang === "fr" && category_fr ? category_fr : category}
           </span>
           <div class={css({ flex: "1 1 220px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "8px" })}>
-            {items.map(({ label, icon, iconSource, related }) => (
+            {items.map(({ label, label_fr, icon, iconSource, related }) => (
               <span class={css({ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: "6px", maxW: "100%" })}>
-                <Tag label={label} icon={icon} iconSource={iconSource} />
+                <Tag label={lang === "fr" && label_fr ? label_fr : label} icon={icon} iconSource={iconSource} />
                 {related && (
                   <span class={css({ display: "inline-flex", alignItems: "center", gap: "6px", fontFamily: "mono", fontSize: "15px", lineHeight: "1", color: "textMuted" })}>
                     <span>[</span>
