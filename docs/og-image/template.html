@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Geist+Mono:wght@500;600&display=block"
+    />
+    <style>
+      * { box-sizing: border-box; margin: 0; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        padding: 40px;
+        background: #eeeadb;
+        color: #141310;
+        font-family: "Schibsted Grotesk", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .card {
+        height: 100%;
+        padding: 56px 64px;
+        border: 3px solid #141310;
+        border-radius: 32px;
+        background: #faf8f1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .top { display: flex; align-items: center; justify-content: space-between; }
+      .avatar {
+        width: 112px;
+        height: 112px;
+        border-radius: 50%;
+        border: 3px solid #141310;
+        background: #ec9b5a;
+        object-fit: cover;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 16px 24px;
+        border-radius: 999px;
+        font: 500 26px/1 "Geist Mono", monospace;
+        border: 3px solid #141310;
+      }
+      .domain { background: #ec9b5a; font-weight: 600; }
+      h1 {
+        font-weight: 800;
+        font-size: 168px;
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+      }
+      .bottom { display: flex; gap: 14px; }
+      .dark { background: #141310; border-color: #141310; color: #eeeadb; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="top">
+        <img class="avatar" src="../../src/assets/avatar.png" alt="" />
+        <span class="pill domain">s1m0n.engineer</span>
+      </div>
+      <h1>s1m0n3rdx</h1>
+      <div class="bottom">
+        <span class="pill dark">Software Engineer</span>
+        <span class="pill">Dakar</span>
+        <span class="pill">A Cool Blogfolio</span>
+      </div>
+    </div>
+  </body>
+</html>
