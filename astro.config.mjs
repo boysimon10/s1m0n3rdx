@@ -6,7 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { loadEnv } from "vite";
 
-const { SITE_URL } = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
+const { SITE_URL, UNDER_CONSTRUCTION } = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
 
 /** @returns {import('astro').AstroIntegration} */
 function translationValidator() {
@@ -67,13 +67,17 @@ export default defineConfig({
 
   integrations: [
     mdx(),
-    sitemap({
-      filter: (page) => !/^\/(fr\/)?classic(\/|$)/.test(new URL(page).pathname),
-      i18n: {
-        defaultLocale: "en",
-        locales: { en: "en-US", fr: "fr-FR" },
-      },
-    }),
+    ...(UNDER_CONSTRUCTION === "true"
+      ? []
+      : [
+          sitemap({
+            filter: (page) => !/^\/(fr\/)?classic(\/|$)/.test(new URL(page).pathname),
+            i18n: {
+              defaultLocale: "en",
+              locales: { en: "en-US", fr: "fr-FR" },
+            },
+          }),
+        ]),
     translationValidator(),
   ],
 

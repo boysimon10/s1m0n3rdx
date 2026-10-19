@@ -1,12 +1,11 @@
 ---
 import { css, cx } from "../../../../../styled-system/css";
 import { getIconSvg } from "../../../../utils/icons";
-import { site, socials, lastPlayed } from "../../../../data/site";
+import { site, lastPlayed } from "../../../../data/site";
 import { getLangFromUrl, useTranslations } from "../../../../i18n";
 import Diamond from "../Diamond.astro";
+import SocialLinks from "../SocialLinks.astro";
 import IconCopy from "iconoir/icons/regular/copy.svg?raw";
-import IconLinkedin from "iconoir/icons/regular/linkedin.svg?raw";
-import IconMail from "iconoir/icons/regular/mail.svg?raw";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -14,17 +13,6 @@ const t = useTranslations(lang);
 const role = lang === "fr" ? site.role_fr : site.role;
 const bio = lang === "fr" ? site.bio_fr : site.bio;
 const firstName = site.author.split(" ")[0];
-
-// brand icons get recolored to ink; iconoir icons are stroke-based and must keep fill: none
-const socialIcons: Record<string, { svg: string; brand: boolean }> = {
-  github: { svg: getIconSvg("siGithub", "si", 22), brand: true },
-  linkedin: { svg: IconLinkedin, brand: false },
-  x: { svg: getIconSvg("siX", "si", 22), brand: true },
-  instagram: { svg: getIconSvg("siInstagram", "si", 22), brand: true },
-  youtube: { svg: getIconSvg("siYoutube", "si", 22), brand: true },
-  twitch: { svg: getIconSvg("siTwitch", "si", 22), brand: true },
-  mail: { svg: IconMail, brand: false },
-};
 
 const card = css({ border: "1.5px solid {colors.border}", rounded: "lg" });
 const pill = css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1", rounded: "pill" });
@@ -91,36 +79,7 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
         css({ flex: "1 1 300px", p: "16px", bg: "surface", display: "flex", flexWrap: "wrap", gap: "10px", alignContent: "center", justifyContent: "center" }),
       )}
     >
-      {socials.map(({ href, icon, label }) => {
-        const entry = socialIcons[icon];
-        const external = !href.startsWith("mailto");
-        return (
-          <a
-            href={href}
-            target={external ? "_blank" : undefined}
-            rel={external ? "noopener noreferrer" : undefined}
-            aria-label={label}
-            title={label}
-            class={cx(
-              css({
-                w: "52px",
-                h: "52px",
-                rounded: "full",
-                border: "1.5px solid {colors.border}",
-                bg: "bg",
-                color: "text",
-                display: "grid",
-                placeItems: "center",
-                transition: "background 0.15s",
-                _hover: { bg: "accent" },
-                "& svg": { w: "22px", h: "22px" },
-              }),
-              entry?.brand && css({ "& svg": { fill: "currentColor" } }),
-            )}
-            set:html={entry?.svg ?? ""}
-          />
-        );
-      })}
+      <SocialLinks />
     </div>
   </div>
 </section>

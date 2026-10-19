@@ -49,6 +49,9 @@ export const ui = {
     "project.confidential": "client · confidential",
     "project.site": "website",
     "project.repo": "repo",
+    "construction.badge": "work in progress",
+    "construction.title": "Under construction",
+    "construction.text": "I'm rebuilding this place — articles, projects and all. Come back soon. Meanwhile, you can find me here:",
   },
   fr: {
     "nav.home": "Accueil",
@@ -97,6 +100,9 @@ export const ui = {
     "project.confidential": "client · confidentiel",
     "project.site": "site",
     "project.repo": "repo",
+    "construction.badge": "travaux en cours",
+    "construction.title": "En construction",
+    "construction.text": "Je reconstruis cet endroit — articles, projets et tout le reste. Reviens bientôt. En attendant, tu me trouves ici :",
   },
 } as const;
 

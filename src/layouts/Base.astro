@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import { getLangFromUrl, getThemeFromUrl, getThemePath, type Theme } from "../i18n";
+import { underConstruction } from "../utils/construction";
+import UnderConstruction from "../themes/modern/views/UnderConstruction.astro";
 
 interface Props {
   title: string;
@@ -12,13 +14,17 @@ interface Props {
 
 const {
   title,
-  description = "Portfolio & blog - dev, design, and thoughts.",
+  description: pageDescription,
   ogImage,
-  theme = "modern",
+  theme: requestedTheme = "modern",
 } = Astro.props;
 
+const theme: Theme = underConstruction ? "modern" : requestedTheme;
+const defaultDescription = "Portfolio & blog - dev, design, and thoughts.";
+const description = underConstruction ? defaultDescription : (pageDescription ?? defaultDescription);
+
 const siteTitle = "s1m0n3rdx";
-const fullTitle = title === siteTitle ? title : `${title} - ${siteTitle}`;
+const fullTitle = underConstruction || title === siteTitle ? siteTitle : `${title} - ${siteTitle}`;
 const lang = getLangFromUrl(Astro.url);
 const canonicalURL =
   Astro.props.canonicalURL ??
@@ -38,6 +44,7 @@ const fonts = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    {underConstruction && <meta name="robots" content="noindex" />}
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
@@ -67,6 +74,6 @@ const fonts = {
     <link href={fonts[theme]} rel="stylesheet" />
   </head>
   <body>
-    <slot />
+    {underConstruction ? <UnderConstruction /> : <slot />}
   </body>
 </html>
