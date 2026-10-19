@@ -1,0 +1,104 @@
+---
+import { Image } from "astro:assets";
+import { css, cx } from "../../../../styled-system/css";
+import { site } from "../../../data/site";
+import { getAlternatePath, getLangFromUrl, useTranslations } from "../../../i18n";
+import Diamond from "../components/Diamond.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const currentPath = Astro.url.pathname;
+const langs = [
+  { code: "EN", active: lang === "en", href: lang === "fr" ? getAlternatePath(currentPath, "en") : currentPath },
+  { code: "FR", active: lang === "fr", href: lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath },
+];
+const year = new Date().getFullYear();
+---
+
+<div
+  class={css({
+    maxW: "container",
+    mx: "auto",
+    minH: "100dvh",
+    pt: "clamp(12px, 2vw, 24px)",
+    px: "clamp(16px, 4vw, 48px)",
+    pb: "clamp(16px, 3vw, 32px)",
+    display: "flex",
+    flexDir: "column",
+    gap: "clamp(28px, 4vw, 48px)",
+  })}
+>
+  <header class={css({ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" })}>
+    <Image
+      src={site.avatar}
+      alt={site.author}
+      width={44}
+      height={44}
+      densities={[1, 2]}
+      loading="eager"
+      class={css({ w: "44px", h: "44px", rounded: "full", border: "1.5px solid {colors.border}", bg: "accent", objectFit: "cover" })}
+    />
+    <div class={css({ display: "flex", p: "3px", gap: "2px", border: "1.5px solid {colors.border}", rounded: "pill" })}>
+      {langs.map(({ code, active, href }) => (
+        <a
+          href={href}
+          aria-current={active ? "true" : undefined}
+          class={cx(
+            css({ py: "9px", px: "12px", rounded: "pill", fontFamily: "mono", fontSize: "12px", lineHeight: "1" }),
+            active
+              ? css({ bg: "accent", border: "1.5px solid {colors.border}", fontWeight: "600" })
+              : css({ border: "1.5px solid transparent", fontWeight: "500", color: "textMuted", _hover: { color: "text" } }),
+          )}
+        >
+          {code}
+        </a>
+      ))}
+    </div>
+  </header>
+
+  <main class={css({ flex: "1", display: "flex", alignItems: "center" })}>
+    <div
+      class={css({
+        w: "100%",
+        display: "flex",
+        flexDir: "column",
+        alignItems: "flex-start",
+        gap: "24px",
+        p: "clamp(24px, 5vw, 56px)",
+        border: "1.5px solid {colors.border}",
+        rounded: "lg",
+        bg: "surface",
+      })}
+    >
+      <span
+        class={css({
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
+          py: "8px",
+          px: "14px",
+          rounded: "pill",
+          bg: "text",
+          color: "accent",
+          fontFamily: "mono",
+          fontWeight: "500",
+          fontSize: "13px",
+          lineHeight: "1",
+        })}
+      >
+        <Diamond />
+        {t("construction.badge")}
+      </span>
+      <h1 class={css({ m: "0", textStyle: "h1", textWrap: "balance" })}>{t("construction.title")}</h1>
+      <p class={css({ m: "0", maxW: "36em", textStyle: "lead", color: "textMuted", textWrap: "pretty" })}>{t("construction.text")}</p>
+      <div class={css({ display: "flex", flexWrap: "wrap", gap: "10px" })}>
+        <SocialLinks />
+      </div>
+    </div>
+  </main>
+
+  <footer class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", color: "textMuted" })}>
+    {t("footer.rights")}. Simon M. A. Diouf © {year}
+  </footer>
+</div>
