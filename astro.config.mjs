@@ -4,6 +4,9 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import fs from "node:fs";
 import path from "node:path";
+import { loadEnv } from "vite";
+
+const { SITE_URL } = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
 
 /** @returns {import('astro').AstroIntegration} */
 function translationValidator() {
@@ -54,7 +57,7 @@ function translationValidator() {
 }
 
 export default defineConfig({
-  site: process.env.SITE_URL,
+  site: SITE_URL,
 
   i18n: {
     defaultLocale: "en",

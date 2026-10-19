@@ -1,3 +1,5 @@
+import avatar from "../assets/avatar.png";
+
 export const site = {
   name: "s1m0n3rdx",
   author: "Simon Diouf",
@@ -7,7 +9,7 @@ export const site = {
   location: "Dakar",
   role: "Software Engineer",
   role_fr: "Ingénieur Logiciel",
-  avatar: "https://avatars.githubusercontent.com/u/47926032?v=4",
+  avatar,
 };
 
 export const lastPlayed = {
