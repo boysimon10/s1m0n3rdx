@@ -64,11 +64,6 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
         class={cx(pill, outlined, css({ transition: "background 0.15s", "&[href]:hover": { bg: "accentSoft" } }))}
       >
         <span class={css({ display: "flex" })} set:html={getIconSvg("siSpotify", "si", 16)} />
-        <span
-          data-sp-live
-          hidden
-          class={css({ w: "8px", h: "8px", rounded: "full", bg: "accent", animation: "pulse 1.5s ease-in-out infinite", _motionReduce: { animation: "none" } })}
-        ></span>
         <span data-sp-label class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} ·</span>
         <span data-sp-title>{lastPlayed.title}</span>
         <span data-sp-artist class={css({ color: "textMuted" })}>· {lastPlayed.artist}</span>
@@ -108,22 +103,34 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
 
   // served by the Cloudflare Worker; in `astro dev` the request fails and the static fallback stays
   const pill = document.getElementById("spotify-pill") as HTMLAnchorElement | null;
+  const REFRESH_MS = 30_000;
+
+  async function refresh(el: HTMLAnchorElement) {
+    try {
+      const res = await fetch("/api/now-playing", { cache: "no-store" });
+      if (!res.ok) return;
+      const track = (await res.json()) as NowPlaying;
+      if (!track) return;
+      const set = (selector: string, text: string) => {
+        const node = el.querySelector(selector);
+        if (node) node.textContent = text;
+      };
+      el.href = track.url;
+      set("[data-sp-title]", track.title);
+      set("[data-sp-artist]", `· ${track.artist}`);
+      set("[data-sp-label]", `${track.playing ? el.dataset.now : el.dataset.last} ·`);
+    } catch {
+      // keep the last value shown
+    }
+  }
+
   if (pill) {
-    fetch("/api/now-playing")
-      .then((res) => (res.ok ? (res.json() as Promise<NowPlaying>) : null))
-      .then((track) => {
-        if (!track) return;
-        const set = (selector: string, text: string) => {
-          const el = pill.querySelector(selector);
-          if (el) el.textContent = text;
-        };
-        pill.href = track.url;
-        set("[data-sp-title]", track.title);
-        set("[data-sp-artist]", `· ${track.artist}`);
-        set("[data-sp-label]", `${track.playing ? pill.dataset.now : pill.dataset.last} ·`);
-        const live = pill.querySelector<HTMLElement>("[data-sp-live]");
-        if (live) live.hidden = !track.playing;
-      })
-      .catch(() => {});
+    void refresh(pill);
+    setInterval(() => {
+      if (document.visibilityState === "visible") void refresh(pill);
+    }, REFRESH_MS);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") void refresh(pill);
+    });
   }
 </script>
