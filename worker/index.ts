@@ -26,7 +26,8 @@ export type NowPlaying = {
   image: string | null;
 } | null;
 
-const CACHE_SECONDS = 30;
+// shared edge cache only: browsers must not keep their own copy, or two tabs can show different tracks
+const EDGE_CACHE_SECONDS = 15;
 
 async function getAccessToken(env: Env): Promise<string> {
   const res = await fetch("https://accounts.spotify.com/api/token", {
@@ -82,7 +83,7 @@ export default {
 
     try {
       const response = Response.json(await getNowPlaying(env), {
-        headers: { "Cache-Control": `public, max-age=${String(CACHE_SECONDS)}` },
+        headers: { "Cache-Control": `public, max-age=0, s-maxage=${String(EDGE_CACHE_SECONDS)}` },
       });
       ctx.waitUntil(cache.put(cacheKey, response.clone()));
       return response;
