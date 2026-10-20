@@ -56,6 +56,26 @@ function translationValidator() {
   };
 }
 
+/**
+ * Astro only treats the root 404 page specially, so /fr/404 is emitted as fr/404/index.html.
+ * Cloudflare serves the nearest 404.html, so move it to fr/404.html.
+ * @returns {import('astro').AstroIntegration}
+ */
+function localized404() {
+  return {
+    name: "localized-404",
+    hooks: {
+      "astro:build:done": ({ dir }) => {
+        const root = new URL(".", dir).pathname;
+        const from = path.join(root, "fr/404/index.html");
+        if (!fs.existsSync(from)) return;
+        fs.renameSync(from, path.join(root, "fr/404.html"));
+        fs.rmdirSync(path.join(root, "fr/404"));
+      },
+    },
+  };
+}
+
 export default defineConfig({
   site: SITE_URL,
 
@@ -79,6 +99,7 @@ export default defineConfig({
           }),
         ]),
     translationValidator(),
+    localized404(),
   ],
 
   markdown: {

@@ -55,12 +55,24 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
           set:html={IconCopy}
         />
       </span>
-      <span class={cx(pill, outlined)}>
+      <a
+        id="spotify-pill"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-now={t("hero.nowPlaying")}
+        data-last={t("hero.lastPlayed")}
+        class={cx(pill, outlined, css({ transition: "background 0.15s", "&[href]:hover": { bg: "accentSoft" } }))}
+      >
         <span class={css({ display: "flex" })} set:html={getIconSvg("siSpotify", "si", 16)} />
-        <span class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} ·</span>
-        {lastPlayed.title}
-        <span class={css({ color: "textMuted" })}>· {lastPlayed.artist}</span>
-      </span>
+        <span
+          data-sp-live
+          hidden
+          class={css({ w: "8px", h: "8px", rounded: "full", bg: "accent", animation: "pulse 1.5s ease-in-out infinite", _motionReduce: { animation: "none" } })}
+        ></span>
+        <span data-sp-label class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} ·</span>
+        <span data-sp-title>{lastPlayed.title}</span>
+        <span data-sp-artist class={css({ color: "textMuted" })}>· {lastPlayed.artist}</span>
+      </a>
       <span id="copy-email-done" hidden class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", color: "textMuted" })}>
         {t("hero.copied")}
       </span>
@@ -91,4 +103,27 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
     clearTimeout(timer);
     timer = setTimeout(() => (done.hidden = true), 1600);
   });
+
+  import type { NowPlaying } from "../../../../../worker/index";
+
+  // served by the Cloudflare Worker; in `astro dev` the request fails and the static fallback stays
+  const pill = document.getElementById("spotify-pill") as HTMLAnchorElement | null;
+  if (pill) {
+    fetch("/api/now-playing")
+      .then((res) => (res.ok ? (res.json() as Promise<NowPlaying>) : null))
+      .then((track) => {
+        if (!track) return;
+        const set = (selector: string, text: string) => {
+          const el = pill.querySelector(selector);
+          if (el) el.textContent = text;
+        };
+        pill.href = track.url;
+        set("[data-sp-title]", track.title);
+        set("[data-sp-artist]", `· ${track.artist}`);
+        set("[data-sp-label]", `${track.playing ? pill.dataset.now : pill.dataset.last} ·`);
+        const live = pill.querySelector<HTMLElement>("[data-sp-live]");
+        if (live) live.hidden = !track.playing;
+      })
+      .catch(() => {});
+  }
 </script>
