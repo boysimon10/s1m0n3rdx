@@ -32,6 +32,9 @@ Copy `.env.example` to `.env` and fill in your values.
 | Variable | Required | Description |
 | :--- | :--- | :--- |
 | `SITE_URL` | Yes | Your site's base URL (e.g. `https://your-domain.com`) |
+| `SPOTIFY_CLIENT_ID` | No | Spotify app credentials for the "now playing" pill, used by the Worker (`worker/index.ts`) at runtime. Set them as Worker secrets in production and in `.dev.vars` locally. |
+| `SPOTIFY_CLIENT_SECRET` | No | See above. |
+| `SPOTIFY_REFRESH_TOKEN` | No | Refresh token for your Spotify account (scopes `user-read-currently-playing`, `user-read-recently-played`). |
 | `UNDER_CONSTRUCTION` | No | Set to `true` to replace every page with an "under construction" page (modern theme, `noindex`, empty RSS, no sitemap). Read at build time: redeploy after changing it. |
 
 ## License
