@@ -37,6 +37,11 @@ Copy `.env.example` to `.env` and fill in your values.
 | `SPOTIFY_REFRESH_TOKEN` | No | Refresh token for your Spotify account (scopes `user-read-currently-playing`, `user-read-recently-played`). |
 | `UNDER_CONSTRUCTION` | No | Set to `true` to replace every page with an "under construction" page (modern theme, `noindex`, empty RSS, no sitemap). Read at build time: redeploy after changing it. |
 
+## Docs
+
+- [Spotify "now playing"](./docs/spotify/README.md) - Worker endpoint, Spotify app setup, secrets
+- [Link preview image](./docs/og-image/README.md) - regenerate `public/og.png`
+
 ## License
 
 The code is released under the [MIT](./LICENSE) license.
