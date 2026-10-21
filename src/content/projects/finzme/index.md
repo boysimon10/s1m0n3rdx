@@ -15,8 +15,8 @@ tags:
 page: true
 role: Full-stack developer (mobile & backend)
 role_fr: Développeur full-stack (mobile & backend)
-context: Personal project, full rebuild of a first version
-context_fr: Projet personnel, refonte complète d'une première version
+context: Personal project, full rebuild of a first version. Not on the App Store yet, Apple developer enrollment still pending.
+context_fr: Projet personnel, refonte complète d'une première version. Pas encore sur l'App Store, l'inscription au programme développeur Apple est toujours en attente.
 intro: Track income, expenses, budgets and savings goals in one place, with clear monthly stats.
 intro_fr: Suivre revenus, dépenses, budgets et objectifs d'épargne au même endroit, avec des statistiques mensuelles claires.
 details: >-
@@ -39,4 +39,26 @@ details_fr: >-
   listes virtualisées, sans masquer le pull-to-refresh natif. J'ai isolé la logique de scroll dans
   un hook indépendant du type de liste, ce qui permet de passer un écran en FlatList sans toucher
   au header. Résultat : chaque nouvel écran ou champ d'API arrive typé par défaut.
+screens:
+  - { src: ../../../assets/projects/finzme/01-onboarding-1.png, caption: onboarding · log expenses in seconds, caption_fr: onboarding · noter ses dépenses en quelques secondes }
+  - { src: ../../../assets/projects/finzme/02-onboarding-2.png, caption: onboarding · understand your habits, caption_fr: onboarding · comprendre ses habitudes }
+  - { src: ../../../assets/projects/finzme/03-onboarding-3.png, caption: onboarding · sign in or sign up, caption_fr: onboarding · connexion ou inscription }
+  - { src: ../../../assets/projects/finzme/04-login-phone.png, caption: login · phone number, caption_fr: connexion · numéro de téléphone }
+  - { src: ../../../assets/projects/finzme/05-login-pin.png, caption: login · PIN code, caption_fr: connexion · code PIN }
+  - { src: ../../../assets/projects/finzme/06-signup-profile.png, caption: sign up · profile, caption_fr: inscription · profil }
+  - { src: ../../../assets/projects/finzme/07-signup-currency.png, caption: sign up · currency detected from the phone, caption_fr: inscription · devise détectée depuis le téléphone }
+  - { src: ../../../assets/projects/finzme/08-signup-categories.png, caption: sign up · starting categories, caption_fr: inscription · catégories de départ }
+  - { src: ../../../assets/projects/finzme/09-signup-notifications.png, caption: sign up · notifications, caption_fr: inscription · notifications }
+  - { src: ../../../assets/projects/finzme/10-home-empty.png, caption: home · empty state, caption_fr: accueil · état vide }
+  - { src: ../../../assets/projects/finzme/11-home.png, caption: home · balance and recent transactions, caption_fr: accueil · solde et transactions récentes }
+  - { src: ../../../assets/projects/finzme/12-new-transaction.png, caption: new transaction, caption_fr: nouvelle transaction }
+  - { src: ../../../assets/projects/finzme/13-new-transaction-filled.png, caption: new transaction · category and description, caption_fr: nouvelle transaction · catégorie et description }
+  - { src: ../../../assets/projects/finzme/14-new-transaction-amount.png, caption: new transaction · amount, caption_fr: nouvelle transaction · montant }
+  - { src: ../../../assets/projects/finzme/15-transaction-detail.png, caption: transaction detail, caption_fr: détail d'une transaction }
+  - { src: ../../../assets/projects/finzme/16-categories.png, caption: categories, caption_fr: catégories }
+  - { src: ../../../assets/projects/finzme/17-savings.png, caption: savings goals, caption_fr: objectifs d'épargne }
+  - { src: ../../../assets/projects/finzme/18-stats.png, caption: stats, caption_fr: statistiques }
+  # shows the account phone number and email
+  # - { src: ../../../assets/projects/finzme/19-settings.png, caption: settings, caption_fr: paramètres }
+  - { src: ../../../assets/projects/finzme/20-settings-more.png, caption: settings · data and support, caption_fr: paramètres · données et assistance }
 ---

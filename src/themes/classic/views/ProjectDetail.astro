@@ -27,6 +27,8 @@ const links = [
   data.href && { label: t("project.site"), href: data.href },
   data.repo && { label: t("project.repo"), href: data.repo },
 ].filter((l): l is { label: string; href: string } => !!l);
+// phone screenshots get a grid instead of one full-width image per row
+const portrait = data.screens.length > 0 && data.screens.every(({ src }) => src.height > src.width);
 
 const section = css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" });
 const metaLabel = css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0", w: "24" });
@@ -90,14 +92,20 @@ const metaLabel = css({ textStyle: "classic.label", color: "textMuted", flexShri
       {data.screens.length > 0 && (
         <div class={css({ py: "8" })}>
           <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("project.screens")}</p>
-          <div class={css({ display: "flex", flexDir: "column", gap: "8" })}>
+          <div
+            class={
+              portrait
+                ? css({ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "6", sm: { gridTemplateColumns: "repeat(3, 1fr)" } })
+                : css({ display: "flex", flexDir: "column", gap: "8" })
+            }
+          >
             {data.screens.map(({ src, caption, caption_fr }) => (
               <figure>
                 <Image
                   src={src}
                   alt={pick(caption, caption_fr) ?? ""}
-                  widths={[640, 960, 1280]}
-                  sizes="(min-width: 820px) 820px, 100vw"
+                  widths={portrait ? [480, 720, 960] : [640, 960, 1280]}
+                  sizes={portrait ? "(min-width: 820px) 270px, (min-width: 640px) 33vw, 50vw" : "(min-width: 820px) 820px, 100vw"}
                   class={css({ display: "block", w: "100%", h: "auto", border: "1px solid", borderColor: "border", borderRadius: "12px" })}
                 />
                 <figcaption class={css({ textStyle: "classic.label", color: "textMuted", mt: "3" })}>{pick(caption, caption_fr)}</figcaption>
