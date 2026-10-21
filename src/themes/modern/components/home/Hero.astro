@@ -61,13 +61,23 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
         rel="noopener noreferrer"
         data-now={t("hero.nowPlaying")}
         data-last={t("hero.lastPlayed")}
-        class={cx(pill, outlined, css({ transition: "background 0.15s", "&[href]:hover": { bg: "accentSoft" } }))}
+        data-loading
+        class={cx(
+          pill,
+          outlined,
+          css({
+            transition: "background 0.15s, opacity 0.2s",
+            "&[href]:hover": { bg: "accentSoft" },
+            "&[data-loading]": { visibility: "hidden", opacity: "0" },
+          }),
+        )}
       >
         <span class={css({ display: "flex" })} set:html={getIconSvg("siSpotify", "si", 16)} />
         <span data-sp-label class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} ·</span>
         <span data-sp-title>{lastPlayed.title}</span>
         <span data-sp-artist class={css({ color: "textMuted" })}>· {lastPlayed.artist}</span>
       </a>
+      <noscript><style is:inline>#spotify-pill { visibility: visible; opacity: 1; }</style></noscript>
       <span id="copy-email-done" hidden class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", color: "textMuted" })}>
         {t("hero.copied")}
       </span>
@@ -101,13 +111,14 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
 
   import type { NowPlaying } from "../../../../../worker/index";
 
-  // served by the Cloudflare Worker; in `astro dev` the request fails and the static fallback stays
+
   const pill = document.getElementById("spotify-pill") as HTMLAnchorElement | null;
   const REFRESH_MS = 30_000;
+  const TIMEOUT_MS = 5_000;
 
   async function refresh(el: HTMLAnchorElement) {
     try {
-      const res = await fetch("/api/now-playing", { cache: "no-store" });
+      const res = await fetch("/api/now-playing", { cache: "no-store", signal: AbortSignal.timeout(TIMEOUT_MS) });
       if (!res.ok) return;
       const track = (await res.json()) as NowPlaying;
       if (!track) return;
@@ -120,7 +131,8 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
       set("[data-sp-artist]", `· ${track.artist}`);
       set("[data-sp-label]", `${track.playing ? el.dataset.now : el.dataset.last} ·`);
     } catch {
-      // keep the last value shown
+    } finally {
+      delete el.dataset.loading;
     }
   }
 
