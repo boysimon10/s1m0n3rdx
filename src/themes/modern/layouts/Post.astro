@@ -6,6 +6,7 @@ import { resolveTagIcon, type TagIconEntry } from "../../../utils/tagIcons";
 import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
 import { formatDate } from "../../../utils/formatDate";
 import IconArrowRight from "iconoir/icons/regular/arrow-right.svg?raw";
+import IconShare from "iconoir/icons/regular/share-ios.svg?raw";
 
 interface Props {
   title: string;
@@ -25,7 +26,6 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const isVoid = variant === "void";
 const translationLabel = translationLang === "fr" ? "Lire en français" : "Read in English";
-const hasAside = isVoid || tags.length > 0 || !!translationUrl;
 ---
 
 <Page title={title} description={description} ogImage={ogImage}>
@@ -59,80 +59,110 @@ const hasAside = isVoid || tags.length > 0 || !!translationUrl;
     </header>
 
     <div class={css({ display: "flex", flexWrap: "wrap", gap: "clamp(24px, 5vw, 64px)", alignItems: "flex-start" })}>
-      {hasAside && (
-        isVoid ? (
-          <aside
-            class={css({
-              flex: "1 1 260px",
-              maxW: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: "12px",
-              py: "16px",
-              px: "20px",
-              border: "1.5px dashed {colors.border}",
-              rounded: "lg",
-            })}
-          >
-            <span class={css({ py: "6px", px: "10px", rounded: "pill", bg: "text", color: "accent", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" })}>
-              void()
-            </span>
-            <a href={localePath(lang, "modern", "/void")} class={css({ fontFamily: "mono", fontSize: "12px", lineHeight: "1", color: "textMuted", _hover: { color: "text" } })}>
-              {t("void.back")}
+      {isVoid ? (
+        <aside
+          class={css({
+            flex: "1 1 260px",
+            maxW: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+            py: "16px",
+            px: "20px",
+            border: "1.5px dashed {colors.border}",
+            rounded: "lg",
+          })}
+        >
+          <span class={css({ py: "6px", px: "10px", rounded: "pill", bg: "text", color: "accent", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" })}>
+            void()
+          </span>
+          <a href={localePath(lang, "modern", "/void")} class={css({ fontFamily: "mono", fontSize: "12px", lineHeight: "1", color: "textMuted", _hover: { color: "text" } })}>
+            {t("void.back")}
+          </a>
+        </aside>
+      ) : (
+        <aside
+          class={css({
+            flex: "1 1 260px",
+            maxW: "100%",
+            display: "flex",
+            flexDir: "column",
+            gap: "16px",
+            p: "20px",
+            border: "1.5px solid {colors.border}",
+            rounded: "lg",
+            bg: "surfaceAlt",
+          })}
+        >
+          {tags.length > 0 && (
+            <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+              {tags.map((tag) => {
+                const info = resolveTagIcon(tag, tagIcons);
+                return <Tag label={tag} icon={info?.icon} iconSource={info?.iconSource} surface />;
+              })}
+            </div>
+          )}
+          {translationUrl && (
+            <a
+              href={translationUrl}
+              class={css({
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "12px",
+                py: "6px",
+                pr: "6px",
+                pl: "16px",
+                rounded: "pill",
+                bg: "text",
+                color: "inverse",
+                fontFamily: "mono",
+                fontWeight: "500",
+                fontSize: "13px",
+                lineHeight: "1",
+              })}
+            >
+              {translationLabel}
+              <span
+                class={css({ w: "32px", h: "32px", rounded: "full", bg: "accent", color: "text", display: "grid", placeItems: "center", "& svg": { w: "15px", h: "15px" } })}
+                set:html={IconArrowRight}
+              />
             </a>
-          </aside>
-        ) : (
-          <aside
+          )}
+          <button
+            type="button"
+            data-share
+            data-title={title}
+            data-copied={t("post.copied")}
             class={css({
-              flex: "1 1 260px",
-              maxW: "100%",
               display: "flex",
-              flexDir: "column",
-              gap: "16px",
-              p: "20px",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "12px",
+              py: "6px",
+              pr: "6px",
+              pl: "16px",
+              rounded: "pill",
               border: "1.5px solid {colors.border}",
-              rounded: "lg",
-              bg: "surfaceAlt",
+              bg: "surface",
+              color: "text",
+              fontFamily: "mono",
+              fontWeight: "500",
+              fontSize: "13px",
+              lineHeight: "1",
+              cursor: "pointer",
+              transition: "background 0.15s",
+              _hover: { bg: "accentSoft" },
             })}
           >
-            {tags.length > 0 && (
-              <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
-                {tags.map((tag) => {
-                  const info = resolveTagIcon(tag, tagIcons);
-                  return <Tag label={tag} icon={info?.icon} iconSource={info?.iconSource} surface />;
-                })}
-              </div>
-            )}
-            {translationUrl && (
-              <a
-                href={translationUrl}
-                class={css({
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: "12px",
-                  py: "6px",
-                  pr: "6px",
-                  pl: "16px",
-                  rounded: "pill",
-                  bg: "text",
-                  color: "inverse",
-                  fontFamily: "mono",
-                  fontWeight: "500",
-                  fontSize: "13px",
-                  lineHeight: "1",
-                })}
-              >
-                {translationLabel}
-                <span
-                  class={css({ w: "32px", h: "32px", rounded: "full", bg: "accent", color: "text", display: "grid", placeItems: "center", "& svg": { w: "15px", h: "15px" } })}
-                  set:html={IconArrowRight}
-                />
-              </a>
-            )}
-          </aside>
-        )
+            <span data-share-label>{t("post.share")}</span>
+            <span
+              class={css({ w: "32px", h: "32px", rounded: "full", border: "1.5px solid {colors.border}", bg: "accent", display: "grid", placeItems: "center", "& svg": { w: "15px", h: "15px" } })}
+              set:html={IconShare}
+            />
+          </button>
+        </aside>
       )}
       <article class={cx("prose-modern", css({ flex: "999 1 560px", minW: "0", maxW: "prose" }))}>
         <slot />
@@ -140,3 +170,7 @@ const hasAside = isVoid || tags.length > 0 || !!translationUrl;
     </div>
   </div>
 </Page>
+
+<script>
+  import "../../../scripts/share";
+</script>

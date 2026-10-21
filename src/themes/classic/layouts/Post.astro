@@ -5,7 +5,7 @@ import Footer from "../components/Footer.astro";
 import { css } from "../../../../styled-system/css";
 import { getIconSvg } from "../../../utils/icons";
 import { resolveTagIcon, type TagIconEntry } from "../../../utils/tagIcons";
-import { getLangFromUrl } from "../../../i18n";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
 import { formatDate } from "../../../utils/formatDate";
 
 interface Props {
@@ -22,8 +22,18 @@ interface Props {
 const { title, description, date, tags = [], tagIcons, ogImage, translationUrl, translationLang } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const formattedDate = date ? formatDate(date, lang) : null;
 const translationLabel = translationLang === "fr" ? "Lire en français" : "Read in English";
+const linkStyleRaw = {
+  textStyle: "classic.label",
+  color: "textMuted",
+  border: "0",
+  borderBottom: "1px dashed",
+  borderBottomColor: "border",
+  _hover: { color: "text", borderBottomColor: "text" },
+} as const;
+const linkStyle = css(linkStyleRaw);
 ---
 
 <Base title={title} description={description} ogImage={ogImage} theme="classic">
@@ -54,14 +64,22 @@ const translationLabel = translationLang === "fr" ? "Lire en français" : "Read 
             })}
           </div>
         )}
-        {translationUrl && (
-          <a
-            href={translationUrl}
-            class={css({ display: "inline-block", mt: "4", textStyle: "classic.label", color: "textMuted", borderBottom: "1px dashed", borderBottomColor: "border", _hover: { color: "text", borderBottomColor: "text" } })}
+        <div class={css({ display: "flex", gap: "5", mt: "4", flexWrap: "wrap" })}>
+          {translationUrl && (
+            <a href={translationUrl} class={linkStyle}>
+              {translationLabel} →
+            </a>
+          )}
+          <button
+            type="button"
+            data-share
+            data-title={title}
+            data-copied={t("post.copied")}
+            class={css({ bg: "transparent", p: "0", cursor: "pointer" }, linkStyleRaw)}
           >
-            {translationLabel} →
-          </a>
-        )}
+            <span data-share-label>{t("post.share")}</span> ↗
+          </button>
+        </div>
       </header>
       <div class="prose">
         <slot />
@@ -71,3 +89,7 @@ const translationLabel = translationLang === "fr" ? "Lire en français" : "Read 
   <Footer />
   </div>
 </Base>
+
+<script>
+  import "../../../scripts/share";
+</script>
