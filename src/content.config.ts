@@ -61,6 +61,8 @@ const projects = defineCollection({
         intro_fr: z.string().optional(),
         details: z.string().optional(),
         details_fr: z.string().optional(),
+        // optional thumbnail in the project list (modern theme)
+        cover: image().optional(),
         screens: z
           .array(z.object({ src: image(), caption: z.string(), caption_fr: z.string().optional() }))
           .default([]),

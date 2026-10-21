@@ -32,6 +32,7 @@ const links = [
 ].filter((l): l is { label: string; href: string } => !!l);
 // phone screenshots get a denser grid than desktop ones
 const portrait = data.screens.length > 0 && data.screens.every(({ src }) => src.height > src.width);
+const portraitCover = data.cover && data.cover.height > data.cover.width;
 
 const smallPill = css({ py: "7px", px: "12px", rounded: "pill", fontFamily: "mono", fontSize: "12.5px", lineHeight: "1", border: "1.5px solid {colors.border}" });
 const metaLabel = css({ textStyle: "eyebrow", fontSize: "11.5px", color: "textMuted" });
@@ -113,7 +114,31 @@ const metaDivider = css({ borderBottom: "1px solid {colors.hairline}" });
           </div>
         </div>
       </div>
+
+      {data.cover && portraitCover && (
+        <div class={css({ position: "relative", flex: "0 1 200px", minH: "280px", border: "1.5px solid {colors.border}", rounded: "lg", overflow: "hidden", bg: "surface", mx: { base: "auto", sm: "0" } })}>
+          <Image
+            src={data.cover}
+            alt={data.name}
+            widths={[200, 400]}
+            sizes="200px"
+            class={css({ position: "absolute", inset: "0", w: "100%", h: "100%", objectFit: "cover", objectPosition: "top" })}
+          />
+        </div>
+      )}
     </div>
+
+    {data.cover && !portraitCover && (
+      <div class={css({ border: "1.5px solid {colors.border}", rounded: "lg", overflow: "hidden", bg: "surface" })}>
+        <Image
+          src={data.cover}
+          alt={data.name}
+          widths={[640, 960, 1280, 1920]}
+          sizes="(min-width: 1180px) 1140px, 100vw"
+          class={css({ display: "block", w: "100%", h: "auto", maxH: "560px", objectFit: "cover", objectPosition: "top" })}
+        />
+      </div>
+    )}
 
     {(intro || details || links.length > 0) && (
       <div class={css({ display: "flex", flexWrap: "wrap", gap: "16px 48px", pt: "clamp(8px, 2vw, 24px)", pb: "clamp(16px, 3vw, 32px)" })}>
@@ -123,7 +148,7 @@ const metaDivider = css({ borderBottom: "1px solid {colors.hairline}" });
           </p>
         )}
         <div class={css({ flex: "1 1 320px", display: "flex", flexDir: "column", gap: "20px" })}>
-          {details && <p class={css({ m: "0", fontFamily: "body", fontSize: "17px", lineHeight: "1.7", color: "textMuted", textWrap: "pretty" })}>{details}</p>}
+          {details && <p class={css({ m: "0", fontFamily: "body", fontSize: "17px", lineHeight: "1.7", textWrap: "pretty" })}>{details}</p>}
           {links.length > 0 && (
             <div class={css({ display: "flex", flexWrap: "wrap", gap: "8px" })}>
               {links.map(({ label, href }) => (

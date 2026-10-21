@@ -39,6 +39,7 @@ details_fr: >-
   listes virtualisées, sans masquer le pull-to-refresh natif. J'ai isolé la logique de scroll dans
   un hook indépendant du type de liste, ce qui permet de passer un écran en FlatList sans toucher
   au header. Résultat : chaque nouvel écran ou champ d'API arrive typé par défaut.
+cover: ../../../assets/projects/finzme/11-home.png
 screens:
   - { src: ../../../assets/projects/finzme/01-onboarding-1.png, caption: onboarding · log expenses in seconds, caption_fr: onboarding · noter ses dépenses en quelques secondes }
   - { src: ../../../assets/projects/finzme/02-onboarding-2.png, caption: onboarding · understand your habits, caption_fr: onboarding · comprendre ses habitudes }
