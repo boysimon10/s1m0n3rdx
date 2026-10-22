@@ -1,5 +1,6 @@
 ---
-import { css } from "../../../../styled-system/css";
+import { Image } from "astro:assets";
+import { css, cx } from "../../../../styled-system/css";
 import type { ProjectEntry } from "../../../utils/projects";
 import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
 import Tag from "./Tag.astro";
@@ -19,6 +20,7 @@ const t = useTranslations(lang);
 const desc = lang === "fr" && data.desc_fr ? data.desc_fr : data.desc;
 const external = !data.page;
 const href = external ? data.href : localePath(lang, "modern", `/projects/${project.id}`);
+const portraitCover = data.cover && data.cover.height > data.cover.width;
 ---
 
 <a
@@ -53,15 +55,31 @@ const href = external ? data.href : localePath(lang, "modern", `/projects/${proj
   </div>
 
   <div class={css({ flex: "1", minW: "0", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px 24px", py: "18px", px: "clamp(16px, 2.4vw, 24px)" })}>
-    <div class={css({ flex: "1 1 300px", minW: "0", display: "flex", flexDir: "column", gap: "8px" })}>
-      <div class={css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "8px 12px" })}>
-        <span class={css({ textStyle: "h3", lineHeight: "1.1" })}>{data.name}</span>
-        {data.confidential && <ConfidentialBadge label={t("project.confidential")} />}
+    <div class={css({ flex: "1 1 300px", minW: "0", display: "flex", alignItems: "center", gap: "clamp(14px, 2vw, 20px)" })}>
+      <div class={css({ flex: "1", minW: "0", display: "flex", flexDir: "column", gap: "8px" })}>
+        <div class={css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "8px 12px" })}>
+          <span class={css({ textStyle: "h3", lineHeight: "1.1" })}>{data.name}</span>
+          {data.confidential && <ConfidentialBadge label={t("project.confidential")} />}
+        </div>
+        <span class={css({ textStyle: "small", fontSize: "15.5px", color: "textMuted" })}>{desc}</span>
+        <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px", mt: "2px" })}>
+          {data.tags.map(({ label, icon, iconSource }) => <Tag label={label} icon={icon} iconSource={iconSource} />)}
+        </div>
       </div>
-      <span class={css({ textStyle: "small", fontSize: "15.5px", color: "textMuted" })}>{desc}</span>
-      <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px", mt: "2px" })}>
-        {data.tags.map(({ label, icon, iconSource }) => <Tag label={label} icon={icon} iconSource={iconSource} />)}
-      </div>
+      {data.cover && (
+        <Image
+          src={data.cover}
+          alt=""
+          widths={portraitCover ? [72, 144] : [160, 320]}
+          sizes={portraitCover ? "72px" : "160px"}
+          class={cx(
+            css({ flex: "none", display: "block", objectFit: "cover", objectPosition: "top", border: "1.5px solid {colors.border}", rounded: "md" }),
+            portraitCover
+              ? css({ w: "60px", h: "96px", sm: { w: "72px", h: "112px" } })
+              : css({ w: "112px", h: "70px", sm: { w: "160px", h: "100px" } }),
+          )}
+        />
+      )}
     </div>
     <div class={css({ flex: "none", display: "flex", alignItems: "center", gap: "14px" })}>
       {showYear && <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", color: "textMuted" })}>{data.year}</span>}
