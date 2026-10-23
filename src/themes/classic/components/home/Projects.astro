@@ -35,14 +35,15 @@ const theme = getThemeFromUrl(Astro.url);
         <div class={css({ flex: "1", minW: "0" })}>
           <span class={css({ fontFamily: "heading", fontWeight: "600", fontSize: "1rem" })}>{name}</span>
           <p class={css({ textStyle: "classic.body", color: "textMuted", fontSize: "0.9rem", mt: "1" })}>{lang === "fr" && desc_fr ? desc_fr : desc}</p>
-        </div>
-        <div class={css({ display: "flex", gap: "3", flexWrap: "wrap", flexShrink: "0" })}>
-          {tags.map(({ label, icon, iconSource }) => (
-            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
-              <span set:html={getIconSvg(icon, iconSource)} />
-              {label}
-            </span>
-          ))}
+          {/* under the description: a right-hand column overflowed with long stacks */}
+          <div class={css({ display: "flex", flexWrap: "wrap", columnGap: "4", rowGap: "2", mt: "3" })}>
+            {tags.map(({ label, icon, iconSource }) => (
+              <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
+                <span set:html={getIconSvg(icon, iconSource)} />
+                {label}
+              </span>
+            ))}
+          </div>
         </div>
       </a>
     ))}
