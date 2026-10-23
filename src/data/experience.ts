@@ -44,7 +44,7 @@ export const experience: Experience[] = [
   {
     role: "Founding Engineer",
     company: "MonaxTech",
-    url: "",
+    url: "https://monaxtech.com",
     contractType: contractType.INDEPENDENT,
     period: "Jul. 2024 - Present",
     tags: [

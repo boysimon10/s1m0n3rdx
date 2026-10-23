@@ -66,18 +66,29 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
           pill,
           outlined,
           css({
-            transition: "background 0.15s, opacity 0.2s",
+            transition: "background 0.15s",
             "&[href]:hover": { bg: "accentSoft" },
-            "&[data-loading]": { visibility: "hidden", opacity: "0" },
+            // skeleton until the first API answer, then the track or the fallback
+            "&[data-loading] [data-sp-label], &[data-loading] [data-sp-title], &[data-loading] [data-sp-artist]": { display: "none" },
+            "&[data-loading] [data-sp-skeleton]": { display: "inline-flex" },
           }),
         )}
       >
         <span class={css({ display: "flex" })} set:html={getIconSvg("siSpotify", "si", 16)} />
+        <span data-sp-skeleton aria-hidden="true" class={css({ display: "none", alignItems: "center", gap: "8px", animation: "pulse", _motionReduce: { animation: "none" } })}>
+          <span class={css({ w: "112px", h: "9px", rounded: "pill", bg: "hairline" })}></span>
+          <span class={css({ w: "64px", h: "9px", rounded: "pill", bg: "hairline" })}></span>
+        </span>
         <span data-sp-label class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} ·</span>
         <span data-sp-title>{lastPlayed.title}</span>
         <span data-sp-artist class={css({ color: "textMuted" })}>· {lastPlayed.artist}</span>
       </a>
-      <noscript><style is:inline>#spotify-pill { visibility: visible; opacity: 1; }</style></noscript>
+      <noscript>
+        <style is:inline>
+          #spotify-pill [data-sp-skeleton] { display: none !important; }
+          #spotify-pill [data-sp-title], #spotify-pill [data-sp-artist] { display: inline !important; }
+        </style>
+      </noscript>
       <span id="copy-email-done" hidden class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", color: "textMuted" })}>
         {t("hero.copied")}
       </span>
