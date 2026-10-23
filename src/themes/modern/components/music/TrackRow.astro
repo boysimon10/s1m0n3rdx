@@ -1,0 +1,36 @@
+---
+import { css } from "../../../../../styled-system/css";
+
+interface Props {
+  // "ago" = recently played (time on the right), "rank" = top tracks (number on the left)
+  variant: "ago" | "rank";
+}
+
+const { variant } = Astro.props;
+const mono = css({ flex: "none", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1", color: "textMuted" });
+---
+
+<a
+  target="_blank"
+  rel="noopener noreferrer"
+  class={css({
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    py: "9px",
+    px: "10px",
+    rounded: "sm",
+    transition: "background 0.15s",
+    _hover: { bg: "accentSoft" },
+  })}
+>
+  {variant === "rank" && <span data-f="rank" data-skel class={mono}>00</span>}
+  <span class={css({ flex: "none", w: "40px", h: "40px", rounded: "xs", overflow: "hidden", bg: "hairline", border: "1px solid {colors.hairline}" })}>
+    <img data-f="cover" hidden alt="" width="40" height="40" loading="lazy" class={css({ w: "100%", h: "100%", objectFit: "cover" })} />
+  </span>
+  <span class={css({ flex: "1", minW: "0", display: "flex", flexDir: "column", gap: "4px" })}>
+    <span data-f="title" data-skel class={css({ fontWeight: "600", fontSize: "15px", lineHeight: "1.2", truncate: true, alignSelf: "flex-start", maxW: "100%" })}>Loading a track</span>
+    <span data-f="artist" data-skel class={css({ fontSize: "13.5px", lineHeight: "1.2", color: "textMuted", truncate: true, alignSelf: "flex-start", maxW: "100%" })}>Artist</span>
+  </span>
+  {variant === "ago" && <span data-f="ago" data-skel class={mono}>5 min ago</span>}
+</a>

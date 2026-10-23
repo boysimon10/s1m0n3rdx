@@ -6,7 +6,7 @@ import { execFile } from "node:child_process";
 
 const VARS = ".dev.vars";
 const REDIRECT = "http://127.0.0.1:8888/callback";
-const SCOPES = "user-read-currently-playing user-read-recently-played";
+const SCOPES = "user-read-currently-playing user-read-recently-played user-top-read";
 
 const vars = Object.fromEntries(
   fs.readFileSync(VARS, "utf8").split("\n").filter((l) => l.includes("=")).map((l) => {

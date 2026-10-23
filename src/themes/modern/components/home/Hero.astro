@@ -2,7 +2,7 @@
 import { css, cx } from "../../../../../styled-system/css";
 import { getIconSvg } from "../../../../utils/icons";
 import { site, lastPlayed } from "../../../../data/site";
-import { getLangFromUrl, useTranslations } from "../../../../i18n";
+import { getLangFromUrl, localePath, useTranslations } from "../../../../i18n";
 import SocialLinks from "../SocialLinks.astro";
 import IconCopy from "iconoir/icons/regular/copy.svg?raw";
 
@@ -57,8 +57,7 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
       </span>
       <a
         id="spotify-pill"
-        target="_blank"
-        rel="noopener noreferrer"
+        href={localePath(lang, "modern", "/music")}
         data-now={t("hero.nowPlaying")}
         data-last={t("hero.lastPlayed")}
         data-loading
@@ -79,6 +78,7 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
           <span class={css({ w: "112px", h: "9px", rounded: "pill", bg: "hairline" })}></span>
           <span class={css({ w: "64px", h: "9px", rounded: "pill", bg: "hairline" })}></span>
         </span>
+        <img data-sp-cover hidden alt="" width="22" height="22" class={css({ flex: "none", w: "22px", h: "22px", my: "-5px", rounded: "4px", objectFit: "cover", border: "1px solid {colors.hairline}" })} />
         <span data-sp-label class={css({ display: "none", color: "textMuted", sm: { display: "inline" } })}>{t("hero.lastPlayed")} ·</span>
         <span data-sp-title>{lastPlayed.title}</span>
         <span data-sp-artist class={css({ color: "textMuted" })}>· {lastPlayed.artist}</span>
@@ -137,10 +137,14 @@ const outlined = css({ display: "inline-flex", alignItems: "center", gap: "8px",
         const node = el.querySelector(selector);
         if (node) node.textContent = text;
       };
-      el.href = track.url;
       set("[data-sp-title]", track.title);
       set("[data-sp-artist]", `· ${track.artist}`);
       set("[data-sp-label]", `${track.playing ? el.dataset.now : el.dataset.last} ·`);
+      const cover = el.querySelector<HTMLImageElement>("[data-sp-cover]");
+      if (cover) {
+        if (track.image && cover.src !== track.image) cover.src = track.image;
+        cover.hidden = !track.image;
+      }
     } catch {
     } finally {
       delete el.dataset.loading;

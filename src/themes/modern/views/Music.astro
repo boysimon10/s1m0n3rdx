@@ -1,0 +1,301 @@
+---
+import Page from "../layouts/Page.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import TrackRow from "../components/music/TrackRow.astro";
+import ArtistTile from "../components/music/ArtistTile.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+import { music } from "../../../data/music";
+import { getIconSvg } from "../../../utils/icons";
+import IconArrowUpRight from "iconoir/icons/regular/arrow-up-right.svg?raw";
+import IconRefresh from "iconoir/icons/regular/refresh.svg?raw";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const card = css({ border: "1.5px solid {colors.border}", rounded: "lg", bg: "surface" });
+const ranges = [
+  { value: "short_term", label: t("music.short") },
+  { value: "medium_term", label: t("music.medium") },
+  { value: "long_term", label: t("music.long") },
+];
+---
+
+<Page title={lang === "fr" ? "Musique" : "Music"}>
+  <div
+    data-music
+    data-state="loading"
+    data-lang={lang}
+    data-label-now={t("music.now")}
+    data-label-paused={t("music.paused")}
+    data-label-last={t("music.last")}
+    class={css({
+      display: "flex",
+      flexDir: "column",
+      gap: "20px",
+      // skeleton: placeholder text becomes grey bars until the first answer
+      "&[data-state=loading] [data-skel]": {
+        color: "transparent",
+        bg: "hairline",
+        rounded: "xs",
+        animation: "pulse",
+        _motionReduce: { animation: "none" },
+      },
+      "&[data-state=loading] a": { pointerEvents: "none" },
+      "&[data-state=error] [data-content]": { display: "none" },
+      "&:not([data-state=error]) [data-error]": { display: "none" },
+    })}
+  >
+    <SectionHeader label={t("music.heading")}>
+      <a
+        slot="right"
+        href={music.profile}
+        target="_blank"
+        rel="noopener noreferrer"
+        class={css({
+          flex: "none",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
+          fontFamily: "mono",
+          fontWeight: "500",
+          fontSize: "13px",
+          lineHeight: "1",
+          _hover: { textDecoration: "underline" },
+          "& svg": { w: "15px", h: "15px" },
+        })}
+      >
+        <span class={css({ display: "flex" })} set:html={getIconSvg("siSpotify", "si", 16)} />
+        <span class={css({ display: "none", sm: { display: "inline" } })}>{t("music.profile")}</span>
+      </a>
+    </SectionHeader>
+
+    <div
+      data-error
+      role="alert"
+      class={cx(card, css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(20px, 4vw, 40px)", p: "clamp(22px, 4vw, 44px)" }))}
+    >
+      <!-- a stopped record: grooves, orange label, and a scratch -->
+      <div
+        aria-hidden="true"
+        class={css({
+          position: "relative",
+          flex: "none",
+          w: "clamp(110px, 22vw, 168px)",
+          aspectRatio: "1",
+          rounded: "full",
+          border: "1.5px solid {colors.border}",
+          bg: "repeating-radial-gradient(circle, {colors.code.bg} 0 3px, {colors.code.border} 3px 5px)",
+          display: "grid",
+          placeItems: "center",
+          transform: "rotate(-14deg)",
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: "22%",
+            left: "12%",
+            w: "46%",
+            h: "2px",
+            rounded: "pill",
+            bg: "surface",
+            opacity: "0.55",
+            transform: "rotate(-32deg)",
+          },
+        })}
+      >
+        <span class={css({ w: "36%", aspectRatio: "1", rounded: "full", bg: "accent", border: "1.5px solid {colors.border}", display: "grid", placeItems: "center" })}>
+          <span class={css({ w: "16%", aspectRatio: "1", rounded: "full", bg: "text" })}></span>
+        </span>
+      </div>
+
+      <div class={css({ flex: "1 1 280px", display: "flex", flexDir: "column", alignItems: "flex-start", gap: "14px" })}>
+        <p class={css({ m: "0", textStyle: "h2", fontSize: "clamp(1.6rem, 3.4vw, 2.25rem)" })}>{t("music.oops")}</p>
+        <p class={css({ m: "0", textStyle: "small", fontSize: "16px", color: "textMuted", maxW: "46ch", textWrap: "pretty" })}>{t("music.error")}</p>
+        <div class={css({ display: "flex", flexWrap: "wrap", gap: "8px", mt: "4px" })}>
+          <button
+            type="button"
+            data-retry
+            class={css({
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "12px",
+              py: "6px",
+              pr: "6px",
+              pl: "18px",
+              border: "none",
+              rounded: "pill",
+              bg: "text",
+              color: "inverse",
+              fontFamily: "mono",
+              fontWeight: "500",
+              fontSize: "13px",
+              lineHeight: "1",
+              cursor: "pointer",
+              "&:hover svg": { transform: "rotate(180deg)" },
+            })}
+          >
+            {t("music.retry")}
+            <span
+              class={css({ w: "32px", h: "32px", rounded: "full", bg: "accent", color: "text", display: "grid", placeItems: "center", "& svg": { w: "15px", h: "15px", transition: "transform 0.3s" } })}
+              set:html={IconRefresh}
+            />
+          </button>
+          <a
+            href={music.profile}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={css({
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              py: "13px",
+              px: "16px",
+              border: "1.5px solid {colors.border}",
+              rounded: "pill",
+              fontFamily: "mono",
+              fontWeight: "500",
+              fontSize: "13px",
+              lineHeight: "1",
+              transition: "background 0.15s",
+              _hover: { bg: "accentSoft" },
+              "& svg": { w: "15px", h: "15px" },
+            })}
+          >
+            {t("music.profile")} <span class={css({ display: "flex" })} set:html={IconArrowUpRight} />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- now playing, or the last played track -->
+    <div
+      data-now
+      data-content
+      class={cx(card, css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(18px, 3vw, 32px)", p: "clamp(16px, 2.4vw, 24px)" }))}
+    >
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        tabindex="-1"
+        aria-hidden="true"
+        class={css({ flex: "none", w: "clamp(120px, 26vw, 200px)", aspectRatio: "1", rounded: "md", overflow: "hidden", bg: "hairline", border: "1.5px solid {colors.border}" })}
+      >
+        <img data-f="cover" hidden alt="" width="200" height="200" class={css({ w: "100%", h: "100%", objectFit: "cover" })} />
+      </a>
+      <div class={css({ flex: "1 1 260px", minW: "0", display: "flex", flexDir: "column", gap: "10px" })}>
+        <span
+          class={css({
+            alignSelf: "flex-start",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            textStyle: "eyebrow",
+            fontSize: "11.5px",
+            color: "textMuted",
+            // pulsing dot only while a track is actually playing
+            "& [data-dot]": { w: "7px", h: "7px", rounded: "full", bg: "accent" },
+            "[data-playing=true] &": { "& [data-dot]": { animation: "pulse" } },
+          })}
+        >
+          <span data-dot></span>
+          <span data-f="label" data-skel>{t("music.now")}</span>
+        </span>
+        <a
+          data-f="title"
+          data-skel
+          target="_blank"
+          rel="noopener noreferrer"
+          class={css({ alignSelf: "flex-start", maxW: "100%", textStyle: "h2", fontSize: "clamp(1.75rem, 4vw, 2.6rem)", lineHeight: "1.05", m: "0", truncate: true, _hover: { textDecoration: "underline" } })}
+        >
+          Loading a track
+        </a>
+        <span data-f="artist" data-skel class={css({ alignSelf: "flex-start", maxW: "100%", fontSize: "17px", color: "textMuted", truncate: true })}>Artist name</span>
+        <div data-now-progress hidden class={css({ display: "flex", alignItems: "center", gap: "12px", mt: "6px", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", color: "textMuted" })}>
+          <span data-f="elapsed">0:00</span>
+          <span class={css({ flex: "1", h: "6px", rounded: "pill", bg: "hairline", overflow: "hidden" })}>
+            <span data-f="bar" class={css({ display: "block", h: "100%", bg: "accent", transformOrigin: "left", transform: "scaleX(0)", transition: "transform 1s linear" })}></span>
+          </span>
+          <span data-f="duration">0:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div data-content class={css({ display: "flex", flexWrap: "wrap", gap: "16px", alignItems: "flex-start" })}>
+      <section class={cx(card, css({ flex: "1 1 420px", minW: "0", display: "flex", flexDir: "column", gap: "12px", p: "clamp(14px, 2vw, 20px)" }))}>
+        <SectionHeader label={t("music.recent")} />
+        <template data-tpl="recent"><TrackRow variant="ago" /></template>
+        <div data-list="recent" class={css({ display: "flex", flexDir: "column" })}>
+          {Array.from({ length: 6 }, () => <TrackRow variant="ago" />)}
+        </div>
+      </section>
+
+      <section class={cx(card, css({ flex: "1 1 420px", minW: "0", display: "flex", flexDir: "column", gap: "18px", p: "clamp(14px, 2vw, 20px)" }))}>
+        <SectionHeader label={t("music.top")} />
+        <div role="group" aria-label={t("music.top")} class={css({ alignSelf: "flex-start", display: "flex", flexWrap: "wrap", gap: "4px", p: "4px", border: "1.5px solid {colors.border}", rounded: "pill" })}>
+          {ranges.map(({ value, label }) => (
+            <button
+              type="button"
+              data-range={value}
+              aria-pressed={value === "short_term" ? "true" : "false"}
+              class={css({
+                py: "7px",
+                px: "12px",
+                border: "none",
+                rounded: "pill",
+                bg: "transparent",
+                color: "text",
+                fontFamily: "mono",
+                fontWeight: "500",
+                fontSize: "12.5px",
+                lineHeight: "1",
+                cursor: "pointer",
+                transition: "background 0.15s",
+                _hover: { bg: "accentSoft" },
+                "&[aria-pressed=true]": { bg: "text", color: "inverse" },
+              })}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div class={css({ display: "flex", flexDir: "column", gap: "10px" })}>
+          <span class={css({ textStyle: "eyebrow", fontSize: "11.5px", color: "textMuted" })}>{t("music.artists")}</span>
+          <template data-tpl="artists"><ArtistTile /></template>
+          <div data-list="artists" class={css({ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "clamp(8px, 1.6vw, 14px)" })}>
+            {Array.from({ length: 5 }, () => <ArtistTile />)}
+          </div>
+        </div>
+
+        <div class={css({ display: "flex", flexDir: "column", gap: "4px" })}>
+          <span class={css({ textStyle: "eyebrow", fontSize: "11.5px", color: "textMuted" })}>{t("music.tracks")}</span>
+          <template data-tpl="tracks"><TrackRow variant="rank" /></template>
+          <div data-list="tracks" class={css({ display: "flex", flexDir: "column" })}>
+            {Array.from({ length: 5 }, () => <TrackRow variant="rank" />)}
+          </div>
+        </div>
+      </section>
+    </div>
+
+    {music.playlists.length > 0 && (
+      <section class={css({ display: "flex", flexDir: "column", gap: "16px" })}>
+        <SectionHeader label={t("music.playlists")} />
+        <div class={css({ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 420px), 1fr))", gap: "16px" })}>
+          {music.playlists.map((id) => (
+            <iframe
+              src={`https://open.spotify.com/embed/playlist/${id}`}
+              title={`Spotify playlist ${id}`}
+              loading="lazy"
+              allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              class={css({ w: "100%", h: "352px", border: "0", rounded: "lg" })}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Page>
+
+<script>
+  import "../../../scripts/music";
+</script>
