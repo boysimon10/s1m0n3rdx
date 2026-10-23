@@ -2,11 +2,12 @@
 import { css } from "../../../../../styled-system/css";
 import { getIconSvg } from "../../../../utils/icons";
 import { site, socials, lastPlayed } from "../../../../data/site";
-import { getLangFromUrl, localePath } from "../../../../i18n";
+import { getLangFromUrl, localePath, useTranslations } from "../../../../i18n";
 
 import IconCopy from "iconoir/icons/regular/copy.svg?raw";
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const iconMap: Record<string, string> = {
   github: getIconSvg("siGithub", "si"),
@@ -42,15 +43,18 @@ const spotifyTrack = { title: lastPlayed.title, artists: lastPlayed.artist };
   <p class={css({ fontSize: "0.9rem", color: "text", mb: "4", maxW: "520px" })}>{bio}</p>
 
   <a
+    id="spotify-line"
     href={localePath(lang, "classic", "/music")}
+    data-now={t("hero.nowPlaying")}
+    data-last={t("hero.lastPlayed")}
     class={css({ display: "flex", alignItems: "center", gap: "2", mb: "5", fontSize: "0.82rem", color: "textMuted", flexWrap: "wrap", _hover: { opacity: "0.75" } })}
   >
     <span set:html={getIconSvg("siSpotify", "si", 16)} />
-    <span>{lang === "fr" ? "Dernière écoute" : "Last played"}</span>
+    <span data-sp-label>{t("hero.lastPlayed")}</span>
     <span>-</span>
-    <span class={css({ color: "text" })}>{spotifyTrack.title}</span>
+    <span data-sp-title class={css({ color: "text" })}>{spotifyTrack.title}</span>
     <span>·</span>
-    <span>{spotifyTrack.artists}</span>
+    <span data-sp-artist>{spotifyTrack.artists}</span>
   </a>
 
   <div class={css({ display: "flex", alignItems: "center", gap: "4" })}>
@@ -73,4 +77,39 @@ const spotifyTrack = { title: lastPlayed.title, artists: lastPlayed.artist };
     const email = btn.dataset.email ?? "";
     navigator.clipboard.writeText(email);
   });
+
+  // no skeleton here: the fallback shows right away and is replaced when the API answers
+  import type { NowPlaying } from "../../../../../worker/index";
+
+  const line = document.getElementById("spotify-line");
+  const REFRESH_MS = 30_000;
+  const TIMEOUT_MS = 5_000;
+
+  async function refresh(el: HTMLElement) {
+    try {
+      const res = await fetch("/api/now-playing", { cache: "no-store", signal: AbortSignal.timeout(TIMEOUT_MS) });
+      if (!res.ok) return;
+      const track = (await res.json()) as NowPlaying;
+      if (!track) return;
+      const set = (selector: string, text: string) => {
+        const node = el.querySelector(selector);
+        if (node) node.textContent = text;
+      };
+      set("[data-sp-title]", track.title);
+      set("[data-sp-artist]", track.artist);
+      set("[data-sp-label]", (track.playing ? el.dataset.now : el.dataset.last) ?? "");
+    } catch {
+      // keep the fallback
+    }
+  }
+
+  if (line) {
+    void refresh(line);
+    setInterval(() => {
+      if (document.visibilityState === "visible") void refresh(line);
+    }, REFRESH_MS);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") void refresh(line);
+    });
+  }
 </script>

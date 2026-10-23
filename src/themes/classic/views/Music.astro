@@ -132,7 +132,7 @@ const ranges = [
               <span data-f="name" data-skel>Artist</span>
             </a>
           </template>
-          <div data-list="artists" class={css({ display: "flex", flexWrap: "wrap", gap: "2 5", textStyle: "classic.body" })}>
+          <div data-list="artists" class={css({ display: "flex", flexWrap: "wrap", columnGap: "8", rowGap: "3", textStyle: "classic.body" })}>
             {Array.from({ length: 5 }, () => <span data-skel>Artist name</span>)}
           </div>
 
