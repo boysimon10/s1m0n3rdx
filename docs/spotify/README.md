@@ -13,7 +13,7 @@ The Spotify pill in the home hero shows what is playing right now, or the last t
 
   `null` when Spotify has no history, `502 { "error": "spotify unavailable" }` when the call fails.
 - The response is cached **15 s at the edge** (`s-maxage=15`) and never in the browser (`max-age=0`), so every visitor sees the same track.
-- The pill is hidden until the first answer of the API. The script in `Hero.astro` fetches it on load, every 30 s while the tab is visible, and when the tab becomes visible again. If the first call fails or takes more than 5 s, the pill shows the static fallback (`lastPlayed` in `src/data/site.ts`) instead. Without JavaScript, the fallback is shown directly.
+- The pill shows a skeleton until the first answer of the API. The script in `Hero.astro` fetches it on load, every 30 s while the tab is visible, and when the tab becomes visible again. If the first call fails or takes more than 5 s, the pill shows the static fallback (`lastPlayed` in `src/data/site.ts`) instead. Without JavaScript, the fallback is shown directly.
 - In `npm run dev` there is no Worker: the request fails and the fallback is shown.
 
 ## Setup
