@@ -16,6 +16,15 @@ The Spotify pill in the home hero shows what is playing right now, or the last t
 - The pill shows a skeleton until the first answer of the API. The script in `Hero.astro` fetches it on load, every 30 s while the tab is visible, and when the tab becomes visible again. If the first call fails or takes more than 5 s, the pill shows the static fallback (`lastPlayed` in `src/data/site.ts`) instead. Without JavaScript, the fallback is shown directly.
 - In `npm run dev` there is no Worker: the request fails and the fallback is shown.
 
+## Music page
+
+`/music` (and `/fr/music`, `/classic/music`, `/fr/classic/music`) shows the current track with a live progress bar, the last 10 tracks and the top 5 artists and tracks over 4 weeks, 6 months and all time. The pill in the home hero links to it.
+
+- `GET /api/music` returns all of it in one call (`Music` type in [`worker/index.ts`](../../worker/index.ts)). Same 15 s edge cache as `/api/now-playing`; the tops (6 Spotify calls) are cached separately for 1 h.
+- [`src/scripts/music.ts`](../../src/scripts/music.ts) fills both themes from `data-*` hooks and `<template>` rows, refreshes every 30 s and fetches the next track as soon as the current one ends. Skeletons until the first answer, an error message with a link to the Spotify profile if it fails.
+- Playlists can't be listed by the API (403), so they are picked by hand: add public playlist IDs to `playlists` in `src/data/music.ts`. They are shown with Spotify's embedded player; the section is hidden while the list is empty.
+- The tops need the `user-top-read` scope: a refresh token created before it was added must be regenerated.
+
 ## Setup
 
 ### 1. Create a Spotify app
@@ -47,7 +56,7 @@ Then run, from the root of the repo:
 node docs/spotify/get-refresh-token.mjs
 ```
 
-It opens the Spotify authorization page, catches the redirect on `127.0.0.1:8888` and appends `SPOTIFY_REFRESH_TOKEN` to `.dev.vars`. The token is never printed. Requested scopes are read-only: `user-read-currently-playing` and `user-read-recently-played`.
+It opens the Spotify authorization page, catches the redirect on `127.0.0.1:8888` and appends `SPOTIFY_REFRESH_TOKEN` to `.dev.vars`. The token is never printed. Requested scopes are read-only: `user-read-currently-playing`, `user-read-recently-played` and `user-top-read`. Public playlists need no scope.
 
 The refresh token does not expire unless you revoke the app's access in your Spotify account. If that happens, run the script again.
 

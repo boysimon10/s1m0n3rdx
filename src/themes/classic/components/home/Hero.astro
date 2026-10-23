@@ -2,7 +2,7 @@
 import { css } from "../../../../../styled-system/css";
 import { getIconSvg } from "../../../../utils/icons";
 import { site, socials, lastPlayed } from "../../../../data/site";
-import { getLangFromUrl } from "../../../../i18n";
+import { getLangFromUrl, localePath } from "../../../../i18n";
 
 import IconCopy from "iconoir/icons/regular/copy.svg?raw";
 
@@ -41,14 +41,17 @@ const spotifyTrack = { title: lastPlayed.title, artists: lastPlayed.artist };
 
   <p class={css({ fontSize: "0.9rem", color: "text", mb: "4", maxW: "520px" })}>{bio}</p>
 
-  <div class={css({ display: "flex", alignItems: "center", gap: "2", mb: "5", fontSize: "0.82rem", color: "textMuted", flexWrap: "wrap" })}>
+  <a
+    href={localePath(lang, "classic", "/music")}
+    class={css({ display: "flex", alignItems: "center", gap: "2", mb: "5", fontSize: "0.82rem", color: "textMuted", flexWrap: "wrap", _hover: { opacity: "0.75" } })}
+  >
     <span set:html={getIconSvg("siSpotify", "si", 16)} />
     <span>{lang === "fr" ? "Dernière écoute" : "Last played"}</span>
     <span>-</span>
     <span class={css({ color: "text" })}>{spotifyTrack.title}</span>
     <span>·</span>
     <span>{spotifyTrack.artists}</span>
-  </div>
+  </a>
 
   <div class={css({ display: "flex", alignItems: "center", gap: "4" })}>
     {socials.map(({ href, icon, label }) => (

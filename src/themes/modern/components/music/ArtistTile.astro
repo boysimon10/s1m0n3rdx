@@ -1,0 +1,21 @@
+---
+import { css } from "../../../../../styled-system/css";
+---
+
+<a
+  target="_blank"
+  rel="noopener noreferrer"
+  class={css({
+    minW: "0",
+    display: "flex",
+    flexDir: "column",
+    alignItems: "center",
+    gap: "8px",
+    "&:hover img": { transform: "scale(1.05)" },
+  })}
+>
+  <span class={css({ w: "100%", aspectRatio: "1", rounded: "full", overflow: "hidden", bg: "hairline", border: "1.5px solid {colors.border}" })}>
+    <img data-f="cover" hidden alt="" width="160" height="160" loading="lazy" class={css({ w: "100%", h: "100%", objectFit: "cover", transition: "transform 0.2s" })} />
+  </span>
+  <span data-f="name" data-skel class={css({ maxW: "100%", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", lineHeight: "1.2", textAlign: "center", truncate: true })}>Artist</span>
+</a>
