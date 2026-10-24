@@ -37,6 +37,8 @@ export const tagIconMap: Record<string, { icon: string; iconSource: IconSource }
   // Mobile
   "Flutter":      { icon: "Flutter",     iconSource: "dev" },
   "Expo":         { icon: "siExpo",      iconSource: "si"  },
+  "Bluetooth":    { icon: "siBluetooth", iconSource: "si"  },
+  "BLE":          { icon: "siBluetooth", iconSource: "si"  },
 
   // Backend / Frameworks
   "Node.js":      { icon: "NodeJs",      iconSource: "dev" },
