@@ -33,7 +33,7 @@ const themeLinks = [
 const rssHref = lang === "fr" ? "/fr/rss.xml" : "/rss.xml";
 
 const line = css({ display: "none", md: { display: "block", flex: "1", h: "2.5px", bg: "border", minW: "16px" } });
-const circle = css({ w: "24px", h: "24px", rounded: "full", display: "grid", placeItems: "center", fontFamily: "mono", fontWeight: "500", fontSize: "11px", lineHeight: "1" });
+const circle = css({ w: "24px", h: "24px", display: "grid", placeItems: "center", fontFamily: "mono", fontWeight: "500", fontSize: "11px", lineHeight: "1" });
 ---
 
 <header
@@ -42,7 +42,7 @@ const circle = css({ w: "24px", h: "24px", rounded: "full", display: "grid", pla
     flexWrap: "wrap",
     alignItems: "center",
     gap: "10px",
-    md: { flexWrap: "nowrap", gap: "14px", p: "8px", border: "2.5px solid {colors.border}", rounded: "pill", bg: "surface" },
+    md: { flexWrap: "nowrap", gap: "14px", p: "8px", border: "3px solid {colors.border}", bg: "surface" },
   })}
 >
   <a href={homeHref} class={css({ display: "flex", alignItems: "center", gap: "10px", pr: "6px", _hover: { color: "accent" } })}>
@@ -69,7 +69,6 @@ const circle = css({ w: "24px", h: "24px", rounded: "full", display: "grid", pla
       gap: "2px",
       p: "4px",
       border: "2.5px solid {colors.border}",
-      rounded: "pill",
       bg: "surface",
       md: { order: "0", flexBasis: "auto", gap: "4px", p: "0", border: "none", bg: "transparent" },
     })}
@@ -84,8 +83,7 @@ const circle = css({ w: "24px", h: "24px", rounded: "full", display: "grid", pla
             textAlign: "center",
             py: "13px",
             px: "4px",
-            rounded: "pill",
-            fontFamily: "display",
+                        fontFamily: "display",
             fontWeight: "600",
             fontSize: "14px",
             lineHeight: "1",
@@ -107,8 +105,7 @@ const circle = css({ w: "24px", h: "24px", rounded: "full", display: "grid", pla
         w: "40px",
         h: "40px",
         ml: "4px",
-        rounded: "full",
-        border: "2px solid {colors.border}",
+                border: "2px solid {colors.border}",
         display: "grid",
         placeItems: "center",
         transition: "background 0.15s",
@@ -135,13 +132,13 @@ const circle = css({ w: "24px", h: "24px", rounded: "full", display: "grid", pla
       )}
     </div>
 
-    <div class={css({ display: "flex", p: "3px", gap: "2px", border: "2.5px solid {colors.border}", rounded: "pill" })}>
+    <div class={css({ display: "flex", p: "3px", gap: "2px", border: "2.5px solid {colors.border}" })}>
       {langs.map(({ code, active, href }) => (
         <a
           href={href}
           aria-current={active ? "true" : undefined}
           class={cx(
-            css({ py: "11px", px: "11px", rounded: "pill", fontFamily: "mono", fontSize: "12px", lineHeight: "1", md: { py: "9px", px: "12px" } }),
+            css({ py: "11px", px: "11px", fontFamily: "mono", fontSize: "12px", lineHeight: "1", md: { py: "9px", px: "12px" } }),
             active ? css({ bg: "accent", color: "accentFg", fontWeight: "600" }) : css({ fontWeight: "500", color: "textMuted", _hover: { color: "text" } }),
           )}
         >
