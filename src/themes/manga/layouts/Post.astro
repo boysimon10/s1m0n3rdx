@@ -10,7 +10,8 @@ import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
 import { formatDate } from "../../../utils/formatDate";
 import { panel, inkPanel, hatch, chipInk } from "../styles";
 
-type Neighbor = { title: string; href: string } | undefined;
+// no href: an announced (soon) volume, shown without a link
+type Neighbor = { title: string; href?: string } | undefined;
 
 interface Props {
   title: string;
@@ -127,7 +128,7 @@ const sideLink = css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", 
               href={next?.href}
               class={css({ display: "flex", flexDir: "column", gap: "8px", p: "18px", border: "3px solid {colors.border}", bg: "accent", color: "accentFg", textAlign: "right", "&:not([href])": { pointerEvents: "none" } })}
             >
-              <span class={navMono}>{t("manga.next")}</span>
+              <span class={navMono}>{next && !next.href ? `${t("manga.next").replace(" →", "")} · ${t("manga.soon")}` : t("manga.next")}</span>
               {next ? (
                 <span class={css({ fontWeight: "700", fontSize: "17px", lineHeight: "1.2" })}>{next.title}</span>
               ) : (

@@ -7,12 +7,17 @@ import { getVolumes } from "../../../utils/volumes";
 export async function getStaticPaths() {
   const volumes = await getVolumes("fr");
   const others = await getVolumes("en");
-  // volumes are newest first: the next volume is the one before in the list
-  return volumes.map(({ post, num, minutes }, i) => {
-    const translation = post.data.translationKey ? others.find((v) => v.post.data.translationKey === post.data.translationKey) : undefined;
+  // volumes are newest first: the next volume is the one before in the list.
+  // Announced ones get no page; as a neighbor they show their title without a link.
+  return volumes.flatMap(({ post, num, minutes, soon }, i) => {
+    if (soon) return [];
+    const translation = post.data.translationKey
+      ? others.find((v) => !v.soon && v.post.data.translationKey === post.data.translationKey)
+      : undefined;
     const link = (index: number) => {
       const v = volumes.at(index);
-      return v && index >= 0 ? { title: v.post.data.title, href: localePath("fr", "manga", `/blog/${getSlugFromId(v.post.id)}`) } : undefined;
+      if (!v || index < 0) return undefined;
+      return { title: v.post.data.title, href: v.soon ? undefined : localePath("fr", "manga", `/blog/${getSlugFromId(v.post.id)}`) };
     };
     return {
       params: { slug: getSlugFromId(post.id) },

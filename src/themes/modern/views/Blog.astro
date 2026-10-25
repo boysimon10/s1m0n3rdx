@@ -17,7 +17,7 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const inLang = (id: string) => id.startsWith(`${lang}/`);
 
-const articles = (await getCollection("articles", ({ id, data }) => !data.draft && inLang(id))).map(
+const articles = (await getCollection("articles", ({ id, data }) => !data.draft && !data.soon && inLang(id))).map(
   (post) => ({ type: "article" as const, post }),
 );
 const voids = (await getCollection("void", ({ id, data }) => data.showInBlog && !data.draft && inLang(id))).map(

@@ -18,7 +18,10 @@ const t = useTranslations(lang);
 const firstName = site.author.split(" ")[0];
 const role = lang === "fr" ? site.role_fr : site.role;
 const bio = lang === "fr" ? site.bio_fr : site.bio;
-const volumes = (await getVolumes(lang)).slice(0, 2);
+const allVolumes = await getVolumes(lang);
+// the latest published volume, then the next announced one as a teaser
+const volumes = allVolumes.filter((v) => !v.soon).slice(0, 2);
+const nextUp = allVolumes.filter((v) => v.soon).at(-1);
 const projects = (await getProjects()).slice(0, 3);
 ---
 
@@ -46,7 +49,7 @@ const projects = (await getProjects()).slice(0, 3);
       </div>
 
       <!-- avatar panel + narration box; first on mobile -->
-      <div class={css({ order: "-1", display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", gap: "14px", md: { order: "0" } })}>
+      <div class={css({ order: "-1", minW: "0", display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gridTemplateRows: "minmax(0, 1fr) auto", gap: "14px", md: { order: "0" } })}>
         <div class={cx(panel, cutLeft, css({ position: "relative", overflow: "hidden", minH: "220px", display: "grid", placeItems: "center", bg: "bg", md: { minH: "400px" } }))}>
           <div class={speedCenter}></div>
           <Image
@@ -90,13 +93,13 @@ const projects = (await getProjects()).slice(0, 3);
       </div>
     </div>
 
-    <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "14px", md: { gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)" } })}>
+    <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "14px", md: { gridTemplateColumns: "minmax(0, 1.35fr) minmax(0, 1fr)" } })}>
       <section class={cx(panel, css({ display: "flex", flexDir: "column" }))}>
         <div class={panelBar}>
           <h2 class={cx(panelBarTitle, css({ m: "0" }))}>{t("blog.heading")}</h2>
           <a href={localePath(lang, "manga", "/blog")} class={panelBarLink}>{t("blog.seeAll")} →</a>
         </div>
-        {volumes.length === 0 && <p class={css({ m: "0", p: "22px 18px", color: "textMuted" })}>{t("blog.empty")}</p>}
+        {volumes.length === 0 && !nextUp && <p class={css({ m: "0", p: "22px 18px", color: "textMuted" })}>{t("blog.empty")}</p>}
         {volumes.map(({ post, num }, i) => (
           <a
             href={localePath(lang, "manga", `/blog/${getSlugFromId(post.id)}`)}
@@ -124,6 +127,21 @@ const projects = (await getProjects()).slice(0, 3);
             )}
           </a>
         ))}
+        {nextUp && (
+          <div
+            aria-disabled="true"
+            class={cx(
+              css({ display: "flex", flexDir: "column", gap: "10px", pt: "18px", px: "18px", pb: "20px", color: "textMuted", backgroundImage: "repeating-linear-gradient(-45deg, transparent 0 9px, color-mix(in srgb, var(--colors-border) 7%, transparent) 9px 10px)" }),
+              volumes.length > 0 && css({ borderTop: "1.5px dashed {colors.border}" }),
+            )}
+          >
+            <span class={css({ display: "flex", gap: "8px", alignItems: "center" })}>
+              <span class={cx(chipLine, css({ py: "5px", color: "accent" }))}>VOL.{nextUp.num}</span>
+              <span class={cx(chipInk, css({ py: "5px" }))}>{t("manga.soon")}</span>
+            </span>
+            <span class={css({ alignSelf: "flex-start", bg: "bg", px: "6px", fontFamily: "display", fontWeight: "800", fontSize: "19px", lineHeight: "1.2", letterSpacing: "-0.02em", textWrap: "pretty" })}>{nextUp.post.data.title}</span>
+          </div>
+        )}
       </section>
 
       <section class={cx(panel, css({ display: "flex", flexDir: "column" }))}>
@@ -136,6 +154,7 @@ const projects = (await getProjects()).slice(0, 3);
             <ChapterRow project={project} inPanel />
           </div>
         ))}
+        <div aria-hidden="true" class={css({ flex: "1", minH: "0", backgroundImage: "radial-gradient({colors.border} 1px, transparent 1.3px)", backgroundSize: "7px 7px", maskImage: "linear-gradient(to bottom, transparent, #000)", opacity: "0.5" })}></div>
       </section>
     </div>
   </div>

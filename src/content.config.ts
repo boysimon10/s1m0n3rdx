@@ -16,6 +16,7 @@ const articles = defineCollection({
       iconSource: z.enum(["dev", "si"]),
     })).optional(),
     draft: z.boolean().default(false),
+    soon: z.boolean().default(false),
     translationKey: z.string().optional(),
   }),
 });

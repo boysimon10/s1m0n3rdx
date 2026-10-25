@@ -4,7 +4,7 @@ import Post from "../../../themes/classic/layouts/Post.astro";
 import { getSlugFromId } from "../../../i18n";
 
 export async function getStaticPaths() {
-  const all = await getCollection("articles", ({ data }) => !data.draft);
+  const all = await getCollection("articles", ({ data }) => !data.draft && !data.soon);
   const enPosts = all.filter(p => p.id.startsWith("en/"));
   const frPosts = all.filter(p => p.id.startsWith("fr/"));
 

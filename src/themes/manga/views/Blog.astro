@@ -10,11 +10,14 @@ import { panel, speedCorner, toneRed, chipInk, lift, pageTitle, cutRight } from 
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const [featured, ...rest] = await getVolumes(lang);
+const volumes = await getVolumes(lang);
+// the newest published volume is featured; announced ones come first in the side column
+const upcoming = volumes.filter((v) => v.soon).reverse();
+const [featured, ...rest] = volumes.filter((v) => !v.soon);
 const voids = (await getCollection("void", ({ id, data }) => data.showInBlog && !data.draft && id.startsWith(`${lang}/`))).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
-const hasSide = rest.length > 0 || voids.length > 0;
+const hasSide = upcoming.length > 0 || rest.length > 0 || voids.length > 0;
 const card = cx(panel, lift, css({ display: "flex", flexDir: "column", gap: "12px", p: "22px" }));
 const cardMeta = css({ display: "flex", justifyContent: "space-between", gap: "12px", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" });
 const cardTitle = css({ fontFamily: "display", fontWeight: "800", fontSize: "clamp(21px, 2.2vw, 26px)", lineHeight: "1.1", letterSpacing: "-0.02em", textWrap: "pretty" });
@@ -72,6 +75,17 @@ const cardDek = css({ fontSize: "15px", lineHeight: "1.45", color: "textBody", t
             </span>
           </span>
         </a>
+
+        {upcoming.map(({ post, num }) => (
+          <div aria-disabled="true" class={cx(panel, css({ display: "flex", flexDir: "column", gap: "12px", p: "22px", borderStyle: "dashed", color: "textMuted" }))}>
+            <span class={cardMeta}>
+              <span class={css({ color: "accent" })}>VOL.{num}</span>
+              <span class={css({ py: "4px", px: "7px", bg: "text", color: "inverse" })}>{t("manga.soon")}</span>
+            </span>
+            <span class={cardTitle}>{post.data.title}</span>
+            <span class={cardDek}>{post.data.description}</span>
+          </div>
+        ))}
 
         {rest.map(({ post, num }) => (
           <a href={localePath(lang, "manga", `/blog/${getSlugFromId(post.id)}`)} class={card}>
