@@ -1,11 +1,12 @@
 # Design System - s1m0n3rdx
 
-Two themes share one set of semantic tokens:
+Three themes share one set of semantic tokens:
 
-- **Modern** (default) - warm beige paper, bordered cards, pill shapes and a signature orange. Schibsted Grotesk + Geist Mono.
+- **Manga** (main, served at the root URLs) - ink on paper, thick panels, screentones, speed lines, speech bubbles and one red. Schibsted Grotesk + Geist Mono, Dela Gothic One for onomatopoeia. See [Manga patterns](#manga-patterns).
+- **Modern** (`/modern`) - warm beige paper, bordered cards, pill shapes and a signature orange. Schibsted Grotesk + Geist Mono.
 - **Classic** - brutalist/editorial, off-white background, hairline separators, IBM Plex Mono everywhere except display moments in Archivo Black.
 
-Semantic tokens hold the modern values by default and switch to the classic values under `data-theme="classic"`. Components always use semantic tokens, never raw ones.
+Semantic tokens hold the modern values by default and switch under `data-theme="classic"` and `data-theme="manga"`. The manga pages are the canonical ones: `/modern` and `/classic` point their canonical to them and stay out of the sitemap. Components always use semantic tokens, never raw ones.
 
 ---
 
@@ -243,3 +244,28 @@ Title in heading font, description in `classic.body` muted, meta (date, year) ri
 
 ### Project detail
 Back link in `classic.label` with an accent arrow, then number (accent), year and badge as labels, heading-font title, muted description. Meta rows use a fixed label column (role, context, stack). Screenshots are full width with a `1px` border, `12px` radius and a `classic.label` caption. Sections are separated by `1px` rules.
+
+---
+
+## Manga patterns
+
+Views live in `src/themes/manga/`; shared building blocks are in `src/themes/manga/styles.ts`.
+
+| Token | Value | Usage |
+|---|---|---|
+| `manga.paper` | `#F4F3EF` | Page background (`bg`, `inverse`) |
+| `manga.panel` | `#FFFFFF` | Panels (`surface`) |
+| `manga.screen` | `#E9E7E1` | Hover fills (`surfaceAlt`) |
+| `manga.ink` | `#0B0B0B` | Text, borders, ink panels |
+| `manga.body` | `#3A3A36` | Body copy (`textBody`) |
+| `manga.muted` | `#5A5A55` | Secondary text |
+| `manga.red` | `#E5352B` | The only color: numbers, onomatopoeia, accents, hover |
+| `manga.redLight` | `#FF7A70` | Red on ink panels |
+
+- **Panels**: `3px` ink border, square corners. Hero panels are cut on one side with `clip-path` (`cutRight`, `cutLeft`, desktop only).
+- **Screentones and speed lines**: `toneCorner`, `tone`, `toneRed`, `speedCenter`, `speedCorner`, decorative layers behind the content. Text over them sits on a white box.
+- **Onomatopoeia**: `Sfx.astro` (`fonts.sfx`, katakana: ドン, ゴゴゴ, パラ, シーン), hidden from screen readers.
+- **Speech bubbles**: `Bubble.astro`, tail under the bubble (`bottom`, `center`) or on its left side (`left`).
+- **Hover**: red offset shadow (`lift`), speed lines on project rows.
+- **Vocabulary**: articles are volumes (`VOL.01`, oldest first, `src/utils/volumes.ts`), projects are arcs, About is a wanted poster, the void is an inner monologue, the 404 is "to be continued".
+- **Article body**: `.prose-manga` in `global.css`: numbered sections (§01), red marker on `strong`, quotes as speech bubbles, code in ink panels with a red shadow.

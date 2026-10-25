@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+import Page from "../layouts/Page.astro";
+import Bubble from "../components/Bubble.astro";
+import SocialSquares from "../components/SocialSquares.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { site } from "../../../data/site";
+import { experience } from "../../../data/experience";
+import { stack } from "../../../data/stack";
+import { getIconSvg } from "../../../utils/icons";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+import { panel, panelBar, panelBarTitle, chipLine } from "../styles";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const title = lang === "fr" ? "À propos" : "About";
+// the bounty poster lists the stack of the current jobs
+const abilities = [...new Set(experience.flatMap((e) => e.tags.map((tag) => tag.label)))].slice(0, 8);
+const contractKey = (c: string) => `contract.${c.toLowerCase().replace(/[^a-z]/g, "")}` as Parameters<typeof t>[0];
+---
+
+<Page title={title}>
+  <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "clamp(32px, 4vw, 48px)", alignItems: "start", lg: { gridTemplateColumns: "400px minmax(0, 1fr)" } })}>
+    <!-- wanted poster -->
+    <div class={css({ w: "100%", maxW: "420px", mx: "auto", lg: { position: "sticky", top: "24px", mx: "0" } })}>
+      <div class={cx(panel, css({ display: "flex", flexDir: "column", gap: "14px", p: "20px", boxShadow: "8px 8px 0 {colors.accent}", transform: "rotate(-1.5deg)" }))}>
+        <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "8px" })}>
+          <span class={css({ fontFamily: "sfx", fontSize: "clamp(44px, 5vw, 58px)", lineHeight: "0.9" })}>{t("manga.wanted")}</span>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "11px", lineHeight: "1.3", color: "textMuted", textAlign: "right" })}>No. 0001<br />{site.location}, SN</span>
+        </div>
+        <div class={css({ position: "relative", aspectRatio: "1", border: "3px solid {colors.border}", overflow: "hidden", bg: "bg" })}>
+          <Image src={site.avatar} alt={site.author} width={360} height={360} densities={[1, 2]} class={css({ w: "100%", h: "100%", objectFit: "cover", filter: "grayscale(1) contrast(1.2)" })} />
+          <div class={css({ position: "absolute", inset: "0", backgroundImage: "radial-gradient({colors.border} 1px, transparent 1.4px)", backgroundSize: "6px 6px", mixBlendMode: "multiply", opacity: "0.35", maskImage: "linear-gradient(to top, #000, transparent 60%)" })}></div>
+          <span class={css({ position: "absolute", right: "10px", bottom: "10px", py: "6px", px: "10px", bg: "accent", color: "accentFg", border: "2.5px solid {colors.border}", fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1", transform: "rotate(-4deg)" })}>FULL-STACK</span>
+        </div>
+        <div class={css({ display: "flex", flexDir: "column", gap: "4px", textAlign: "center" })}>
+          <span class={css({ fontFamily: "display", fontWeight: "900", fontSize: "clamp(24px, 3vw, 30px)", lineHeight: "1", letterSpacing: "-0.03em" })}>SIMON M. A. DIOUF</span>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1", color: "textMuted" })}>{t("manga.alias")} {site.name}</span>
+        </div>
+        <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", py: "12px", px: "14px", bg: "text", color: "inverse" })}>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" })}>{t("manga.bounty")}</span>
+          <span class={css({ fontFamily: "sfx", fontSize: "28px", lineHeight: "1", color: "manga.redLight" })}>10,000 h</span>
+        </div>
+        <div class={css({ display: "flex", flexDir: "column", gap: "8px" })}>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "11px", lineHeight: "1", color: "textMuted" })}>{t("manga.knownAbilities")}</span>
+          <div class={css({ display: "flex", flexWrap: "wrap", gap: "5px" })}>
+            {abilities.map((label) => <span class={chipLine}>{label}</span>)}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class={css({ display: "flex", flexDir: "column", gap: "28px", minW: "0", lg: { pt: "8px" } })}>
+      <h1 class={css({ m: "0", fontFamily: "display", fontWeight: "900", fontSize: "clamp(3.5rem, 8vw, 6rem)", lineHeight: "0.85", letterSpacing: "-0.055em" })}>
+        {title}<span class={css({ color: "accent" })}>.</span>
+      </h1>
+
+      <Bubble tail="left" class={css({ maxW: "640px" })} bubbleClass={css({ display: "flex", flexDir: "column", gap: "14px", py: "24px", px: "clamp(22px, 3vw, 32px)", rounded: "36px" })}>
+        <p class={css({ m: "0", fontWeight: "500", fontSize: "clamp(17px, 1.8vw, 19px)", lineHeight: "1.5", textWrap: "pretty" })}>{t("about.p1")}</p>
+        <p class={css({ m: "0", fontSize: "16px", lineHeight: "1.5", color: "textBody", textWrap: "pretty" })}>{t("about.p2")}</p>
+      </Bubble>
+
+      <section class={panel}>
+        <div class={panelBar}>
+          <h2 class={cx(panelBarTitle, css({ m: "0", fontSize: "20px" }))}>{t("manga.crew")}</h2>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", color: "accent" })}>{t("manga.arcs")}</span>
+        </div>
+        {experience.map(({ role, company, url, contractType, period }, i) => (
+          <div class={cx(css({ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", gap: "6px 18px", alignItems: "center", py: "16px", px: "18px", sm: { gridTemplateColumns: "56px minmax(0, 1fr) auto" } }), i > 0 && css({ borderTop: "1.5px solid {colors.border}" }))}>
+            <span class={css({ fontFamily: "sfx", fontSize: "28px", lineHeight: "1", color: "accent" })}>{String(experience.length - i).padStart(2, "0")}</span>
+            <span class={css({ display: "flex", flexDir: "column", gap: "4px", minW: "0" })}>
+              <span class={css({ fontWeight: "700", fontSize: "18px", lineHeight: "1.2" })}>{role}</span>
+              <span class={css({ fontSize: "14px", lineHeight: "1.3", color: "textMuted" })}>
+                {url ? <a href={url} target="_blank" rel="noopener noreferrer" class={css({ textDecoration: "underline", textDecorationColor: "accent", textUnderlineOffset: "3px", _hover: { color: "accent" } })}>{company}</a> : company}
+                {contractType && ` · ${t(contractKey(contractType))}`}
+              </span>
+            </span>
+            <span class={css({ gridColumn: "2", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1", color: "textMuted", whiteSpace: "nowrap", sm: { gridColumn: "auto" } })}>{period}</span>
+          </div>
+        ))}
+      </section>
+
+      <section class={panel}>
+        <div class={panelBar}>
+          <h2 class={cx(panelBarTitle, css({ m: "0", fontSize: "20px" }))}>{t("manga.abilities")}</h2>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", color: "accent" })}>STACK</span>
+        </div>
+        {stack.map(({ category, category_fr, items }, i) => (
+          <div class={cx(css({ display: "flex", flexDir: "column", gap: "10px", py: "14px", px: "18px", sm: { flexDir: "row", alignItems: "baseline", gap: "18px" } }), i > 0 && css({ borderTop: "1.5px solid {colors.border}" }))}>
+            <span class={css({ flex: "none", fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1.3", color: "accent", sm: { w: "9rem" } })}>
+              {(lang === "fr" && category_fr ? category_fr : category).toUpperCase()}
+            </span>
+            <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+              {items.flatMap((item) => [item, ...(item.related ?? [])]).map(({ label, label_fr, icon, iconSource }) => (
+                <span class={cx(chipLine, css({ display: "inline-flex", alignItems: "center", gap: "6px", border: "1.5px solid {colors.border}" }))}>
+                  {icon && <span class={css({ display: "flex" })} set:html={getIconSvg(icon, iconSource, 13)} />}
+                  {lang === "fr" && label_fr ? label_fr : label}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <div class={css({ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "14px" })}>
+        <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", color: "textMuted" })}>{t("education.text")}</span>
+        <SocialSquares />
+      </div>
+    </div>
+  </div>
+</Page>

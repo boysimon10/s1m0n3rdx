@@ -29,6 +29,37 @@ export const ui = {
     "theme.label": "theme",
     "theme.modern": "modern theme",
     "theme.classic": "classic theme",
+    "theme.manga": "manga theme",
+    "manga.origin": "CHAPTER 01 · ORIGIN",
+    "manga.lastPlayed": "LAST PLAYED",
+    "manga.nowPlaying": "NOW PLAYING",
+    "manga.volumes": "ALL VOLUMES",
+    "manga.new": "NEW",
+    "manga.minRead": "min read",
+    "manga.contents": "CONTENTS",
+    "manga.previous": "← previous volume",
+    "manga.next": "next volume →",
+    "manga.continued": "TO BE CONTINUED",
+    "manga.toc": "table of contents",
+    "manga.arc": "ARC",
+    "manga.allArcs": "← all arcs",
+    "manga.abilitiesUsed": "ABILITIES USED",
+    "manga.screens": "PANELS",
+    "manga.wanted": "WANTED",
+    "manga.alias": "alias",
+    "manga.bounty": "BOUNTY",
+    "manga.knownAbilities": "KNOWN ABILITIES",
+    "manga.crew": "Crew history",
+    "manga.arcs": "ARCS",
+    "manga.abilities": "Abilities",
+    "manga.monologue": "INNER MONOLOGUE",
+    "manga.backVoid": "← back to the void",
+    "manga.older": "← older",
+    "manga.newer": "newer →",
+    "manga.notDrawn": "this page hasn't\nbeen drawn yet",
+    "manga.backHome": "← back to chapter 01",
+    "manga.ost": "ORIGINAL SOUNDTRACK",
+    "manga.lang": "Lire en français",
     "hero.greeting": "I'm",
     "hero.lastPlayed": "Last played",
     "hero.nowPlaying": "Now playing",
@@ -99,6 +130,37 @@ export const ui = {
     "theme.label": "thème",
     "theme.modern": "thème moderne",
     "theme.classic": "thème classique",
+    "theme.manga": "thème manga",
+    "manga.origin": "CHAPITRE 01 · ORIGINES",
+    "manga.lastPlayed": "DERNIÈRE ÉCOUTE",
+    "manga.nowPlaying": "EN ÉCOUTE",
+    "manga.volumes": "TOUS LES VOLUMES",
+    "manga.new": "NOUVEAU",
+    "manga.minRead": "min de lecture",
+    "manga.contents": "SOMMAIRE",
+    "manga.previous": "← volume précédent",
+    "manga.next": "volume suivant →",
+    "manga.continued": "À SUIVRE",
+    "manga.toc": "table des matières",
+    "manga.arc": "ARC",
+    "manga.allArcs": "← tous les arcs",
+    "manga.abilitiesUsed": "TECHNIQUES UTILISÉES",
+    "manga.screens": "CASES",
+    "manga.wanted": "WANTED",
+    "manga.alias": "alias",
+    "manga.bounty": "PRIME",
+    "manga.knownAbilities": "TECHNIQUES CONNUES",
+    "manga.crew": "Équipages",
+    "manga.arcs": "ARCS",
+    "manga.abilities": "Techniques",
+    "manga.monologue": "MONOLOGUE INTÉRIEUR",
+    "manga.backVoid": "← retour au void",
+    "manga.older": "← plus ancien",
+    "manga.newer": "plus récent →",
+    "manga.notDrawn": "cette page n'a pas\nencore été dessinée",
+    "manga.backHome": "← retour au chapitre 01",
+    "manga.ost": "BANDE ORIGINALE",
+    "manga.lang": "Read in English",
     "hero.greeting": "Je suis",
     "hero.lastPlayed": "Dernière écoute",
     "hero.nowPlaying": "En écoute",
@@ -164,15 +226,22 @@ export function getSlugFromId(id: string): string {
   return id.replace(/^(en|fr)\//, "");
 }
 
-export type Theme = "modern" | "classic";
+// manga is the main theme and lives at the root; the others are prefixed: /modern, /classic
+export type Theme = "manga" | "modern" | "classic";
+export const themes: Theme[] = ["manga", "modern", "classic"];
 
 function splitPath(pathname: string): { lang: Lang; theme: Theme; rest: string } {
   let rest = pathname;
   const isFr = rest === "/fr" || rest.startsWith("/fr/");
   if (isFr) rest = rest.slice(3) || "/";
-  const isClassic = rest === "/classic" || rest.startsWith("/classic/");
-  if (isClassic) rest = rest.slice(8) || "/";
-  return { lang: isFr ? "fr" : "en", theme: isClassic ? "classic" : "modern", rest };
+  let theme: Theme = "manga";
+  for (const prefixed of ["modern", "classic"] as const) {
+    if (rest === `/${prefixed}` || rest.startsWith(`/${prefixed}/`)) {
+      theme = prefixed;
+      rest = rest.slice(prefixed.length + 1) || "/";
+    }
+  }
+  return { lang: isFr ? "fr" : "en", theme, rest };
 }
 
 export function getThemeFromUrl(url: URL): Theme {
@@ -180,7 +249,7 @@ export function getThemeFromUrl(url: URL): Theme {
 }
 
 export function localePath(lang: Lang, theme: Theme, path = "/"): string {
-  const prefix = (lang === "fr" ? "/fr" : "") + (theme === "classic" ? "/classic" : "");
+  const prefix = (lang === "fr" ? "/fr" : "") + (theme === "manga" ? "" : `/${theme}`);
   return path === "/" ? prefix || "/" : prefix + path;
 }
 
@@ -196,7 +265,7 @@ export function getThemePath(currentPath: string, targetTheme: Theme): string {
   return localePath(lang, targetTheme, rest);
 }
 
-export function getNavLinks(lang: Lang, theme: Theme = "modern") {
+export function getNavLinks(lang: Lang, theme: Theme = "manga") {
   return [
     { labelKey: "nav.home" as UIKey, href: localePath(lang, theme) },
     { labelKey: "nav.blog" as UIKey, href: localePath(lang, theme, "/blog") },

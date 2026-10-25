@@ -1,0 +1,23 @@
+---
+import Page from "../layouts/Page.astro";
+import ChapterRow from "../components/ChapterRow.astro";
+import { css } from "../../../../styled-system/css";
+import { getProjects } from "../../../utils/projects";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+import { pageTitle } from "../styles";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const projects = await getProjects();
+const title = lang === "fr" ? "Projets" : "Projects";
+---
+
+<Page title={title}>
+  <div class={css({ display: "flex", flexDir: "column", gap: "14px" })}>
+    <div class={css({ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "8px 14px", pb: "14px", borderBottom: "3px solid {colors.border}" })}>
+      <h1 class={pageTitle}>{title}</h1>
+      <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1", color: "textMuted" })}>{t("manga.toc")}</span>
+    </div>
+    {projects.map((project) => <ChapterRow project={project} />)}
+  </div>
+</Page>

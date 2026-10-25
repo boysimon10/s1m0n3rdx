@@ -1,0 +1,146 @@
+---
+import { Image } from "astro:assets";
+import Page from "../layouts/Page.astro";
+import Sfx from "../components/Sfx.astro";
+import Bubble from "../components/Bubble.astro";
+import SocialSquares from "../components/SocialSquares.astro";
+import ChapterRow from "../components/ChapterRow.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { site, lastPlayed } from "../../../data/site";
+import { getProjects } from "../../../utils/projects";
+import { getVolumes } from "../../../utils/volumes";
+import { formatDate } from "../../../utils/formatDate";
+import { getLangFromUrl, getSlugFromId, localePath, useTranslations } from "../../../i18n";
+import { panel, inkPanel, layer, toneCorner, speedCenter, cutRight, cutLeft, chipInk, chipLine, panelBar, panelBarTitle, panelBarLink } from "../styles";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const firstName = site.author.split(" ")[0];
+const role = lang === "fr" ? site.role_fr : site.role;
+const bio = lang === "fr" ? site.bio_fr : site.bio;
+const volumes = (await getVolumes(lang)).slice(0, 2);
+const projects = (await getProjects()).slice(0, 3);
+---
+
+<Page title="s1m0n3rdx">
+  <div class={css({ display: "flex", flexDir: "column", gap: "14px" })}>
+    <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "14px", md: { gridTemplateColumns: "minmax(0, 1.35fr) minmax(0, 1fr)" } })}>
+      <!-- hero panel -->
+      <div class={cx(panel, cutRight, css({ position: "relative", display: "flex", flexDir: "column", gap: "clamp(16px, 2.4vw, 26px)", p: "clamp(22px, 3.4vw, 40px)", md: { pr: "72px" } }))}>
+        <div class={cx(layer, toneCorner, css({ inset: "auto", right: "0", bottom: "0", w: "62%", h: "55%" }))}></div>
+        <span class={cx(chipLine, css({ position: "relative", alignSelf: "flex-start", py: "7px", px: "11px", fontWeight: "600", letterSpacing: "0.04em" }))}>{t("manga.origin")}</span>
+        <h1 class={css({ position: "relative", m: "0", fontFamily: "display", fontWeight: "900", fontSize: "clamp(4.5rem, 10vw, 8rem)", lineHeight: "0.86", letterSpacing: "-0.055em" })}>
+          {t("hero.greeting")}<br />{firstName}<span class={css({ color: "accent" })}>.</span>
+        </h1>
+        <div class={css({ position: "relative", display: "flex", flexWrap: "wrap", gap: "8px" })}>
+          <span class={cx(chipInk, css({ py: "8px", px: "11px", fontSize: "13px" }))}>{role}</span>
+          <span class={cx(chipLine, css({ py: "8px", px: "11px", fontSize: "13px" }))}>{site.location}</span>
+          <a href={`mailto:${site.email}`} class={cx(chipLine, css({ py: "8px", px: "11px", fontSize: "13px", _hover: { bg: "accent", color: "accentFg" } }))}>{site.email}</a>
+        </div>
+        <Bubble class={css({ alignSelf: "flex-start", maxW: "460px" })} bubbleClass={css({ py: "clamp(16px, 2vw, 22px)", px: "clamp(24px, 3vw, 34px)", rounded: "28px", md: { rounded: "999px" } })}>
+          <p class={css({ m: "0", fontWeight: "600", fontSize: "clamp(16px, 1.6vw, 19px)", lineHeight: "1.4", textWrap: "pretty" })}>{bio}</p>
+        </Bubble>
+        <div class={css({ position: "relative" })}>
+          <SocialSquares />
+        </div>
+      </div>
+
+      <!-- avatar panel + narration box; first on mobile -->
+      <div class={css({ order: "-1", display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", gap: "14px", md: { order: "0" } })}>
+        <div class={cx(panel, cutLeft, css({ position: "relative", overflow: "hidden", minH: "220px", display: "grid", placeItems: "center", bg: "bg", md: { minH: "400px" } }))}>
+          <div class={speedCenter}></div>
+          <Image
+            src={site.avatar}
+            alt={site.author}
+            width={230}
+            height={230}
+            densities={[1, 2]}
+            loading="eager"
+            class={css({ position: "relative", w: "clamp(132px, 18vw, 230px)", h: "clamp(132px, 18vw, 230px)", objectFit: "cover", rounded: "full", border: "4px solid {colors.border}", bg: "text", filter: "grayscale(1) contrast(1.15)" })}
+          />
+          <Sfx text="ドン" size="clamp(54px, 7vw, 92px)" rotate={9} class={css({ position: "absolute", right: "clamp(12px, 2vw, 22px)", top: "clamp(10px, 1.4vw, 14px)" })} />
+        </div>
+        <a
+          href={localePath(lang, "manga", "/music")}
+          data-now-playing
+          data-now={t("manga.nowPlaying")}
+          data-last={t("manga.lastPlayed")}
+          class={cx(
+            inkPanel,
+            css({
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              py: "14px",
+              px: "16px",
+              transition: "background 0.15s",
+              _hover: { bg: "accent", color: "accentFg", borderColor: "accent" },
+              "& [data-dot]": { flex: "none", w: "9px", h: "9px", rounded: "full", bg: "accent", boxShadow: "0 0 0 2px {colors.inverse}" },
+              "&[data-playing=true] [data-dot]": { animation: "pulse" },
+            }),
+          )}
+        >
+          <span data-dot></span>
+          <span data-sp-label class={css({ flex: "none", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1", opacity: "0.75" })}>{t("manga.lastPlayed")}</span>
+          <span class={css({ minW: "0", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", truncate: true })}>
+            <span data-sp-title>{lastPlayed.title}</span> · <span data-sp-artist>{lastPlayed.artist}</span>
+          </span>
+          <span aria-hidden="true" class={css({ ml: "auto", fontFamily: "mono", fontSize: "12px" })}>♪</span>
+        </a>
+      </div>
+    </div>
+
+    <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "14px", md: { gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)" } })}>
+      <section class={cx(panel, css({ display: "flex", flexDir: "column" }))}>
+        <div class={panelBar}>
+          <h2 class={cx(panelBarTitle, css({ m: "0" }))}>{t("blog.heading")}</h2>
+          <a href={localePath(lang, "manga", "/blog")} class={panelBarLink}>{t("blog.seeAll")} →</a>
+        </div>
+        {volumes.length === 0 && <p class={css({ m: "0", p: "22px 18px", color: "textMuted" })}>{t("blog.empty")}</p>}
+        {volumes.map(({ post, num }, i) => (
+          <a
+            href={localePath(lang, "manga", `/blog/${getSlugFromId(post.id)}`)}
+            class={cx(
+              css({
+                display: "flex",
+                flexDir: "column",
+                gap: "12px",
+                pt: "22px",
+                px: "18px",
+                pb: "24px",
+                _hover: { backgroundImage: "radial-gradient({colors.border} 1px, transparent 1.3px)", backgroundSize: "6px 6px" },
+              }),
+              i > 0 && css({ borderTop: "1.5px solid {colors.border}" }),
+            )}
+          >
+            <span class={cx(chipLine, css({ alignSelf: "flex-start", py: "5px" }))}>VOL.{num} · {formatDate(post.data.date, lang)}</span>
+            <span class={css({ alignSelf: "flex-start", bg: "surface", px: "6px", py: "2px", fontFamily: "display", fontWeight: "800", fontSize: "clamp(21px, 2.2vw, 26px)", lineHeight: "1.15", letterSpacing: "-0.02em", textWrap: "pretty" })}>
+              {post.data.title}
+            </span>
+            {post.data.tags.length > 0 && (
+              <span class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+                {post.data.tags.map((tag) => <span class={cx(chipInk, css({ py: "5px", px: "8px" }))}>{tag}</span>)}
+              </span>
+            )}
+          </a>
+        ))}
+      </section>
+
+      <section class={cx(panel, css({ display: "flex", flexDir: "column" }))}>
+        <div class={panelBar}>
+          <h2 class={cx(panelBarTitle, css({ m: "0" }))}>{t("projects.heading")}</h2>
+          <a href={localePath(lang, "manga", "/projects")} class={panelBarLink}>{t("projects.seeAll")} →</a>
+        </div>
+        {projects.map((project, i) => (
+          <div class={cx(i > 0 && css({ borderTop: "1.5px solid {colors.border}" }))}>
+            <ChapterRow project={project} inPanel />
+          </div>
+        ))}
+      </section>
+    </div>
+  </div>
+</Page>
+
+<script>
+  import "../../../scripts/now-playing";
+</script>

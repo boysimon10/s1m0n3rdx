@@ -1,0 +1,100 @@
+---
+import { getCollection } from "astro:content";
+import Page from "../layouts/Page.astro";
+import Sfx from "../components/Sfx.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { getVolumes } from "../../../utils/volumes";
+import { formatDate } from "../../../utils/formatDate";
+import { getLangFromUrl, getSlugFromId, localePath, useTranslations } from "../../../i18n";
+import { panel, speedCorner, toneRed, chipInk, lift, pageTitle, cutRight } from "../styles";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const [featured, ...rest] = await getVolumes(lang);
+const voids = (await getCollection("void", ({ id, data }) => data.showInBlog && !data.draft && id.startsWith(`${lang}/`))).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const hasSide = rest.length > 0 || voids.length > 0;
+const card = cx(panel, lift, css({ display: "flex", flexDir: "column", gap: "12px", p: "22px" }));
+const cardMeta = css({ display: "flex", justifyContent: "space-between", gap: "12px", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" });
+const cardTitle = css({ fontFamily: "display", fontWeight: "800", fontSize: "clamp(21px, 2.2vw, 26px)", lineHeight: "1.1", letterSpacing: "-0.02em", textWrap: "pretty" });
+const cardDek = css({ fontSize: "15px", lineHeight: "1.45", color: "textBody", textWrap: "pretty" });
+---
+
+<Page title="Blog">
+  <div class={css({ display: "flex", flexDir: "column", gap: "22px" })}>
+    <div class={css({ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "24px" })}>
+      <div class={css({ display: "flex", flexDir: "column", gap: "10px" })}>
+        <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1", color: "accent" })}>{t("manga.volumes")}</span>
+        <h1 class={pageTitle}>Blog</h1>
+      </div>
+      <div class={css({ display: "flex", flexDir: "column", alignItems: "flex-end", gap: "14px" })}>
+        <Sfx text="パラ" size="clamp(44px, 6vw, 76px)" rotate={-6} />
+        <a href={localePath(lang, "manga", "/void")} class={css({ fontFamily: "mono", fontSize: "12px", lineHeight: "1", color: "textMuted", _hover: { color: "accent" } })}>{"void() =>"}</a>
+      </div>
+    </div>
+
+    {!featured && <p class={css({ m: "0", color: "textMuted" })}>{t("blog.empty")}</p>}
+
+    {featured && (
+      <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", md: { gridTemplateColumns: "minmax(0, 1.5fr) minmax(0, 1fr)" } })}>
+        <a
+          href={localePath(lang, "manga", `/blog/${getSlugFromId(featured.post.id)}`)}
+          class={cx(
+            panel,
+            cutRight,
+            css({
+              position: "relative",
+              overflow: "hidden",
+              display: "flex",
+              flexDir: "column",
+              justifyContent: "flex-end",
+              gap: "16px",
+              p: "clamp(22px, 3vw, 32px)",
+              minH: "clamp(320px, 40vw, 420px)",
+              md: { gridRow: "span 2" },
+            }),
+            !hasSide && css({ md: { gridColumn: "1 / -1" } }),
+          )}
+        >
+          <div class={speedCorner}></div>
+          <div class={toneRed}></div>
+          <span class={css({ position: "relative", alignSelf: "flex-start", py: "6px", px: "10px", bg: "accent", color: "accentFg", fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1" })}>
+            VOL.{featured.num} · {t("manga.new")}
+          </span>
+          <span class={css({ position: "relative", alignSelf: "flex-start", maxW: "640px", bg: "surface", py: "4px", px: "8px", fontFamily: "display", fontWeight: "900", fontSize: "clamp(32px, 4.4vw, 52px)", lineHeight: "1", letterSpacing: "-0.035em", textWrap: "pretty" })}>
+            {featured.post.data.title}
+          </span>
+          <span class={css({ position: "relative", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" })}>
+            {featured.post.data.tags.map((tag) => <span class={chipInk}>{tag}</span>)}
+            <span class={css({ ml: "8px", bg: "surface", px: "4px", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1.4", color: "textBody" })}>
+              {formatDate(featured.post.data.date, lang)} · {featured.minutes} min
+            </span>
+          </span>
+        </a>
+
+        {rest.map(({ post, num }) => (
+          <a href={localePath(lang, "manga", `/blog/${getSlugFromId(post.id)}`)} class={card}>
+            <span class={cardMeta}>
+              <span class={css({ color: "accent" })}>VOL.{num}</span>
+              <span class={css({ color: "textMuted" })}>{formatDate(post.data.date, lang)}</span>
+            </span>
+            <span class={cardTitle}>{post.data.title}</span>
+            <span class={cardDek}>{post.data.description}</span>
+          </a>
+        ))}
+
+        {voids.map((entry) => (
+          <a href={localePath(lang, "manga", `/void/${getSlugFromId(entry.id)}`)} class={cx(card, css({ borderStyle: "dashed" }))}>
+            <span class={cardMeta}>
+              <span class={css({ color: "accent" })}>void()</span>
+              <span class={css({ color: "textMuted" })}>{formatDate(entry.data.date, lang)}</span>
+            </span>
+            <span class={cardTitle}>{entry.data.title}</span>
+            <span class={cardDek}>{entry.data.description}</span>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</Page>

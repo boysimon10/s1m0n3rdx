@@ -1,0 +1,31 @@
+---
+import { css } from "../../../../styled-system/css";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer
+  class={css({
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "12px 16px",
+    pt: "16px",
+    borderTop: "3px solid {colors.border}",
+    fontFamily: "mono",
+    fontWeight: "500",
+    fontSize: "12px",
+    lineHeight: "1.4",
+    color: "textMuted",
+  })}
+>
+  <span>{t("footer.rights")}. Simon M. A. Diouf © {year}</span>
+  <span class={css({ display: "flex", gap: "16px" })}>
+    <span>{lang === "fr" ? "· à suivre" : "· to be continued"}</span>
+    <a href={lang === "fr" ? "/fr/rss.xml" : "/rss.xml"} aria-label={t("footer.rss")} class={css({ color: "text", _hover: { color: "accent" } })}>RSS</a>
+  </span>
+</footer>

@@ -1,0 +1,30 @@
+---
+// Onomatopoeia in the decor (ドン, ゴゴゴ…). Decorative only: hidden from screen readers.
+import { css, cx } from "../../../../styled-system/css";
+
+interface Props {
+  text: string;
+  // font size and rotation, e.g. "clamp(54px, 7vw, 92px)" and -6
+  size: string;
+  rotate?: number;
+  // red with an ink outline, white with an ink outline, or plain red
+  tone?: "red" | "white" | "plain";
+  class?: string;
+}
+
+const { text, size, rotate = 0, tone = "red", class: className } = Astro.props;
+---
+
+<span
+  aria-hidden="true"
+  style={`font-size: ${size}; transform: rotate(${String(rotate)}deg)`}
+  class={cx(
+    css({ fontFamily: "sfx", fontWeight: "400", lineHeight: "1", letterSpacing: "-0.04em", whiteSpace: "nowrap", pointerEvents: "none", userSelect: "none" }),
+    tone === "red" && css({ color: "accent", WebkitTextStroke: "3px {colors.border}", paintOrder: "stroke fill" }),
+    tone === "white" && css({ color: "surface", WebkitTextStroke: "2.5px {colors.border}", paintOrder: "stroke fill" }),
+    tone === "plain" && css({ color: "accent" }),
+    className,
+  )}
+>
+  {text}
+</span>
