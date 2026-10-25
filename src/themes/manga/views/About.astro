@@ -7,15 +7,19 @@ import { css, cx } from "../../../../styled-system/css";
 import { site } from "../../../data/site";
 import { experience } from "../../../data/experience";
 import { stack } from "../../../data/stack";
-import { getIconSvg } from "../../../utils/icons";
+import { getIconSvg, type IconSource } from "../../../utils/icons";
 import { getLangFromUrl, useTranslations } from "../../../i18n";
 import { panel, panelBar, panelBarTitle, chipLine } from "../styles";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const title = lang === "fr" ? "À propos" : "About";
-// the bounty poster lists the stack of the current jobs
-const abilities = [...new Set(experience.flatMap((e) => e.tags.map((tag) => tag.label)))].slice(0, 8);
+const abilities: { label: string; icon: string; iconSource: IconSource }[] = [
+  { label: "Go", icon: "Go", iconSource: "dev" },
+  { label: "TypeScript", icon: "TypeScript", iconSource: "dev" },
+  { label: "React Native", icon: "React", iconSource: "dev" },
+  { label: "Expo", icon: "siExpo", iconSource: "si" },
+];
 const contractKey = (c: string) => `contract.${c.toLowerCase().replace(/[^a-z]/g, "")}` as Parameters<typeof t>[0];
 ---
 
@@ -31,7 +35,7 @@ const contractKey = (c: string) => `contract.${c.toLowerCase().replace(/[^a-z]/g
         <div class={css({ position: "relative", aspectRatio: "1", border: "3px solid {colors.border}", overflow: "hidden", bg: "bg" })}>
           <Image src={site.avatar} alt={site.author} width={360} height={360} densities={[1, 2]} class={css({ w: "100%", h: "100%", objectFit: "cover", filter: "grayscale(1) contrast(1.2)" })} />
           <div class={css({ position: "absolute", inset: "0", backgroundImage: "radial-gradient({colors.border} 1px, transparent 1.4px)", backgroundSize: "6px 6px", mixBlendMode: "multiply", opacity: "0.35", maskImage: "linear-gradient(to top, #000, transparent 60%)" })}></div>
-          <span class={css({ position: "absolute", right: "10px", bottom: "10px", py: "6px", px: "10px", bg: "accent", color: "accentFg", border: "2.5px solid {colors.border}", fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1", transform: "rotate(-4deg)" })}>FULL-STACK</span>
+          <span class={css({ position: "absolute", right: "10px", bottom: "10px", py: "6px", px: "10px", bg: "accent", color: "accentFg", border: "2.5px solid {colors.border}", fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1", transform: "rotate(-4deg)" })}>DEAD OR ALIVE</span>
         </div>
         <div class={css({ display: "flex", flexDir: "column", gap: "4px", textAlign: "center" })}>
           <span class={css({ fontFamily: "display", fontWeight: "900", fontSize: "clamp(24px, 3vw, 30px)", lineHeight: "1", letterSpacing: "-0.03em" })}>SIMON M. A. DIOUF</span>
@@ -44,7 +48,13 @@ const contractKey = (c: string) => `contract.${c.toLowerCase().replace(/[^a-z]/g
         <div class={css({ display: "flex", flexDir: "column", gap: "8px" })}>
           <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "11px", lineHeight: "1", color: "textMuted" })}>{t("manga.knownAbilities")}</span>
           <div class={css({ display: "flex", flexWrap: "wrap", gap: "5px" })}>
-            {abilities.map((label) => <span class={chipLine}>{label}</span>)}
+            {abilities.map(({ label, icon, iconSource }) => (
+              <span class={cx(chipLine, css({ display: "inline-flex", alignItems: "center", gap: "6px" }))}>
+                <span class={css({ display: "flex" })} set:html={getIconSvg(icon, iconSource, 14)} />
+                {label}
+              </span>
+            ))}
+            <a href="#stack" aria-label={t("manga.abilities")} title={t("manga.abilities")} class={cx(chipLine, css({ display: "inline-flex", alignItems: "center", borderStyle: "dashed", color: "textMuted", fontWeight: "700", letterSpacing: "0.1em", _hover: { borderStyle: "solid", bg: "text", color: "inverse" } }))}>…</a>
           </div>
         </div>
       </div>
@@ -80,7 +90,7 @@ const contractKey = (c: string) => `contract.${c.toLowerCase().replace(/[^a-z]/g
         ))}
       </section>
 
-      <section class={panel}>
+      <section id="stack" class={cx(panel, css({ scrollMarginTop: "24px" }))}>
         <div class={panelBar}>
           <h2 class={cx(panelBarTitle, css({ m: "0", fontSize: "20px" }))}>{t("manga.abilities")}</h2>
           <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", color: "accent" })}>STACK</span>
