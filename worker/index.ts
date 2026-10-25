@@ -60,6 +60,8 @@ export type Music = {
 const EDGE_CACHE_SECONDS = 15;
 // tops move slowly: 7 Spotify calls, refreshed at most once an hour
 const TOP_CACHE_SECONDS = 3600;
+// the big card on /music is 200 px wide: 400 px for sharp retina screens (Spotify serves 64, 300 and 640)
+const BIG_COVER = 400;
 const TOP_RANGES: TopRange[] = ["short_term", "medium_term", "long_term"];
 
 async function getAccessToken(env: Env): Promise<string> {
@@ -166,13 +168,14 @@ async function getMusic(env: Env, cache: Cache, origin: string, ctx: ExecutionCo
   if (current.status === 200) {
     const data = (await current.json()) as { is_playing: boolean; progress_ms: number | null; currently_playing_type: string; item: SpotifyTrack | null };
     if (data.item && data.currently_playing_type === "track") {
-      now = { ...toTrack(data.item, 300), playing: data.is_playing, progressMs: data.progress_ms ?? 0, durationMs: data.item.duration_ms };
+      now = { ...toTrack(data.item, BIG_COVER), playing: data.is_playing, progressMs: data.progress_ms ?? 0, durationMs: data.item.duration_ms };
     }
   }
 
   return {
     now,
-    recent: recent.items.map(({ track, played_at }) => ({ ...toTrack(track), playedAt: played_at })),
+    // the first one doubles as the big card when nothing is playing
+    recent: recent.items.map(({ track, played_at }, i) => ({ ...toTrack(track, i === 0 ? BIG_COVER : 64), playedAt: played_at })),
     top,
   };
 }
