@@ -1,0 +1,150 @@
+---
+import { Image } from "astro:assets";
+import { css, cx } from "../../../../styled-system/css";
+import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
+import { site } from "../../../data/site";
+import { getLangFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath } from "../../../i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const currentPath = Astro.url.pathname;
+const navLinks = getNavLinks(lang, "manga");
+const homeHref = localePath(lang, "manga");
+
+const norm = (p: string) => p.replace(/\/$/, "") || "/";
+const matches = (href: string) => norm(currentPath) === href || currentPath.startsWith(href + "/");
+const blogHref = localePath(lang, "manga", "/blog");
+const voidHref = localePath(lang, "manga", "/void");
+const isActive = (href: string) => {
+  if (href === homeHref) return norm(currentPath) === href;
+  if (href === blogHref) return matches(href) || matches(voidHref);
+  return matches(href);
+};
+
+const langs = [
+  { code: "EN", active: lang === "en", href: lang === "fr" ? getAlternatePath(currentPath, "en") : currentPath },
+  { code: "FR", active: lang === "fr", href: lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath },
+];
+const themeLinks = [
+  { n: "1", title: t("theme.manga"), href: currentPath, active: true },
+  { n: "2", title: t("theme.modern"), href: getThemePath(currentPath, "modern"), active: false },
+  { n: "3", title: t("theme.classic"), href: getThemePath(currentPath, "classic"), active: false },
+];
+const rssHref = lang === "fr" ? "/fr/rss.xml" : "/rss.xml";
+
+const line = css({ display: "none", md: { display: "block", flex: "1", h: "2.5px", bg: "border", minW: "16px" } });
+const circle = css({ w: "24px", h: "24px", display: "grid", placeItems: "center", fontFamily: "mono", fontWeight: "500", fontSize: "11px", lineHeight: "1" });
+---
+
+<header
+  class={css({
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: "10px",
+    md: { flexWrap: "nowrap", gap: "14px", p: "8px", border: "3px solid {colors.border}", bg: "surface" },
+  })}
+>
+  <a href={homeHref} class={css({ display: "flex", alignItems: "center", gap: "10px", pr: "6px", _hover: { color: "accent" } })}>
+    <Image
+      src={site.avatar}
+      alt=""
+      width={44}
+      height={44}
+      densities={[1, 2]}
+      loading="eager"
+      class={css({ w: "44px", h: "44px", rounded: "full", border: "2.5px solid {colors.border}", bg: "text", objectFit: "cover" })}
+    />
+    <span class={css({ fontFamily: "display", fontWeight: "800", fontSize: "17px", lineHeight: "1", letterSpacing: "-0.02em", whiteSpace: "nowrap" })}>{site.name}</span>
+  </a>
+
+  <span class={line}></span>
+
+  <nav
+    class={css({
+      order: "3",
+      flexBasis: "100%",
+      display: "flex",
+      alignItems: "center",
+      gap: "2px",
+      p: "4px",
+      border: "2.5px solid {colors.border}",
+      bg: "surface",
+      md: { order: "0", flexBasis: "auto", gap: "4px", p: "0", border: "none", bg: "transparent" },
+    })}
+  >
+    {navLinks.map(({ labelKey, href }) => (
+      <a
+        href={href}
+        aria-current={isActive(href) ? "page" : undefined}
+        class={cx(
+          css({
+            flex: "1",
+            textAlign: "center",
+            py: "13px",
+            px: "4px",
+                        fontFamily: "display",
+            fontWeight: "600",
+            fontSize: "14px",
+            lineHeight: "1",
+            whiteSpace: "nowrap",
+            transition: "background 0.15s",
+            md: { flex: "none", py: "12px", px: "18px", fontSize: "15px" },
+          }),
+          isActive(href) ? css({ bg: "text", color: "inverse" }) : css({ _hover: { bg: "surfaceAlt" } }),
+        )}
+      >
+        {t(labelKey)}
+      </a>
+    ))}
+    <a
+      href={rssHref}
+      aria-label="RSS"
+      class={css({
+        flex: "none",
+        w: "40px",
+        h: "40px",
+        ml: "4px",
+                border: "2px solid {colors.border}",
+        display: "grid",
+        placeItems: "center",
+        transition: "background 0.15s",
+        _hover: { bg: "accent", color: "accentFg" },
+        "& svg": { w: "18px", h: "18px" },
+      })}
+      set:html={IconRss}
+    />
+  </nav>
+
+  <span class={line}></span>
+
+  <div class={css({ order: "2", ml: "auto", display: "flex", alignItems: "center", gap: "8px", md: { order: "0", ml: "0", gap: "12px" } })}>
+    <div class={css({ display: "flex", alignItems: "center", gap: "5px", fontFamily: "mono", fontWeight: "500", fontSize: "11px", color: "textMuted" })}>
+      <span class={css({ display: "none", md: { display: "inline" } })}>{t("theme.label")}</span>
+      {themeLinks.map(({ n, title, href, active }) =>
+        active ? (
+          <span class={cx(circle, css({ bg: "text", color: "inverse" }))} title={title}>{n}</span>
+        ) : (
+          <a href={href} title={title} class={cx(circle, css({ border: "1.5px solid {colors.hairline}", color: "textMuted", _hover: { borderColor: "border", color: "text" } }))}>
+            {n}
+          </a>
+        ),
+      )}
+    </div>
+
+    <div class={css({ display: "flex", p: "3px", gap: "2px", border: "2.5px solid {colors.border}" })}>
+      {langs.map(({ code, active, href }) => (
+        <a
+          href={href}
+          aria-current={active ? "true" : undefined}
+          class={cx(
+            css({ py: "11px", px: "11px", fontFamily: "mono", fontSize: "12px", lineHeight: "1", md: { py: "9px", px: "12px" } }),
+            active ? css({ bg: "accent", color: "accentFg", fontWeight: "600" }) : css({ fontWeight: "500", color: "textMuted", _hover: { color: "text" } }),
+          )}
+        >
+          {code}
+        </a>
+      ))}
+    </div>
+  </div>
+</header>

@@ -26,11 +26,10 @@ const description = underConstruction ? defaultDescription : (pageDescription ??
 const siteTitle = "s1m0n3rdx";
 const fullTitle = underConstruction || title === siteTitle ? siteTitle : `${title} - ${siteTitle}`;
 const lang = getLangFromUrl(Astro.url);
+// every theme shows the same content: the manga version (root URLs) is the canonical one
 const canonicalURL =
   Astro.props.canonicalURL ??
-  (getThemeFromUrl(Astro.url) === "classic"
-    ? new URL(getThemePath(Astro.url.pathname, "modern"), Astro.url).href
-    : Astro.url.href);
+  (getThemeFromUrl(Astro.url) === "manga" ? Astro.url.href : new URL(getThemePath(Astro.url.pathname, "manga"), Astro.url).href);
 
 // link previews need an absolute image URL
 const ogImageURL = new URL(underConstruction || !ogImage ? "/og.png" : ogImage, Astro.site ?? Astro.url).href;
@@ -39,6 +38,7 @@ const ogLocale = lang === "fr" ? "fr_FR" : "en_US";
 const fonts = {
   modern: "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap",
   classic: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap",
+  manga: "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&family=Dela+Gothic+One&display=swap",
 };
 ---
 

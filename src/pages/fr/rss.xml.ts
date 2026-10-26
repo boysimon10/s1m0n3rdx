@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   if (!context.site) throw new Error("SITE_URL is not configured");
 
   const posts = (
-    await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("fr/"))
+    await getCollection("articles", ({ id, data }) => !data.draft && !data.soon && id.startsWith("fr/"))
   ).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
   const items = underConstruction ? [] : posts;
 

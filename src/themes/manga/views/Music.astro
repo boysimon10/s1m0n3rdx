@@ -1,0 +1,200 @@
+---
+// Same data-* hooks as the other themes: src/scripts/music.ts fills them from /api/music.
+import Page from "../layouts/Page.astro";
+import Sfx from "../components/Sfx.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { getLangFromUrl, useTranslations } from "../../../i18n";
+import { music } from "../../../data/music";
+import { panel, inkPanel, layer, tone, speedCenter, panelBar, panelBarTitle, pageTitle } from "../styles";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const ranges = [
+  { value: "short_term", label: t("music.short") },
+  { value: "medium_term", label: t("music.medium") },
+  { value: "long_term", label: t("music.long") },
+];
+const row = css({ display: "flex", alignItems: "center", gap: "12px", py: "10px", px: "14px", _hover: { bg: "surfaceAlt" } });
+const thumb = css({ flex: "none", w: "40px", h: "40px", border: "2px solid {colors.border}", bg: "surfaceAlt", overflow: "hidden" });
+const lines = css({ flex: "1", minW: "0", display: "flex", flexDir: "column", gap: "4px" });
+const rowTitle = css({ alignSelf: "flex-start", maxW: "100%", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", truncate: true });
+const rowArtist = css({ alignSelf: "flex-start", maxW: "100%", fontSize: "13.5px", lineHeight: "1.2", color: "textMuted", truncate: true });
+const rowMeta = css({ flex: "none", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1", color: "textMuted" });
+---
+
+<Page title={lang === "fr" ? "Musique" : "Music"}>
+  <div
+    data-music
+    data-state="loading"
+    data-lang={lang}
+    data-label-now={t("manga.nowPlaying")}
+    data-label-paused={t("music.paused").toUpperCase()}
+    data-label-last={t("manga.lastPlayed")}
+    class={css({
+      display: "flex",
+      flexDir: "column",
+      gap: "14px",
+      "&[data-state=loading] [data-skel]": { color: "transparent", bg: "hairline", animation: "pulse", _motionReduce: { animation: "none" } },
+      "&[data-state=loading] a": { pointerEvents: "none" },
+      "&[data-state=error] [data-content]": { display: "none" },
+      "&:not([data-state=error]) [data-error]": { display: "none" },
+    })}
+  >
+    <div class={css({ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "16px", pb: "8px" })}>
+      <div class={css({ display: "flex", flexDir: "column", gap: "10px" })}>
+        <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1", color: "accent" })}>{t("manga.ost")}</span>
+        <h1 class={pageTitle}>{lang === "fr" ? "Musique" : "Music"}</h1>
+      </div>
+      <a href={music.profile} target="_blank" rel="noopener noreferrer" class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1", _hover: { color: "accent" } })}>
+        {t("music.profile")} ↗
+      </a>
+    </div>
+
+    <!-- error: silence -->
+    <div data-error role="alert" class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", sm: { gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.4fr)" } })}>
+      <div class={cx(panel, css({ position: "relative", overflow: "hidden", minH: "200px", display: "grid", placeItems: "center" }))}>
+        <div class={cx(layer, tone)}></div>
+        <Sfx text="シーン" size="clamp(48px, 7vw, 72px)" rotate={-6} tone="white" class={css({ position: "relative" })} />
+      </div>
+      <div class={cx(inkPanel, css({ display: "flex", flexDir: "column", alignItems: "flex-start", gap: "14px", p: "clamp(22px, 3vw, 32px)" }))}>
+        <p class={css({ m: "0", fontFamily: "display", fontWeight: "900", fontSize: "clamp(1.6rem, 3.4vw, 2.25rem)", lineHeight: "1.05", letterSpacing: "-0.03em" })}>{t("music.oops")}</p>
+        <p class={css({ m: "0", fontSize: "16px", lineHeight: "1.5", opacity: "0.85", maxW: "46ch" })}>{t("music.error")}</p>
+        <div class={css({ display: "flex", flexWrap: "wrap", gap: "10px", mt: "4px" })}>
+          <button type="button" data-retry class={css({ py: "13px", px: "16px", bg: "accent", color: "accentFg", border: "2.5px solid {colors.inverse}", fontFamily: "mono", fontWeight: "600", fontSize: "13px", lineHeight: "1", cursor: "pointer", _hover: { bg: "inverse", color: "text" } })}>
+            {t("music.retry")} ↻
+          </button>
+          <a href={music.profile} target="_blank" rel="noopener noreferrer" class={css({ py: "13px", px: "16px", border: "2.5px solid {colors.inverse}", fontFamily: "mono", fontWeight: "600", fontSize: "13px", lineHeight: "1", _hover: { bg: "inverse", color: "text" } })}>
+            {t("music.profile")} ↗
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- now playing, or the last played track -->
+    <div data-now data-content class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", sm: { gridTemplateColumns: "auto minmax(0, 1fr)" } })}>
+      <a target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true" class={cx(panel, css({ position: "relative", overflow: "hidden", display: "grid", placeItems: "center", p: "clamp(20px, 3vw, 32px)", bg: "bg" }))}>
+        <div class={speedCenter}></div>
+        <span class={css({ position: "relative", display: "block", w: "clamp(160px, 22vw, 220px)", aspectRatio: "1", border: "4px solid {colors.border}", bg: "hairline", overflow: "hidden", boxShadow: "8px 8px 0 {colors.accent}" })}>
+          <img data-f="cover" hidden alt="" width="220" height="220" class={css({ w: "100%", h: "100%", objectFit: "cover" })} />
+        </span>
+      </a>
+      <div class={cx(panel, css({ display: "flex", flexDir: "column", justifyContent: "flex-end", gap: "12px", p: "clamp(22px, 3vw, 32px)", minW: "0" }))}>
+        <span class={css({ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", gap: "8px", py: "6px", px: "10px", bg: "text", color: "inverse", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1", "& [data-dot]": { w: "8px", h: "8px", rounded: "full", bg: "accent" }, "[data-playing=true] &": { "& [data-dot]": { animation: "pulse" } } })}>
+          <span data-dot></span>
+          <span data-f="label" data-skel>{t("manga.nowPlaying")}</span>
+        </span>
+        <a data-f="title" data-skel target="_blank" rel="noopener noreferrer" class={css({ alignSelf: "flex-start", maxW: "100%", fontFamily: "display", fontWeight: "900", fontSize: "clamp(2rem, 4.4vw, 3.25rem)", lineHeight: "1", letterSpacing: "-0.04em", truncate: true, _hover: { color: "accent" } })}>
+          Loading a track
+        </a>
+        <span data-f="artist" data-skel class={css({ alignSelf: "flex-start", maxW: "100%", fontSize: "18px", color: "textBody", truncate: true })}>Artist name</span>
+        <div data-now-progress hidden class={css({ display: "flex", alignItems: "center", gap: "12px", mt: "6px", fontFamily: "mono", fontWeight: "500", fontSize: "12.5px", color: "textMuted" })}>
+          <span data-f="elapsed">0:00</span>
+          <span class={css({ flex: "1", h: "10px", border: "2px solid {colors.border}", bg: "surface", overflow: "hidden" })}>
+            <span data-f="bar" class={css({ display: "block", h: "100%", bg: "accent", transformOrigin: "left", transform: "scaleX(0)", transition: "transform 1s linear" })}></span>
+          </span>
+          <span data-f="duration">0:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div data-content class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", alignItems: "start", md: { gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)" } })}>
+      <section class={panel}>
+        <div class={panelBar}><h2 class={cx(panelBarTitle, css({ m: "0" }))}>{t("music.recent")}</h2></div>
+        <template data-tpl="recent">
+          <a target="_blank" rel="noopener noreferrer" class={row}>
+            <span class={thumb}><img data-f="cover" hidden alt="" width="40" height="40" loading="lazy" class={css({ w: "100%", h: "100%", objectFit: "cover" })} /></span>
+            <span class={lines}><span data-f="title" data-skel class={rowTitle}>Loading a track</span><span data-f="artist" data-skel class={rowArtist}>Artist</span></span>
+            <span data-f="ago" data-skel class={rowMeta}>5 min ago</span>
+          </a>
+        </template>
+        <div data-list="recent" class={css({ display: "flex", flexDir: "column", py: "6px" })}>
+          {Array.from({ length: 6 }, () => (
+            <a class={row}>
+              <span class={thumb}></span>
+              <span class={lines}><span data-skel class={rowTitle}>Loading a track</span><span data-skel class={rowArtist}>Artist</span></span>
+              <span data-skel class={rowMeta}>5 min ago</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class={panel}>
+        <div class={panelBar}>
+          <h2 class={cx(panelBarTitle, css({ m: "0" }))}>{t("music.top")}</h2>
+        </div>
+        <div class={css({ display: "flex", flexDir: "column", gap: "18px", p: "16px" })}>
+          <div role="group" aria-label={t("music.top")} class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+            {ranges.map(({ value, label }) => (
+              <button
+                type="button"
+                data-range={value}
+                aria-pressed={value === "short_term" ? "true" : "false"}
+                class={css({ py: "8px", px: "11px", border: "2px solid {colors.border}", bg: "surface", color: "text", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1", cursor: "pointer", _hover: { bg: "surfaceAlt" }, "&[aria-pressed=true]": { bg: "text", color: "inverse" } })}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div class={css({ display: "flex", flexDir: "column", gap: "10px" })}>
+            <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1", color: "accent" })}>{t("music.artists").toUpperCase()}</span>
+            <template data-tpl="artists">
+              <a target="_blank" rel="noopener noreferrer" class={css({ minW: "0", display: "flex", flexDir: "column", alignItems: "center", gap: "8px", "&:hover img": { filter: "none" } })}>
+                <span class={css({ w: "100%", aspectRatio: "1", rounded: "full", overflow: "hidden", bg: "hairline", border: "3px solid {colors.border}" })}>
+                  <img data-f="cover" hidden alt="" width="160" height="160" loading="lazy" class={css({ w: "100%", h: "100%", objectFit: "cover", filter: "grayscale(1) contrast(1.1)", transition: "filter 0.2s" })} />
+                </span>
+                <span data-f="name" data-skel class={css({ maxW: "100%", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1.2", textAlign: "center", truncate: true })}>Artist</span>
+              </a>
+            </template>
+            <div data-list="artists" class={css({ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "clamp(8px, 1.6vw, 14px)" })}>
+              {Array.from({ length: 5 }, () => (
+                <span class={css({ display: "flex", flexDir: "column", alignItems: "center", gap: "8px" })}>
+                  <span class={css({ w: "100%", aspectRatio: "1", rounded: "full", bg: "hairline", border: "3px solid {colors.border}" })}></span>
+                  <span data-skel class={css({ fontFamily: "mono", fontSize: "12px" })}>Artist</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div class={css({ display: "flex", flexDir: "column", gap: "4px" })}>
+            <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1", color: "accent" })}>{t("music.tracks").toUpperCase()}</span>
+            <template data-tpl="tracks">
+              <a target="_blank" rel="noopener noreferrer" class={cx(row, css({ px: "0" }))}>
+                <span data-f="rank" class={css({ flex: "none", w: "36px", fontFamily: "sfx", fontSize: "22px", lineHeight: "1", color: "accent" })}>00</span>
+                <span class={thumb}><img data-f="cover" hidden alt="" width="40" height="40" loading="lazy" class={css({ w: "100%", h: "100%", objectFit: "cover" })} /></span>
+                <span class={lines}><span data-f="title" class={rowTitle}>Track</span><span data-f="artist" class={rowArtist}>Artist</span></span>
+              </a>
+            </template>
+            <div data-list="tracks" class={css({ display: "flex", flexDir: "column" })}>
+              {Array.from({ length: 5 }, () => (
+                <a class={cx(row, css({ px: "0" }))}>
+                  <span data-skel class={css({ w: "36px", fontFamily: "sfx", fontSize: "22px" })}>00</span>
+                  <span class={thumb}></span>
+                  <span class={lines}><span data-skel class={rowTitle}>Loading a track</span><span data-skel class={rowArtist}>Artist</span></span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    {music.playlists.length > 0 && (
+      <section class={css({ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 420px), 1fr))", gap: "12px" })}>
+        {music.playlists.map((id) => (
+          <iframe
+            src={`https://open.spotify.com/embed/playlist/${id}`}
+            title={`Spotify playlist ${id}`}
+            loading="lazy"
+            allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            class={css({ w: "100%", h: "352px", border: "3px solid {colors.border}" })}
+          />
+        ))}
+      </section>
+    )}
+  </div>
+</Page>
+
+<script>
+  import "../../../scripts/music";
+</script>

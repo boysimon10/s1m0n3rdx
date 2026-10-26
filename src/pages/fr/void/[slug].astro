@@ -1,25 +1,26 @@
 ---
 import { getCollection, render } from "astro:content";
-import Post from "../../../themes/modern/layouts/Post.astro";
-import { getSlugFromId } from "../../../i18n";
+import Post from "../../../themes/manga/layouts/Post.astro";
+import { getSlugFromId, localePath } from "../../../i18n";
 
 export async function getStaticPaths() {
-  const entries = await getCollection("void", ({ id, data }) => !data.draft && id.startsWith("fr/"));
-  return entries.map(entry => ({
+  const entries = (await getCollection("void", ({ id, data }) => !data.draft && id.startsWith("fr/"))).sort(
+    (a, b) => a.data.date.getTime() - b.data.date.getTime(),
+  );
+  const link = (index: number) => {
+    const e = entries.at(index);
+    return e && index >= 0 ? { title: e.data.title, href: localePath("fr", "manga", `/void/${getSlugFromId(e.id)}`) } : undefined;
+  };
+  return entries.map((entry, i) => ({
     params: { slug: getSlugFromId(entry.id) },
-    props: { entry },
+    props: { entry, prev: link(i - 1), next: link(i + 1) },
   }));
 }
 
-const { entry } = Astro.props;
+const { entry, prev, next } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<Post
-  title={entry.data.title}
-  description={entry.data.description}
-  date={entry.data.date}
-  variant="void"
->
+<Post title={entry.data.title} description={entry.data.description} date={entry.data.date} prev={prev} next={next} variant="void">
   <Content />
 </Post>

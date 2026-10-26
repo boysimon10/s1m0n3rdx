@@ -11,7 +11,7 @@ import IconArrowRight from "iconoir/icons/regular/arrow-right.svg?raw";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const posts = (await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith(`${lang}/`)))
+const posts = (await getCollection("articles", ({ id, data }) => !data.draft && !data.soon && id.startsWith(`${lang}/`)))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 ---

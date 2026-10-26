@@ -1,0 +1,36 @@
+---
+import Base from "../../../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { css } from "../../../../styled-system/css";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+---
+
+<Base title={title} description={description} ogImage={ogImage} theme="manga">
+  <div
+    class={css({
+      maxW: "container",
+      mx: "auto",
+      pt: "clamp(14px, 2vw, 24px)",
+      px: "clamp(16px, 4vw, 48px)",
+      pb: "clamp(24px, 3vw, 40px)",
+      display: "flex",
+      flexDir: "column",
+      gap: "clamp(14px, 2.4vw, 28px)",
+      minH: "100dvh",
+    })}
+  >
+    <Header />
+    <main class={css({ flex: "1" })}>
+      <slot />
+    </main>
+    <Footer />
+  </div>
+</Base>

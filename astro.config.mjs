@@ -91,7 +91,8 @@ export default defineConfig({
       ? []
       : [
           sitemap({
-            filter: (page) => !/^\/(fr\/)?classic(\/|$)/.test(new URL(page).pathname),
+            // only the manga version (root URLs) is indexed; the other themes point their canonical to it
+            filter: (page) => !/^\/(fr\/)?(classic|modern)(\/|$)/.test(new URL(page).pathname),
             i18n: {
               defaultLocale: "en",
               locales: { en: "en-US", fr: "fr-FR" },

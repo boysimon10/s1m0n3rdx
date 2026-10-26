@@ -1,0 +1,168 @@
+---
+import type { MarkdownHeading } from "astro";
+import { Image } from "astro:assets";
+import Page from "./Page.astro";
+import Bubble from "../components/Bubble.astro";
+import Sfx from "../components/Sfx.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { site } from "../../../data/site";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
+import { formatDate } from "../../../utils/formatDate";
+import { panel, inkPanel, hatch, chipInk } from "../styles";
+
+// no href: an announced (soon) volume, shown without a link
+type Neighbor = { title: string; href?: string } | undefined;
+
+interface Props {
+  title: string;
+  description?: string;
+  date?: Date;
+  tags?: string[];
+  ogImage?: string;
+  translationUrl?: string;
+  headings?: MarkdownHeading[];
+  // volume number and reading time, articles only
+  num?: string;
+  minutes?: number;
+  prev?: Neighbor;
+  next?: Neighbor;
+  variant?: "article" | "void";
+}
+
+const { title, description, date, tags = [], ogImage, translationUrl, headings = [], num, minutes, prev, next, variant = "article" } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const toc = headings.filter((h) => h.depth === 2);
+const navMono = css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" });
+const sideLink = css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1.4", color: "textMuted", _hover: { color: "accent" } });
+---
+
+<Page title={title} description={description} ogImage={ogImage}>
+  {variant === "article" ? (
+    <div class={css({ display: "flex", flexDir: "column", gap: "clamp(20px, 3vw, 28px)" })}>
+      <header
+        class={cx(
+          inkPanel,
+          css({
+            position: "relative",
+            overflow: "hidden",
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr)",
+            gap: "clamp(14px, 3vw, 36px)",
+            alignItems: "end",
+            p: "clamp(24px, 4vw, 48px)",
+            md: { gridTemplateColumns: "auto minmax(0, 1fr)" },
+          }),
+        )}
+      >
+        <div class={hatch}></div>
+        {num && <span aria-hidden="true" class={css({ position: "relative", fontFamily: "sfx", fontSize: "clamp(80px, 12vw, 150px)", lineHeight: "0.78", color: "accent" })}>{num}</span>}
+        <div class={css({ position: "relative", display: "flex", flexDir: "column", gap: "14px" })}>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1.4", opacity: "0.8" })}>
+            {num && `VOL.${num} · `}{date && formatDate(date, lang)}{minutes && ` · ${String(minutes)} ${t("manga.minRead")}`}
+          </span>
+          <h1 class={css({ m: "0", fontFamily: "display", fontWeight: "900", fontSize: "clamp(2.25rem, 5.4vw, 4rem)", lineHeight: "0.98", letterSpacing: "-0.04em", textWrap: "balance" })}>{title}</h1>
+        </div>
+      </header>
+
+      <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "clamp(24px, 4vw, 56px)", md: { gridTemplateColumns: "200px minmax(0, 680px)", justifyContent: "center" } })}>
+        <aside class={css({ display: "flex", flexDir: "column", gap: "18px", md: { position: "sticky", top: "24px", alignSelf: "start" } })}>
+          {toc.length > 0 && (
+            <nav aria-label={t("manga.contents")} class={css({ display: "none", flexDir: "column", gap: "10px", md: { display: "flex" } })}>
+              <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1" })}>{t("manga.contents")}</span>
+              {toc.map((h) => <a href={`#${h.slug}`} class={sideLink}>{h.text}</a>)}
+            </nav>
+          )}
+          {tags.length > 0 && (
+            <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
+              {tags.map((tag) => <span class={chipInk}>{tag}</span>)}
+            </div>
+          )}
+          <div class={css({ display: "flex", flexWrap: "wrap", gap: "8px", md: { flexDir: "column" } })}>
+            {translationUrl && (
+              <a href={translationUrl} class={cx(panel, css({ py: "11px", px: "14px", fontFamily: "mono", fontWeight: "600", fontSize: "13px", lineHeight: "1", _hover: { bg: "text", color: "inverse" } }))}>
+                {t("manga.lang")} →
+              </a>
+            )}
+            <button
+              type="button"
+              data-share
+              data-title={title}
+              data-copied={t("post.copied")}
+              class={css({
+                py: "11px",
+                px: "14px",
+                border: "3px solid {colors.border}",
+                bg: "accent",
+                color: "accentFg",
+                boxShadow: "4px 4px 0 {colors.border}",
+                fontFamily: "mono",
+                fontWeight: "600",
+                fontSize: "13px",
+                lineHeight: "1",
+                textAlign: "left",
+                cursor: "pointer",
+                transition: "transform 0.15s, box-shadow 0.15s",
+                _hover: { transform: "translate(-2px, -2px)", boxShadow: "6px 6px 0 {colors.border}" },
+              })}
+            >
+              <span data-share-label>{t("post.share")}</span> ↗
+            </button>
+          </div>
+        </aside>
+
+        <div class={css({ display: "flex", flexDir: "column", gap: "24px", minW: "0" })}>
+          {description && (
+            <p class={cx(panel, css({ alignSelf: "flex-start", maxW: "440px", m: "0", py: "14px", px: "18px", fontWeight: "600", fontSize: "15px", lineHeight: "1.45" }))}>{description}</p>
+          )}
+          <article class="prose-manga">
+            <slot />
+          </article>
+          <nav class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "12px", mt: "20px" })}>
+            <a href={prev?.href} aria-disabled={prev ? undefined : "true"} class={cx(panel, css({ display: "flex", flexDir: "column", gap: "8px", p: "18px", "&:not([href])": { pointerEvents: "none" }, _hover: { bg: "surfaceAlt" } }))}>
+              <span class={cx(navMono, css({ color: "textMuted" }))}>{t("manga.previous")}</span>
+              <span class={css({ fontWeight: "700", fontSize: "17px", lineHeight: "1.2" })}>{prev?.title ?? "·"}</span>
+            </a>
+            <a
+              href={next?.href}
+              class={css({ display: "flex", flexDir: "column", gap: "8px", p: "18px", border: "3px solid {colors.border}", bg: "accent", color: "accentFg", textAlign: "right", "&:not([href])": { pointerEvents: "none" } })}
+            >
+              <span class={navMono}>{next && !next.href ? `${t("manga.next").replace(" →", "")} · ${t("manga.soon")}` : t("manga.next")}</span>
+              {next ? (
+                <span class={css({ fontWeight: "700", fontSize: "17px", lineHeight: "1.2" })}>{next.title}</span>
+              ) : (
+                <span class={css({ fontFamily: "sfx", fontSize: "20px", lineHeight: "1.1" })}>{t("manga.continued")}</span>
+              )}
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "clamp(24px, 4vw, 40px)", py: "clamp(8px, 2vw, 24px)", md: { gridTemplateColumns: "160px minmax(0, 760px)", justifyContent: "center", alignItems: "start" } })}>
+      <div class={css({ display: "flex", alignItems: "center", gap: "12px", md: { flexDir: "column", pt: "120px" } })}>
+        <Image src={site.avatar} alt="" width={120} height={120} densities={[1, 2]} class={css({ w: "clamp(64px, 10vw, 120px)", h: "clamp(64px, 10vw, 120px)", rounded: "full", border: "4px solid {colors.border}", objectFit: "cover", filter: "grayscale(1) contrast(1.15)" })} />
+        {date && <span class={cx(navMono, css({ color: "textMuted" }))}>{formatDate(date, lang)}</span>}
+      </div>
+      <div class={css({ display: "flex", flexDir: "column", gap: "28px", minW: "0" })}>
+        <a href={localePath(lang, "manga", "/void")} class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1", _hover: { color: "accent" } })}>{t("manga.backVoid")}</a>
+        <h1 class={css({ m: "0", fontFamily: "mono", fontWeight: "500", fontSize: "clamp(1.5rem, 3vw, 2rem)", lineHeight: "1.1", letterSpacing: "-0.03em" })}>{title}</h1>
+        <Bubble tail="left" bubbleClass={css({ py: "clamp(28px, 4vw, 48px)", px: "clamp(28px, 4.4vw, 56px)", rounded: "clamp(32px, 5vw, 60px)" })}>
+          <div class="prose-manga prose-manga-void">
+            <slot />
+          </div>
+        </Bubble>
+        <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", pt: "16px", borderTop: "3px solid {colors.border}" })}>
+          {prev ? <a href={prev.href} class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "14px", _hover: { color: "accent" } })}>{t("manga.older")}</a> : <span></span>}
+          <Sfx text="ゴゴゴ" size="20px" tone="plain" />
+          {next ? <a href={next.href} class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "14px", _hover: { color: "accent" } })}>{t("manga.newer")}</a> : <span></span>}
+        </div>
+      </div>
+    </div>
+  )}
+</Page>
+
+<script>
+  import "../../../scripts/share";
+</script>
