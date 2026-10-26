@@ -51,6 +51,10 @@ The content is not: articles, void entries, project write-ups, photos and images
 
 ## Inspirations
 
+### Manga theme
+
+- One Piece (wanted poster), JoJo's Bizarre Adventure (*To Be Continued*, ゴゴゴ) and manga printing itself: screentones, speed lines, speech bubbles, one red.
+
 ### Modern theme
 
 - [romainlanz.com](https://romainlanz.com/) - Romain Lanz
