@@ -20,6 +20,7 @@ const isActive = (href: string) =>
 
 const enUrl = lang === "fr" ? getAlternatePath(currentPath, "en") : currentPath;
 const frUrl = lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath;
+const mangaUrl = getThemePath(currentPath, "manga");
 const modernUrl = getThemePath(currentPath, "modern");
 const classicUrl = getThemePath(currentPath, "classic");
 ---
@@ -71,6 +72,7 @@ const classicUrl = getThemePath(currentPath, "classic");
     <a href={enUrl} class={css({ textStyle: "classic.label", color: lang === "en" ? "accent" : "textMuted", _hover: { color: "text" } })}>EN</a>
     <a href={frUrl} class={css({ textStyle: "classic.label", color: lang === "fr" ? "accent" : "textMuted", _hover: { color: "text" } })}>FR</a>
     <span class={css({ textStyle: "classic.label", color: "border" })}>|</span>
+    <a href={mangaUrl} title={t("theme.manga")} class={css({ textStyle: "classic.label", color: "textMuted", _hover: { color: "text" } })}>manga</a>
     <a href={modernUrl} title={t("theme.modern")} class={css({ textStyle: "classic.label", color: theme === "modern" ? "accent" : "textMuted", _hover: { color: "text" } })}>modern</a>
     <a href={classicUrl} title={t("theme.classic")} class={css({ textStyle: "classic.label", color: theme === "classic" ? "accent" : "textMuted", _hover: { color: "text" } })}>classic</a>
   </div>

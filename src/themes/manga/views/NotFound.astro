@@ -1,0 +1,32 @@
+---
+import Page from "../layouts/Page.astro";
+import Sfx from "../components/Sfx.astro";
+import { css, cx } from "../../../../styled-system/css";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
+import { panel, inkPanel, layer, tone, cutRight } from "../styles";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Page title="404">
+  <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", maxW: "900px", mx: "auto", sm: { gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gridTemplateRows: "auto 260px" } })}>
+    <div class={cx(panel, css({ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: "12px", p: "22px", sm: { gridColumn: "1 / 3" } }))}>
+      <h1 class={css({ m: "0", fontFamily: "display", fontWeight: "900", fontSize: "clamp(5rem, 14vw, 9rem)", lineHeight: "0.8", letterSpacing: "-0.06em" })}>404</h1>
+      <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1.4", color: "textMuted", textAlign: "right", whiteSpace: "pre-line" })}>{t("manga.notDrawn")}</span>
+    </div>
+    <div class={cx(panel, cutRight, css({ position: "relative", overflow: "hidden", minH: "200px" }))}>
+      <div class={cx(layer, tone)}></div>
+      <Sfx text="ゴゴゴ" size="52px" rotate={-8} tone="white" class={css({ position: "absolute", left: "18px", top: "18px" })} />
+    </div>
+    <div class={cx(inkPanel, css({ display: "flex", flexDir: "column", justifyContent: "space-between", gap: "18px", p: "22px" }))}>
+      <span class={css({ fontFamily: "sfx", fontSize: "30px", lineHeight: "1.05" })}>{t("manga.continued")}</span>
+      <a
+        href={localePath(lang, "manga")}
+        class={css({ alignSelf: "flex-start", py: "13px", px: "16px", bg: "accent", color: "accentFg", border: "2.5px solid {colors.inverse}", fontFamily: "mono", fontWeight: "600", fontSize: "13px", lineHeight: "1", _hover: { bg: "inverse", color: "text" } })}
+      >
+        {t("manga.backHome")}
+      </a>
+    </div>
+  </div>
+</Page>

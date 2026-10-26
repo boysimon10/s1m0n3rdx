@@ -1,26 +1,40 @@
 ---
-import { getCollection, render } from "astro:content";
-import Post from "../../themes/modern/layouts/Post.astro";
-import { getSlugFromId } from "../../i18n";
+import { render } from "astro:content";
+import Post from "../../themes/manga/layouts/Post.astro";
+import { getSlugFromId, localePath } from "../../i18n";
+import { getVolumes } from "../../utils/volumes";
 
 export async function getStaticPaths() {
-  const all = await getCollection("articles", ({ data }) => !data.draft);
-  const enPosts = all.filter(p => p.id.startsWith("en/"));
-  const frPosts = all.filter(p => p.id.startsWith("fr/"));
-
-  return enPosts.map(post => {
+  const volumes = await getVolumes("en");
+  const others = await getVolumes("fr");
+  // volumes are newest first: the next volume is the one before in the list.
+  // Announced ones get no page; as a neighbor they show their title without a link.
+  return volumes.flatMap(({ post, num, minutes, soon }, i) => {
+    if (soon) return [];
     const translation = post.data.translationKey
-      ? frPosts.find(p => p.data.translationKey === post.data.translationKey)
+      ? others.find((v) => !v.soon && v.post.data.translationKey === post.data.translationKey)
       : undefined;
+    const link = (index: number) => {
+      const v = volumes.at(index);
+      if (!v || index < 0) return undefined;
+      return { title: v.post.data.title, href: v.soon ? undefined : localePath("en", "manga", `/blog/${getSlugFromId(v.post.id)}`) };
+    };
     return {
       params: { slug: getSlugFromId(post.id) },
-      props: { post, translationSlug: translation ? getSlugFromId(translation.id) : undefined },
+      props: {
+        post,
+        num,
+        minutes,
+        prev: link(i + 1),
+        next: link(i - 1),
+        translationUrl: translation ? localePath("fr", "manga", `/blog/${getSlugFromId(translation.post.id)}`) : undefined,
+      },
     };
   });
 }
 
-const { post, translationSlug } = Astro.props;
-const { Content } = await render(post);
+const { post, num, minutes, prev, next, translationUrl } = Astro.props;
+const { Content, headings } = await render(post);
 ---
 
 <Post
@@ -29,9 +43,12 @@ const { Content } = await render(post);
   ogImage={post.data.ogImage?.src}
   date={post.data.date}
   tags={post.data.tags}
-  tagIcons={post.data.tagIcons}
-  translationUrl={translationSlug ? `/fr/blog/${translationSlug}` : undefined}
-  translationLang={translationSlug ? "fr" : undefined}
+  headings={headings}
+  num={num}
+  minutes={minutes}
+  prev={prev}
+  next={next}
+  translationUrl={translationUrl}
 >
   <Content />
 </Post>

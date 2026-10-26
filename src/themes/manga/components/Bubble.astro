@@ -1,0 +1,43 @@
+---
+// Speech bubble with an inked tail. The tail is two stacked triangles: ink outline, white fill.
+import { css, cx } from "../../../../styled-system/css";
+
+interface Props {
+  // where the tail points from: under the bubble (left or center), or its left side
+  tail?: "bottom" | "center" | "left";
+  class?: string;
+  bubbleClass?: string;
+}
+
+const { tail = "bottom", class: className, bubbleClass } = Astro.props;
+---
+
+<div
+  class={cx(
+    css({ position: "relative" }),
+    tail === "left" ? css({ ml: "22px" }) : css({ mb: "22px" }),
+    className,
+  )}
+>
+  <div class={cx(css({ position: "relative", zIndex: "1", border: "3px solid {colors.border}", bg: "surface" }), bubbleClass)}>
+    <slot />
+  </div>
+  {tail === "bottom" && (
+    <>
+      <span aria-hidden="true" class={css({ position: "absolute", zIndex: "0", left: "48px", bottom: "-22px", w: "34px", h: "25px", bg: "border", clipPath: "polygon(0 0, 100% 0, 8% 100%)" })}></span>
+      <span aria-hidden="true" class={css({ position: "absolute", zIndex: "2", left: "52px", bottom: "-16px", w: "25px", h: "19px", bg: "surface", clipPath: "polygon(0 0, 100% 0, 8% 100%)" })}></span>
+    </>
+  )}
+  {tail === "center" && (
+    <>
+      <span aria-hidden="true" class={css({ position: "absolute", zIndex: "0", left: "50%", bottom: "-24px", w: "32px", h: "27px", bg: "border", clipPath: "polygon(0 0, 100% 0, 15% 100%)" })}></span>
+      <span aria-hidden="true" class={css({ position: "absolute", zIndex: "2", left: "calc(50% + 5px)", bottom: "-17px", w: "22px", h: "20px", bg: "surface", clipPath: "polygon(0 0, 100% 0, 15% 100%)" })}></span>
+    </>
+  )}
+  {tail === "left" && (
+    <>
+      <span aria-hidden="true" class={css({ position: "absolute", zIndex: "0", left: "-22px", top: "36px", w: "28px", h: "30px", bg: "border", clipPath: "polygon(100% 0, 0 50%, 100% 100%)" })}></span>
+      <span aria-hidden="true" class={css({ position: "absolute", zIndex: "2", left: "-14px", top: "41px", w: "20px", h: "20px", bg: "surface", clipPath: "polygon(100% 0, 0 50%, 100% 100%)" })}></span>
+    </>
+  )}
+</div>
