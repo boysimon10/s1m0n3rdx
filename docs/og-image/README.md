@@ -4,7 +4,7 @@
 
 ## Regenerate it
 
-1. Edit the text in [`template.html`](./template.html) (title, pills, domain). The avatar comes from `src/assets/avatar.png`.
+1. Edit [`template.html`](./template.html): a manga wanted poster (avatar, DEAD OR ALIVE, 10,000 h bounty) next to the site name, the role and the domain, on a screentone background. The avatar comes from `src/assets/avatar.png`.
 2. From the root of the repo, render it with headless Chrome:
 
 ```bash
@@ -22,7 +22,7 @@
 
 An article can have its own preview image. Without one, it uses `public/og.png`.
 
-1. Render [`article.html`](./article.html) with the title in the URL (URL-encoded), into the article's assets folder:
+1. Render [`article.html`](./article.html) (the avatar saying the title in a speech bubble) with the title (URL-encoded) and the volume number in the URL, into the article's assets folder:
 
 ```bash
 mkdir -p src/assets/blog/<article>/og
@@ -31,7 +31,7 @@ mkdir -p src/assets/blog/<article>/og
   --allow-file-access-from-files --virtual-time-budget=5000 \
   --window-size=1200,630 \
   --screenshot=src/assets/blog/<article>/og/en.png \
-  "file://$PWD/docs/og-image/article.html?title=My%20article%20title"
+  "file://$PWD/docs/og-image/article.html?title=My%20article%20title&vol=02"
 ```
 
 2. Reference it in the article frontmatter, relative to the `.mdx` file:
@@ -40,7 +40,7 @@ mkdir -p src/assets/blog/<article>/og
 ogImage: ../../../assets/blog/<article>/og/en.png
 ```
 
-One image per language (`og/en.png`, `og/fr.png`), since the titles differ. `&label=` changes the dark pill (default `Blog`).
+One image per language (`og/en.png`, `og/fr.png`), since the titles differ. `vol` is the article's volume number on the manga blog (oldest article = `01`).
 
 ## Notes
 

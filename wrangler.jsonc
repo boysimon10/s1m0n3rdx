@@ -2,6 +2,7 @@
   "name": "s1m0n3rdx",
   "compatibility_date": "2026-10-01",
   "main": "./worker/index.ts",
+  "workers_dev": false,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
