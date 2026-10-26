@@ -7,7 +7,7 @@ import { resolveTagIcon } from "../../../../utils/tagIcons";
 import { formatDate } from "../../../../utils/formatDate";
 
 const posts = (
-  await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith("fr/"))
+  await getCollection("articles", ({ id, data }) => !data.draft && !data.soon && id.startsWith("fr/"))
 )
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);

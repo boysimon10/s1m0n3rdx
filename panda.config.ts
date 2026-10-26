@@ -13,6 +13,7 @@ export default defineConfig({
   conditions: {
     extend: {
       classic: "[data-theme=classic] &",
+      manga: "[data-theme=manga] &",
     },
   },
 
@@ -60,6 +61,19 @@ export default defineConfig({
             comment: { value: "#8E897B" },
           },
 
+          manga: {
+            paper: { value: "#F4F3EF" },
+            panel: { value: "#FFFFFF" },
+            screen: { value: "#E9E7E1" },
+            ink:   { value: "#0B0B0B" },
+            body:  { value: "#3A3A36" },
+            muted: { value: "#5A5A55" },
+            line:  { value: "#BDBAB2" },
+            red:   { value: "#E5352B" },
+            redSoft: { value: "#FBE1DE" },
+            redLight: { value: "#FF7A70" },
+          },
+
           classic: {
             paper: { value: "#EDEDE9" },
             card:  { value: "#FFFFFF" },
@@ -91,26 +105,30 @@ export default defineConfig({
 
       semanticTokens: {
         colors: {
-          bg:         { value: { base: "{colors.paper}", _classic: "{colors.classic.paper}" } },
-          surface:    { value: { base: "{colors.cream}", _classic: "{colors.classic.card}" } },
-          surfaceAlt: { value: { base: "{colors.sand}", _classic: "{colors.classic.card}" } },
-          text:       { value: { base: "{colors.ink}", _classic: "{colors.classic.ink}" } },
-          textMuted:  { value: { base: "{colors.muted}", _classic: "{colors.classic.muted}" } },
-          textFaint:  { value: { base: "{colors.faint}", _classic: "{colors.classic.muted}" } },
-          inverse:    { value: { base: "{colors.paper}", _classic: "{colors.classic.paper}" } },
-          border:     { value: { base: "{colors.ink}", _classic: "{colors.classic.line}" } },
-          hairline:   { value: { base: "{colors.line}", _classic: "{colors.classic.line}" } },
-          accent:     { value: "{colors.brand}" },
-          accentSoft: { value: "{colors.brandSoft}" },
-          accentText: { value: { base: "{colors.brandInk}", _classic: "{colors.brand}" } },
-          accentFg:   { value: { base: "{colors.ink}", _classic: "#FFFFFF" } },
+          bg:         { value: { base: "{colors.paper}", _classic: "{colors.classic.paper}", _manga: "{colors.manga.paper}" } },
+          surface:    { value: { base: "{colors.cream}", _classic: "{colors.classic.card}", _manga: "{colors.manga.panel}" } },
+          surfaceAlt: { value: { base: "{colors.sand}", _classic: "{colors.classic.card}", _manga: "{colors.manga.screen}" } },
+          text:       { value: { base: "{colors.ink}", _classic: "{colors.classic.ink}", _manga: "{colors.manga.ink}" } },
+          textMuted:  { value: { base: "{colors.muted}", _classic: "{colors.classic.muted}", _manga: "{colors.manga.muted}" } },
+          textFaint:  { value: { base: "{colors.faint}", _classic: "{colors.classic.muted}", _manga: "{colors.manga.muted}" } },
+          inverse:    { value: { base: "{colors.paper}", _classic: "{colors.classic.paper}", _manga: "{colors.manga.paper}" } },
+          border:     { value: { base: "{colors.ink}", _classic: "{colors.classic.line}", _manga: "{colors.manga.ink}" } },
+          hairline:   { value: { base: "{colors.line}", _classic: "{colors.classic.line}", _manga: "{colors.manga.line}" } },
+          accent:     { value: { base: "{colors.brand}", _manga: "{colors.manga.red}" } },
+          accentSoft: { value: { base: "{colors.brandSoft}", _manga: "{colors.manga.redSoft}" } },
+          // manga only: body copy is a softer ink than headings
+          textBody:   { value: { base: "{colors.ink}", _classic: "{colors.classic.ink}", _manga: "{colors.manga.body}" } },
+          accentText: { value: { base: "{colors.brandInk}", _classic: "{colors.brand}", _manga: "{colors.manga.red}" } },
+          accentFg:   { value: { base: "{colors.ink}", _classic: "#FFFFFF", _manga: "#FFFFFF" } },
         },
 
         fonts: {
-          display: { value: { base: "'Schibsted Grotesk', sans-serif", _classic: "'Archivo Black', sans-serif" } },
-          heading: { value: { base: "'Schibsted Grotesk', sans-serif", _classic: "'IBM Plex Mono', monospace" } },
-          body:    { value: { base: "'Schibsted Grotesk', sans-serif", _classic: "'IBM Plex Mono', monospace" } },
-          mono:    { value: { base: "'Geist Mono', ui-monospace, monospace", _classic: "'IBM Plex Mono', monospace" } },
+          display: { value: { base: "'Schibsted Grotesk', sans-serif", _classic: "'Archivo Black', sans-serif", _manga: "'Schibsted Grotesk', sans-serif" } },
+          heading: { value: { base: "'Schibsted Grotesk', sans-serif", _classic: "'IBM Plex Mono', monospace", _manga: "'Schibsted Grotesk', sans-serif" } },
+          body:    { value: { base: "'Schibsted Grotesk', sans-serif", _classic: "'IBM Plex Mono', monospace", _manga: "'Schibsted Grotesk', sans-serif" } },
+          // manga onomatopoeia and big numbers
+          sfx:     { value: { base: "'Dela Gothic One', sans-serif" } },
+          mono:    { value: { base: "'Geist Mono', ui-monospace, monospace", _classic: "'IBM Plex Mono', monospace", _manga: "'Geist Mono', ui-monospace, monospace" } },
         },
       },
 

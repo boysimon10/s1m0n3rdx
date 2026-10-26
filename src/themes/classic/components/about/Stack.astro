@@ -10,19 +10,20 @@ const t = useTranslations(lang);
 
 <div class={css({ py: "8", borderBottom: "1px solid", borderBottomColor: "border" })}>
   <p class={css({ textStyle: "classic.eyebrow", fontWeight: "600", color: "textMuted", mb: "6" })}>{t("section.stack")}</p>
+  <!-- mobile: category above its items, so the items get the full width -->
   <div class={css({ display: "flex", flexDir: "column", gap: "5" })}>
     {stack.map(({ category, category_fr, items }) => (
-      <div class={css({ display: "flex", alignItems: "baseline", gap: "6" })}>
-        <span class={css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0", w: "20" })}>
+      <div class={css({ display: "flex", flexDir: { base: "column", sm: "row" }, alignItems: { base: "flex-start", sm: "baseline" }, gap: { base: "2", sm: "6" } })}>
+        <span class={css({ textStyle: "classic.label", color: "textMuted", flexShrink: "0", w: { base: "auto", sm: "32" } })}>
           {lang === "fr" && category_fr ? category_fr : category}
         </span>
         <div class={css({ display: "flex", gap: "4", flexWrap: "wrap", alignItems: "center" })}>
           {items.map(({ label, label_fr, icon, iconSource, related }) => (
-            <span class={css({ display: "inline-flex", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
+            <span class={css({ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: "1", textStyle: "classic.label", color: "textMuted" })}>
               <span set:html={getIconSvg(icon, iconSource)} />
               {lang === "fr" && label_fr ? label_fr : label}
               {related && (
-                <span class={css({ display: "inline-flex", alignItems: "center", gap: "2" })}>
+                <span class={css({ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: "2" })}>
                   <span>[</span>
                   {related.map(({ label: rl, icon: ri, iconSource: rs }) => (
                     <span class={css({ display: "inline-flex", alignItems: "center", gap: "1" })}>

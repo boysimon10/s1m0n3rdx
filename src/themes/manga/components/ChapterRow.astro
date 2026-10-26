@@ -1,0 +1,61 @@
+---
+// A project as a chapter of the table of contents. Hover: speed lines and a red offset shadow.
+import { css, cx } from "../../../../styled-system/css";
+import type { ProjectEntry } from "../../../utils/projects";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
+import { chipLine, lift } from "../styles";
+
+interface Props {
+  project: ProjectEntry;
+  // home panel: no border, no arrow, stack shown
+  inPanel?: boolean;
+}
+
+const { project, inPanel = false } = Astro.props;
+const { data } = project;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const desc = lang === "fr" && data.desc_fr ? data.desc_fr : data.desc;
+const external = !data.page;
+const href = external ? data.href : localePath(lang, "manga", `/projects/${project.id}`);
+// text sits on white so it stays readable over the speed lines
+const onWhite = css({ alignSelf: "flex-start", bg: "surface", px: "4px" });
+---
+
+<a
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  class={cx(
+    css({
+      position: "relative",
+      display: "grid",
+      gridTemplateColumns: inPanel ? "auto minmax(0, 1fr)" : "auto minmax(0, 1fr) auto",
+      gap: "clamp(14px, 2vw, 18px)",
+      p: "clamp(16px, 2vw, 22px)",
+      bg: "surface",
+      _hover: { background: "repeating-conic-gradient(from 0deg at 0% 50%, {colors.border} 0deg 0.5deg, {colors.surface} 0.5deg 3.5deg)" },
+    }),
+    !inPanel && css({ border: "3px solid {colors.border}" }),
+    !inPanel && lift,
+  )}
+>
+  <span class={css({ alignSelf: "start", bg: "surface", p: "4px", fontFamily: "sfx", fontSize: "clamp(44px, 6vw, 60px)", lineHeight: "0.8" })}>{project.num}</span>
+  <span class={css({ display: "flex", flexDir: "column", gap: "8px", minW: "0" })}>
+    <span class={cx(onWhite, css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1.3", color: "accent" }))}>
+      {t("manga.arc")} {project.num} · {data.year}
+    </span>
+    <span class={cx(onWhite, css({ fontFamily: "display", fontWeight: "800", fontSize: "clamp(21px, 2.4vw, 26px)", lineHeight: "1.1", letterSpacing: "-0.02em" }))}>{data.name}</span>
+    <span class={cx(onWhite, css({ fontSize: "15px", lineHeight: "1.45", color: "textBody", textWrap: "pretty" }))}>{desc}</span>
+    {inPanel && data.tags.length > 0 && (
+      <span class={css({ display: "flex", flexWrap: "wrap", gap: "5px", mt: "2px" })}>
+        {data.tags.map(({ label }) => <span class={cx(chipLine, css({ py: "5px", px: "7px", border: "1.5px solid {colors.border}", fontSize: "11px" }))}>{label}</span>)}
+      </span>
+    )}
+  </span>
+  {!inPanel && (
+    <span aria-hidden="true" class={css({ alignSelf: "center", w: "44px", h: "44px", border: "2.5px solid {colors.border}", bg: "surface", display: "grid", placeItems: "center", fontFamily: "mono", fontWeight: "600", fontSize: "18px" })}>
+      {external ? "↗" : "→"}
+    </span>
+  )}
+</a>

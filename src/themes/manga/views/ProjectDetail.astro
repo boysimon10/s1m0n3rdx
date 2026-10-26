@@ -1,0 +1,128 @@
+---
+import { Image } from "astro:assets";
+import Page from "../layouts/Page.astro";
+import Sfx from "../components/Sfx.astro";
+import { css, cx } from "../../../../styled-system/css";
+import type { ProjectEntry } from "../../../utils/projects";
+import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
+import { panel, inkPanel, speedCenter, cutRight, cutLeft } from "../styles";
+
+interface Props {
+  project: ProjectEntry;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const pick = (en?: string, fr?: string) => (lang === "fr" && fr ? fr : en);
+
+const desc = pick(data.desc, data.desc_fr);
+const beats = [
+  { n: "01", label: t("project.role").toUpperCase(), text: pick(data.role, data.role_fr) },
+  { n: "02", label: t("project.context").toUpperCase(), text: pick(data.context, data.context_fr) },
+  { n: "03", label: lang === "fr" ? "LE PITCH" : "THE PITCH", text: pick(data.intro, data.intro_fr) },
+].filter((b) => b.text);
+const details = pick(data.details, data.details_fr);
+const portraitCover = data.cover && data.cover.height > data.cover.width;
+const portrait = data.screens.length > 0 && data.screens.every(({ src }) => src.height > src.width);
+const button = css({ display: "inline-flex", alignItems: "center", gap: "9px", py: "14px", px: "18px", border: "3px solid {colors.border}", fontFamily: "mono", fontWeight: "600", fontSize: "14px", lineHeight: "1" });
+---
+
+<Page title={data.name} description={desc}>
+  <div class={css({ display: "flex", flexDir: "column", gap: "12px" })}>
+    <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", md: { gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.25fr)" } })}>
+      <div class={cx(panel, cutRight, css({ display: "flex", flexDir: "column", gap: "20px", p: "clamp(24px, 3vw, 36px)", md: { pr: "60px" } }))}>
+        <a href={localePath(lang, "manga", "/projects")} class={css({ alignSelf: "flex-start", fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1", _hover: { color: "accent" } })}>{t("manga.allArcs")}</a>
+        <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "13px", lineHeight: "1", color: "accent" })}>{t("manga.arc")} {project.num} · {data.year}</span>
+        <h1 class={css({ m: "0", fontFamily: "display", fontWeight: "900", fontSize: "clamp(3.5rem, 8vw, 6.5rem)", lineHeight: "0.85", letterSpacing: "-0.055em", overflowWrap: "anywhere" })}>{data.name}</h1>
+        <p class={css({ m: "0", fontSize: "19px", lineHeight: "1.5", color: "textBody", textWrap: "pretty" })}>{desc}</p>
+        {(data.href || data.repo) && (
+          <div class={css({ display: "flex", flexWrap: "wrap", gap: "10px", mt: "6px" })}>
+            {data.href && (
+              <a href={data.href} target="_blank" rel="noopener noreferrer" class={cx(button, css({ bg: "accent", color: "accentFg", boxShadow: "4px 4px 0 {colors.border}", transition: "transform 0.15s, box-shadow 0.15s", _hover: { transform: "translate(-2px, -2px)", boxShadow: "6px 6px 0 {colors.border}" } }))}>
+                {t("project.site")} ↗
+              </a>
+            )}
+            {data.repo && (
+              <a href={data.repo} target="_blank" rel="noopener noreferrer" class={cx(button, css({ bg: "surface", _hover: { bg: "text", color: "inverse" } }))}>
+                {t("project.repo")} ↗
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div class={cx(panel, cutLeft, css({ position: "relative", overflow: "hidden", minH: "clamp(320px, 40vw, 440px)", display: "grid", placeItems: "center" }))}>
+        <div class={speedCenter}></div>
+        {data.cover && portraitCover ? (
+          <div class={css({ position: "relative", w: "clamp(150px, 18vw, 220px)", aspectRatio: "1 / 2", border: "4px solid {colors.border}", rounded: "34px", overflow: "hidden", bg: "bg", transform: "rotate(-6deg)", boxShadow: "10px 10px 0 {colors.accent}" })}>
+            <Image src={data.cover} alt={data.name} widths={[220, 440]} sizes="220px" class={css({ w: "100%", h: "100%", objectFit: "cover", objectPosition: "top" })} />
+          </div>
+        ) : data.cover ? (
+          <div class={css({ position: "relative", w: "78%", border: "4px solid {colors.border}", overflow: "hidden", transform: "rotate(-3deg)", boxShadow: "10px 10px 0 {colors.accent}" })}>
+            <Image src={data.cover} alt={data.name} widths={[480, 960]} sizes="(min-width: 768px) 560px, 80vw" class={css({ display: "block", w: "100%", h: "auto" })} />
+          </div>
+        ) : (
+          <span class={css({ position: "relative", bg: "surface", px: "10px", fontFamily: "sfx", fontSize: "clamp(48px, 8vw, 96px)", lineHeight: "1" })}>{project.num}</span>
+        )}
+        <Sfx text="ドン" size="clamp(52px, 6.4vw, 84px)" rotate={8} class={css({ position: "absolute", right: "clamp(14px, 2vw, 26px)", top: "clamp(12px, 1.6vw, 18px)" })} />
+      </div>
+    </div>
+
+    {beats.length > 0 && (
+      <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", md: { gridTemplateColumns: "repeat(3, minmax(0, 1fr))" } })}>
+        {beats.map(({ n, label, text }) => (
+          <div class={cx(panel, css({ display: "flex", flexDir: "column", gap: "12px", p: "24px" }))}>
+            <span class={css({ display: "flex", alignItems: "baseline", gap: "10px" })}>
+              <span class={css({ fontFamily: "sfx", fontSize: "36px", lineHeight: "1", color: "accent" })}>{n}</span>
+              <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "13px", lineHeight: "1" })}>{label}</span>
+            </span>
+            <span class={css({ fontSize: "16px", lineHeight: "1.5", color: "textBody", textWrap: "pretty" })}>{text}</span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {details && (
+      <p class={cx(panel, css({ m: "0", p: "clamp(22px, 3vw, 32px)", fontSize: "17px", lineHeight: "1.7", color: "textBody", textWrap: "pretty" }))}>{details}</p>
+    )}
+
+    {data.tags.length > 0 && (
+      <div class={cx(inkPanel, css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px 16px", py: "18px", px: "22px" }))}>
+        <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1", color: "manga.redLight" })}>{t("manga.abilitiesUsed")}</span>
+        {data.tags.map(({ label }) => <span class={css({ py: "6px", px: "9px", border: "1.5px solid {colors.inverse}", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" })}>{label}</span>)}
+      </div>
+    )}
+
+    {data.screens.length > 0 && (
+      <section class={css({ display: "flex", flexDir: "column", gap: "12px", mt: "16px" })}>
+        <div class={css({ display: "flex", alignItems: "baseline", gap: "12px", pb: "12px", borderBottom: "3px solid {colors.border}" })}>
+          <h2 class={css({ m: "0", fontFamily: "display", fontWeight: "900", fontSize: "clamp(2rem, 4vw, 3rem)", lineHeight: "1", letterSpacing: "-0.04em" })}>{t("manga.screens")}</h2>
+          <span class={css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", color: "accent" })}>{data.screens.length}</span>
+        </div>
+        <div
+          class={cx(
+            css({ display: "grid", gap: "12px", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 420px), 1fr))" }),
+            portrait && css({ gridTemplateColumns: "repeat(2, 1fr)", sm: { gridTemplateColumns: "repeat(3, 1fr)" } }),
+          )}
+        >
+          {data.screens.map(({ src, caption, caption_fr }) => (
+            <figure class={cx(panel, css({ m: "0", overflow: "hidden" }))}>
+              <Image
+                src={src}
+                alt={pick(caption, caption_fr) ?? ""}
+                widths={portrait ? [480, 720, 960] : [640, 960, 1280]}
+                sizes={portrait ? "(min-width: 1180px) 370px, (min-width: 640px) 33vw, 50vw" : "(min-width: 1180px) 560px, 100vw"}
+                class={css({ display: "block", w: "100%", h: "auto" })}
+              />
+              <figcaption class={css({ py: "10px", px: "12px", borderTop: "3px solid {colors.border}", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1.3" })}>
+                {pick(caption, caption_fr)}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Page>
