@@ -1,4 +1,3 @@
-// [data-share] buttons: native share sheet when available (mobile), copy the link otherwise
 const COPIED_MS = 1600;
 
 async function share(btn: HTMLButtonElement, onCopied: () => void) {
