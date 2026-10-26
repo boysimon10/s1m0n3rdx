@@ -21,6 +21,7 @@ const bio = lang === "fr" ? site.bio_fr : site.bio;
 const allVolumes = await getVolumes(lang);
 // the latest published volume, then the next announced one as a teaser
 const volumes = allVolumes.filter((v) => !v.soon).slice(0, 2);
+const fill = css({ flex: "1", minH: "0", backgroundImage: "radial-gradient({colors.border} 1px, transparent 1.3px)", backgroundSize: "7px 7px", maskImage: "linear-gradient(to bottom, transparent, #000)", opacity: "0.5" });
 const nextUp = allVolumes.filter((v) => v.soon).at(-1);
 const projects = (await getProjects()).slice(0, 3);
 ---
@@ -142,6 +143,7 @@ const projects = (await getProjects()).slice(0, 3);
             <span class={css({ alignSelf: "flex-start", bg: "bg", px: "6px", fontFamily: "display", fontWeight: "800", fontSize: "19px", lineHeight: "1.2", letterSpacing: "-0.02em", textWrap: "pretty" })}>{nextUp.post.data.title}</span>
           </div>
         )}
+        <div aria-hidden="true" class={fill}></div>
       </section>
 
       <section class={cx(panel, css({ display: "flex", flexDir: "column" }))}>
@@ -154,7 +156,7 @@ const projects = (await getProjects()).slice(0, 3);
             <ChapterRow project={project} inPanel />
           </div>
         ))}
-        <div aria-hidden="true" class={css({ flex: "1", minH: "0", backgroundImage: "radial-gradient({colors.border} 1px, transparent 1.3px)", backgroundSize: "7px 7px", maskImage: "linear-gradient(to bottom, transparent, #000)", opacity: "0.5" })}></div>
+        <div aria-hidden="true" class={fill}></div>
       </section>
     </div>
   </div>
