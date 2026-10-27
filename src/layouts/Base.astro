@@ -1,7 +1,8 @@
 ---
 import "../styles/global.css";
-import { getLangFromUrl, getThemeFromUrl, getThemePath, type Theme } from "../i18n";
+import { cleanPath, getLangFromUrl, getThemePath, type Theme } from "../i18n";
 import { underConstruction } from "../utils/construction";
+import { site, socials } from "../data/site";
 import UnderConstruction from "../themes/modern/views/UnderConstruction.astro";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
   ogImage?: string;
   canonicalURL?: string;
   theme?: Theme;
+  // articles only, adds BlogPosting structured data
+  published?: Date;
 }
 
 const {
@@ -17,23 +20,57 @@ const {
   description: pageDescription,
   ogImage,
   theme: requestedTheme = "modern",
+  published,
 } = Astro.props;
 
 const theme: Theme = underConstruction ? "modern" : requestedTheme;
-const defaultDescription = "Portfolio & blog - dev, design, and thoughts.";
+const lang = getLangFromUrl(Astro.url);
+const defaultDescription =
+  lang === "fr"
+    ? `${site.author}, ingénieur logiciel à ${site.location}. Blog & portfolio : logiciel, informatique, et ce qu'il y a en dessous.`
+    : `${site.author}, software engineer in ${site.location}. Blog & portfolio: software, computing, and what's underneath.`;
 const description = underConstruction ? defaultDescription : (pageDescription ?? defaultDescription);
 
 const siteTitle = "s1m0n3rdx";
-const fullTitle = underConstruction || title === siteTitle ? siteTitle : `${title} - ${siteTitle}`;
-const lang = getLangFromUrl(Astro.url);
+const isHome = title === siteTitle;
+const homeTitle = lang === "fr" ? `${site.author} · Ingénieur logiciel à ${site.location}` : `${site.author} · Software Engineer in ${site.location}`;
+const fullTitle = underConstruction ? siteTitle : isHome ? homeTitle : `${title} - ${siteTitle}`;
 // every theme shows the same content: the manga version (root URLs) is the canonical one
 const canonicalURL =
   Astro.props.canonicalURL ??
-  (getThemeFromUrl(Astro.url) === "manga" ? Astro.url.href : new URL(getThemePath(Astro.url.pathname, "manga"), Astro.url).href);
+  new URL(getThemePath(cleanPath(Astro.url.pathname), "manga"), Astro.site ?? Astro.url).href;
 
 // link previews need an absolute image URL
 const ogImageURL = new URL(underConstruction || !ogImage ? "/og.png" : ogImage, Astro.site ?? Astro.url).href;
 const ogLocale = lang === "fr" ? "fr_FR" : "en_US";
+
+const siteURL = new URL("/", Astro.site ?? Astro.url).href;
+const person = {
+  "@type": "Person",
+  name: site.author,
+  alternateName: site.name,
+  url: siteURL,
+  jobTitle: lang === "fr" ? site.role_fr : site.role,
+  address: { "@type": "PostalAddress", addressLocality: site.location, addressCountry: "SN" },
+  sameAs: socials.filter(({ href }) => href.startsWith("https://")).map(({ href }) => href),
+};
+const jsonLd = underConstruction
+  ? null
+  : published
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description,
+        datePublished: published.toISOString(),
+        inLanguage: lang,
+        image: ogImageURL,
+        url: canonicalURL,
+        author: person,
+      }
+    : isHome
+      ? { "@context": "https://schema.org", ...person }
+      : null;
 
 const fonts = {
   modern: "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap",
@@ -58,7 +95,7 @@ const fonts = {
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={published ? "article" : "website"} />
     <meta property="og:site_name" content={siteTitle} />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:image" content={ogImageURL} />
@@ -81,6 +118,8 @@ const fonts = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href={fonts[theme]} rel="stylesheet" />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     {underConstruction ? <UnderConstruction /> : <slot />}

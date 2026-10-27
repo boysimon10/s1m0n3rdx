@@ -21,7 +21,6 @@ interface Props {
   ogImage?: string;
   translationUrl?: string;
   headings?: MarkdownHeading[];
-  // volume number and reading time, articles only
   num?: string;
   minutes?: number;
   prev?: Neighbor;
@@ -38,7 +37,7 @@ const navMono = css({ fontFamily: "mono", fontWeight: "500", fontSize: "12px", l
 const sideLink = css({ fontFamily: "mono", fontWeight: "500", fontSize: "13px", lineHeight: "1.4", color: "textMuted", _hover: { color: "accent" } });
 ---
 
-<Page title={title} description={description} ogImage={ogImage}>
+<Page title={title} description={description} ogImage={ogImage} published={variant === "article" ? date : undefined}>
   {variant === "article" ? (
     <div class={css({ display: "flex", flexDir: "column", gap: "clamp(20px, 3vw, 28px)" })}>
       <header
