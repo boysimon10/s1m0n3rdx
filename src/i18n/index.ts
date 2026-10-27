@@ -216,6 +216,11 @@ export function useTranslations(lang: Lang) {
   };
 }
 
+// pages are built as about.html: Astro.url.pathname is /about.html, the public URL is /about
+export function cleanPath(pathname: string): string {
+  return pathname.replace(/\.html$/, "").replace(/\/index$/, "") || "/";
+}
+
 export function getLangFromUrl(url: URL): Lang {
   return url.pathname.startsWith("/fr") ? "fr" : "en";
 }
@@ -233,7 +238,7 @@ export type Theme = "manga" | "modern" | "classic";
 export const themes: Theme[] = ["manga", "modern", "classic"];
 
 function splitPath(pathname: string): { lang: Lang; theme: Theme; rest: string } {
-  let rest = pathname;
+  let rest = cleanPath(pathname);
   const isFr = rest === "/fr" || rest.startsWith("/fr/");
   if (isFr) rest = rest.slice(3) || "/";
   let theme: Theme = "manga";

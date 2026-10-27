@@ -3,11 +3,11 @@ import { Image } from "astro:assets";
 import { css, cx } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
 import { site } from "../../../data/site";
-import { getLangFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath } from "../../../i18n";
+import { getLangFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath, cleanPath } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const currentPath = Astro.url.pathname;
+const currentPath = cleanPath(Astro.url.pathname);
 const navLinks = getNavLinks(lang, "manga");
 const homeHref = localePath(lang, "manga");
 

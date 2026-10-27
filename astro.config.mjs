@@ -78,6 +78,9 @@ function localized404() {
 
 export default defineConfig({
   site: SITE_URL,
+  // one URL per page: /about, never /about/ (Cloudflare serves about.html at /about)
+  trailingSlash: "never",
+  build: { format: "file" },
 
   i18n: {
     defaultLocale: "en",
