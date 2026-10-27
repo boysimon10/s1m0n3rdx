@@ -6,12 +6,11 @@ import { css, cx } from "../../../../styled-system/css";
 import { getVolumes } from "../../../utils/volumes";
 import { formatDate } from "../../../utils/formatDate";
 import { getLangFromUrl, getSlugFromId, localePath, useTranslations } from "../../../i18n";
-import { panel, speedCorner, toneRed, chipInk, lift, pageTitle, cutRight } from "../styles";
+import { panel, speedCorner, toneRed, chipInk, chipLine, lift, pageTitle, cutRight } from "../styles";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const volumes = await getVolumes(lang);
-// the newest published volume is featured; announced ones come first in the side column
 const upcoming = volumes.filter((v) => v.soon).reverse();
 const [featured, ...rest] = volumes.filter((v) => !v.soon);
 const voids = (await getCollection("void", ({ id, data }) => data.showInBlog && !data.draft && id.startsWith(`${lang}/`))).sort(
@@ -22,6 +21,8 @@ const card = cx(panel, lift, css({ display: "flex", flexDir: "column", gap: "12p
 const cardMeta = css({ display: "flex", justifyContent: "space-between", gap: "12px", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" });
 const cardTitle = css({ fontFamily: "display", fontWeight: "800", fontSize: "clamp(21px, 2.2vw, 26px)", lineHeight: "1.1", letterSpacing: "-0.02em", textWrap: "pretty" });
 const cardDek = css({ fontSize: "15px", lineHeight: "1.45", color: "textBody", textWrap: "pretty" });
+const cardTags = css({ display: "flex", flexWrap: "wrap", gap: "5px", mt: "auto", pt: "4px" });
+const cardTag = cx(chipLine, css({ py: "5px", px: "7px", border: "1.5px solid {colors.border}", fontSize: "11px" }));
 ---
 
 <Page title="Blog">
@@ -84,6 +85,11 @@ const cardDek = css({ fontSize: "15px", lineHeight: "1.45", color: "textBody", t
             </span>
             <span class={cardTitle}>{post.data.title}</span>
             <span class={cardDek}>{post.data.description}</span>
+            {post.data.tags.length > 0 && (
+              <span class={cardTags}>
+                {post.data.tags.map((tag) => <span class={cx(cardTag, css({ borderStyle: "dashed", bg: "transparent", color: "textMuted" }))}>{tag}</span>)}
+              </span>
+            )}
           </div>
         ))}
 
@@ -95,6 +101,11 @@ const cardDek = css({ fontSize: "15px", lineHeight: "1.45", color: "textBody", t
             </span>
             <span class={cardTitle}>{post.data.title}</span>
             <span class={cardDek}>{post.data.description}</span>
+            {post.data.tags.length > 0 && (
+              <span class={cardTags}>
+                {post.data.tags.map((tag) => <span class={cardTag}>{tag}</span>)}
+              </span>
+            )}
           </a>
         ))}
 
