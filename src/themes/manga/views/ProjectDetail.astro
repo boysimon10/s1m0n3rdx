@@ -4,6 +4,7 @@ import Page from "../layouts/Page.astro";
 import Sfx from "../components/Sfx.astro";
 import { css, cx } from "../../../../styled-system/css";
 import type { ProjectEntry } from "../../../utils/projects";
+import { getIconSvg } from "../../../utils/icons";
 import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
 import { panel, inkPanel, speedCenter, cutRight, cutLeft } from "../styles";
 
@@ -91,7 +92,12 @@ const button = css({ display: "inline-flex", alignItems: "center", gap: "9px", p
     {data.tags.length > 0 && (
       <div class={cx(inkPanel, css({ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px 16px", py: "18px", px: "22px" }))}>
         <span class={css({ fontFamily: "mono", fontWeight: "600", fontSize: "12px", lineHeight: "1", color: "manga.redLight" })}>{t("manga.abilitiesUsed")}</span>
-        {data.tags.map(({ label }) => <span class={css({ py: "6px", px: "9px", border: "1.5px solid {colors.inverse}", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" })}>{label}</span>)}
+        {data.tags.map(({ label, icon, iconSource }) => (
+          <span class={css({ display: "inline-flex", alignItems: "center", gap: "6px", py: "6px", px: "9px", border: "1.5px solid {colors.inverse}", fontFamily: "mono", fontWeight: "500", fontSize: "12px", lineHeight: "1" })}>
+            <span class={css({ display: "flex" })} set:html={getIconSvg(icon, iconSource, 13)} />
+            {label}
+          </span>
+        ))}
       </div>
     )}
 
