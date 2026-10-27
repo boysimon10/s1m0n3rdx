@@ -29,7 +29,6 @@ export const stack: StackCategory[] = [
     category: "languages",
     category_fr: "langages",
     items: [
-      { label: "JavaScript", icon: "JavaScript", iconSource: "dev" },
       { label: "TypeScript", icon: "TypeScript", iconSource: "dev" },
       { label: "Go", icon: "Go", iconSource: "dev" },
       { label: "Python", icon: "Python", iconSource: "dev" },
@@ -44,22 +43,8 @@ export const stack: StackCategory[] = [
       { label: "Vue.js", icon: "VueJs", iconSource: "dev" },
       { label: "Astro", icon: "Astro", iconSource: "dev" },
       { label: "HTMX", icon: "siHtmx", iconSource: "si" },
-    ],
-  },
-  {
-    category: "design systems",
-    items: [
       { label: "TailwindCSS", icon: "TailwindCSS", iconSource: "dev" },
       { label: "PandaCSS", icon: "PandaCSS", iconSource: "dev" },
-    ],
-  },
-  {
-    category: "state management",
-    category_fr: "gestion d'état",
-    items: [
-      { label: "Zustand", icon: "", iconSource: "dev" },
-      { label: "Redux", icon: "Redux", iconSource: "dev" },
-      { label: "Pinia", icon: "Pinia", iconSource: "dev" },
     ],
   },
   {
@@ -76,26 +61,17 @@ export const stack: StackCategory[] = [
   {
     category: "backend",
     items: [
-      {
-        label: "Go",
-        icon: "Go",
-        iconSource: "dev",
-        related: [
-          { label: "Gin", icon: "siGin", iconSource: "si" },
-          { label: "Go Fiber", icon: "", iconSource: "dev" },
-        ],
-      },
+      { label: "Gin", icon: "siGin", iconSource: "si" },
+      { label: "Go Fiber", icon: "", iconSource: "dev" },
       {
         label: "Node.js",
         icon: "NodeJs",
         iconSource: "dev",
         related: [
           { label: "NestJS", icon: "NestJS", iconSource: "dev" },
-          { label: "Express.js", icon: "siExpress", iconSource: "si" },
           { label: "AdonisJS", icon: "siAdonisjs", iconSource: "si" },
         ],
       },
-      { label: "REST API", icon: "", iconSource: "dev" },
       { label: "GraphQL", icon: "GraphQL", iconSource: "dev" },
       { label: "tRPC", icon: "TRPC", iconSource: "dev" },
       { label: "WebSockets", icon: "", iconSource: "dev" },

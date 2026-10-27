@@ -42,7 +42,7 @@ export const experience: Experience[] = [
     ],
   },
   {
-    role: "Founding Engineer",
+    role: "Co-founder & Software Engineer",
     company: "MonaxTech",
     url: "https://monaxtech.com",
     contractType: contractType.INDEPENDENT,
