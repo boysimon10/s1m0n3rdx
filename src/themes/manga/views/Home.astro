@@ -19,7 +19,6 @@ const firstName = site.author.split(" ")[0];
 const role = lang === "fr" ? site.role_fr : site.role;
 const bio = lang === "fr" ? site.bio_fr : site.bio;
 const allVolumes = await getVolumes(lang);
-// the latest published volume, then the next announced one as a teaser
 const volumes = allVolumes.filter((v) => !v.soon).slice(0, 2);
 const fill = css({ flex: "1", minH: "0", backgroundImage: "radial-gradient({colors.border} 1px, transparent 1.3px)", backgroundSize: "7px 7px", maskImage: "linear-gradient(to bottom, transparent, #000)", opacity: "0.5" });
 const nextUp = allVolumes.filter((v) => v.soon).at(-1);
@@ -29,7 +28,6 @@ const projects = (await getProjects()).slice(0, 3);
 <Page title="s1m0n3rdx">
   <div class={css({ display: "flex", flexDir: "column", gap: "14px" })}>
     <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "14px", md: { gridTemplateColumns: "minmax(0, 1.35fr) minmax(0, 1fr)" } })}>
-      <!-- hero panel -->
       <div class={cx(panel, cutRight, css({ position: "relative", display: "flex", flexDir: "column", gap: "clamp(16px, 2.4vw, 26px)", p: "clamp(22px, 3.4vw, 40px)", md: { pr: "72px" } }))}>
         <div class={cx(layer, toneCorner, css({ inset: "auto", right: "0", bottom: "0", w: "62%", h: "55%" }))}></div>
         <span class={cx(chipLine, css({ position: "relative", alignSelf: "flex-start", py: "7px", px: "11px", fontWeight: "600", letterSpacing: "0.04em" }))}>{t("manga.origin")}</span>
@@ -49,7 +47,6 @@ const projects = (await getProjects()).slice(0, 3);
         </div>
       </div>
 
-      <!-- avatar panel + narration box; first on mobile -->
       <div class={css({ order: "-1", minW: "0", display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gridTemplateRows: "minmax(0, 1fr) auto", gap: "14px", md: { order: "0" } })}>
         <div class={cx(panel, cutLeft, css({ position: "relative", overflow: "hidden", minH: "220px", display: "grid", placeItems: "center", bg: "bg", md: { minH: "400px" } }))}>
           <div class={speedCenter}></div>

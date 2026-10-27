@@ -1,5 +1,4 @@
 ---
-// A project as a chapter of the table of contents. Hover: speed lines and a red offset shadow.
 import { css, cx } from "../../../../styled-system/css";
 import type { ProjectEntry } from "../../../utils/projects";
 import { getLangFromUrl, localePath, useTranslations } from "../../../i18n";
@@ -8,7 +7,6 @@ import { chipLine, lift } from "../styles";
 
 interface Props {
   project: ProjectEntry;
-  // home panel: no border, no arrow
   inPanel?: boolean;
 }
 

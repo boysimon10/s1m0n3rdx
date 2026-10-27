@@ -50,7 +50,6 @@ const rowMeta = css({ flex: "none", fontFamily: "mono", fontWeight: "500", fontS
       </a>
     </div>
 
-    <!-- error: silence -->
     <div data-error role="alert" class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", sm: { gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.4fr)" } })}>
       <div class={cx(panel, css({ position: "relative", overflow: "hidden", minH: "200px", display: "grid", placeItems: "center" }))}>
         <div class={cx(layer, tone)}></div>
@@ -70,7 +69,6 @@ const rowMeta = css({ flex: "none", fontFamily: "mono", fontWeight: "500", fontS
       </div>
     </div>
 
-    <!-- now playing, or the last played track -->
     <div data-now data-content class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "12px", sm: { gridTemplateColumns: "auto minmax(0, 1fr)" } })}>
       <a target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true" class={cx(panel, css({ position: "relative", overflow: "hidden", display: "grid", placeItems: "center", p: "clamp(20px, 3vw, 32px)", bg: "bg" }))}>
         <div class={speedCenter}></div>
