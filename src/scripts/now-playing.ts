@@ -1,4 +1,3 @@
-// Manga home narration box: fills [data-sp-*] inside [data-now-playing] from /api/now-playing.
 // The markup ships the static fallback (lastPlayed); it is replaced as soon as the API answers.
 import type { NowPlaying } from "../../worker/index";
 
@@ -22,7 +21,6 @@ async function refresh(el: HTMLElement) {
     set("label", (track.playing ? el.dataset.now : el.dataset.last) ?? "");
     el.dataset.playing = String(track.playing);
   } catch {
-    // keep the fallback
   }
 }
 

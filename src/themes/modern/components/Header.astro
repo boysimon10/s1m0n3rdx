@@ -10,11 +10,12 @@ import {
   getNavLinks,
   getThemePath,
   localePath,
+  cleanPath,
 } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const currentPath = Astro.url.pathname;
+const currentPath = cleanPath(Astro.url.pathname);
 const navLinks = getNavLinks(lang, "modern");
 const homeHref = localePath(lang, "modern");
 

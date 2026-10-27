@@ -3,12 +3,12 @@ import { Image } from "astro:assets";
 import { site } from "../../../data/site";
 import { css } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
-import { getLangFromUrl, getThemeFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath } from "../../../i18n";
+import { getLangFromUrl, getThemeFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath, cleanPath } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const theme = getThemeFromUrl(Astro.url);
 const t = useTranslations(lang);
-const currentPath = Astro.url.pathname;
+const currentPath = cleanPath(Astro.url.pathname);
 const navLinks = getNavLinks(lang, theme);
 const homeHref = localePath(lang, theme);
 

@@ -86,7 +86,7 @@ export const ui = {
     "music.retry": "try again",
     "music.profile": "my Spotify profile",
     "about.p1": "I'm Simon, a self-taught developer based in Dakar. I build web and mobile applications, mostly backend in Go and NestJS, and mobile in React Native.",
-    "about.p2": "This site is my space to write about what I'm learning, the projects I'm building, and what interests me in software development.",
+    "about.p2": "This site is my space to write about what I'm learning, the projects I'm building, and what interests me in computer science.",
     "void.comment": "// you're not supposed to be here",
     "void.line1": "- no format.",
     "void.line2": "- no subject.",
@@ -188,7 +188,7 @@ export const ui = {
     "music.retry": "réessayer",
     "music.profile": "mon profil Spotify",
     "about.p1": "Je suis Simon, développeur self-taught basé à Dakar. Je construis des applications web et mobile, principalement du backend en Go et NestJS, et du mobile en React Native.",
-    "about.p2": "Ce site est mon espace pour écrire sur ce que j'apprends, les projets que je construis, et ce qui m'intéresse dans le développement logiciel.",
+    "about.p2": "Ce site est mon espace pour écrire sur ce que j'apprends, les projets que je construis, et ce qui m'intéresse en computer science.",
     "void.comment": "// t'es pas censé être là",
     "void.line1": "- pas de format.",
     "void.line2": "- pas de sujet.",
@@ -216,6 +216,11 @@ export function useTranslations(lang: Lang) {
   };
 }
 
+// pages are built as about.html: Astro.url.pathname is /about.html, the public URL is /about
+export function cleanPath(pathname: string): string {
+  return pathname.replace(/\.html$/, "").replace(/\/index$/, "") || "/";
+}
+
 export function getLangFromUrl(url: URL): Lang {
   return url.pathname.startsWith("/fr") ? "fr" : "en";
 }
@@ -233,7 +238,7 @@ export type Theme = "manga" | "modern" | "classic";
 export const themes: Theme[] = ["manga", "modern", "classic"];
 
 function splitPath(pathname: string): { lang: Lang; theme: Theme; rest: string } {
-  let rest = pathname;
+  let rest = cleanPath(pathname);
   const isFr = rest === "/fr" || rest.startsWith("/fr/");
   if (isFr) rest = rest.slice(3) || "/";
   let theme: Theme = "manga";

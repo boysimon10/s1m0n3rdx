@@ -4,11 +4,11 @@ export const site = {
   name: "s1m0n3rdx",
   author: "Simon Diouf",
   email: "simondiouf2710@gmail.com",
-  bio: "Full-stack & mobile engineer. I build products from idea to deployment.",
-  bio_fr: "Ingénieur full-stack & mobile. Je construis des produits de l'idée au déploiement.",
+  bio: "Computer scientist at heart. I build software, and I like to understand everything underneath it.",
+  bio_fr: "Computer scientist dans l'âme. Je construis du logiciel, et j'aime comprendre tout ce qu'il y a en dessous.",
   location: "Dakar",
   role: "Software Engineer",
-  role_fr: "Ingénieur Logiciel",
+  role_fr: "Ingénieur logiciel",
   avatar,
 };
 

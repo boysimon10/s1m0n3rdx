@@ -17,6 +17,8 @@ export async function GET(context: APIContext) {
     title: site.name,
     description: site.bio_fr,
     site: context.site,
+    stylesheet: "/rss/styles.xsl",
+    trailingSlash: false,
     items: items.map(post => ({
       title: post.data.title,
       description: post.data.description,

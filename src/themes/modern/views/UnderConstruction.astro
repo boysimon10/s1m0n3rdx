@@ -2,12 +2,12 @@
 import { Image } from "astro:assets";
 import { css, cx } from "../../../../styled-system/css";
 import { site } from "../../../data/site";
-import { getAlternatePath, getLangFromUrl, useTranslations } from "../../../i18n";
+import { getAlternatePath, getLangFromUrl, useTranslations, cleanPath } from "../../../i18n";
 import SocialLinks from "../components/SocialLinks.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const currentPath = Astro.url.pathname;
+const currentPath = cleanPath(Astro.url.pathname);
 const langs = [
   { code: "EN", active: lang === "en", href: lang === "fr" ? getAlternatePath(currentPath, "en") : currentPath },
   { code: "FR", active: lang === "fr", href: lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath },

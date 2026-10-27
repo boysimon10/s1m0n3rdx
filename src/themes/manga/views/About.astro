@@ -12,6 +12,7 @@ import { getLangFromUrl, useTranslations } from "../../../i18n";
 import { panel, panelBar, panelBarTitle, chipLine } from "../styles";
 
 const lang = getLangFromUrl(Astro.url);
+const stackChip = cx(chipLine, css({ display: "inline-flex", alignItems: "center", gap: "6px", border: "1.5px solid {colors.border}", color: "text" }));
 const t = useTranslations(lang);
 const title = lang === "fr" ? "À propos" : "About";
 const abilities: { label: string; icon: string; iconSource: IconSource }[] = [
@@ -25,7 +26,6 @@ const contractKey = (c: string) => `contract.${c.toLowerCase().replace(/[^a-z]/g
 
 <Page title={title}>
   <div class={css({ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "clamp(32px, 4vw, 48px)", alignItems: "start", lg: { gridTemplateColumns: "400px minmax(0, 1fr)" } })}>
-    <!-- wanted poster -->
     <div class={css({ w: "100%", maxW: "420px", mx: "auto", lg: { position: "sticky", top: "24px", mx: "0" } })}>
       <div class={cx(panel, css({ display: "flex", flexDir: "column", gap: "14px", p: "20px", boxShadow: "8px 8px 0 {colors.accent}", transform: "rotate(-1.5deg)" }))}>
         <div class={css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "8px" })}>
@@ -101,10 +101,24 @@ const contractKey = (c: string) => `contract.${c.toLowerCase().replace(/[^a-z]/g
               {(lang === "fr" && category_fr ? category_fr : category).toUpperCase()}
             </span>
             <div class={css({ display: "flex", flexWrap: "wrap", gap: "6px" })}>
-              {items.flatMap((item) => [item, ...(item.related ?? [])]).map(({ label, label_fr, icon, iconSource }) => (
-                <span class={cx(chipLine, css({ display: "inline-flex", alignItems: "center", gap: "6px", border: "1.5px solid {colors.border}" }))}>
-                  {icon && <span class={css({ display: "flex" })} set:html={getIconSvg(icon, iconSource, 13)} />}
-                  {lang === "fr" && label_fr ? label_fr : label}
+              {items.map(({ label, label_fr, icon, iconSource, related }) => (
+                <span class={css({ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: "6px" })}>
+                  <span class={stackChip}>
+                    {icon && <span class={css({ display: "flex" })} set:html={getIconSvg(icon, iconSource, 13)} />}
+                    {lang === "fr" && label_fr ? label_fr : label}
+                  </span>
+                  {related && (
+                    <span class={css({ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: "6px", fontFamily: "mono", fontWeight: "600", fontSize: "16px", lineHeight: "1", color: "accent" })}>
+                      <span>[</span>
+                      {related.map((r) => (
+                        <span class={stackChip}>
+                          {r.icon && <span class={css({ display: "flex" })} set:html={getIconSvg(r.icon, r.iconSource, 13)} />}
+                          {r.label}
+                        </span>
+                      ))}
+                      <span>]</span>
+                    </span>
+                  )}
                 </span>
               ))}
             </div>

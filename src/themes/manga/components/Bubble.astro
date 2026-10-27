@@ -1,9 +1,8 @@
 ---
-// Speech bubble with an inked tail. The tail is two stacked triangles: ink outline, white fill.
+// the tail is two stacked triangles: ink outline, white fill
 import { css, cx } from "../../../../styled-system/css";
 
 interface Props {
-  // where the tail points from: under the bubble (left or center), or its left side
   tail?: "bottom" | "center" | "left";
   class?: string;
   bubbleClass?: string;

@@ -25,7 +25,7 @@ export type Experience = {
 
 export const experience: Experience[] = [
   {
-    role: "Software Engineer - Lead Backend & Mobile",
+    role: "Software Engineer",
     company: "Made In Senegal Center",
     url: "https://misen.sn",
     contractType: contractType.FULL_TIME,
@@ -42,7 +42,7 @@ export const experience: Experience[] = [
     ],
   },
   {
-    role: "Founding Engineer",
+    role: "Co-founder & Software Engineer",
     company: "MonaxTech",
     url: "https://monaxtech.com",
     contractType: contractType.INDEPENDENT,

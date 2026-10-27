@@ -8,12 +8,13 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  published?: Date;
 }
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, published } = Astro.props;
 ---
 
-<Base title={title} description={description} ogImage={ogImage} theme="manga">
+<Base title={title} description={description} ogImage={ogImage} published={published} theme="manga">
   <div
     class={css({
       maxW: "container",
