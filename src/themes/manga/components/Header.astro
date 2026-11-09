@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { css, cx } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
 import { site } from "../../../data/site";
+import { isThemeEnabled } from "../../enabled";
 import { getLangFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath, cleanPath } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
@@ -25,11 +26,13 @@ const langs = [
   { code: "EN", active: lang === "en", href: lang === "fr" ? getAlternatePath(currentPath, "en") : currentPath },
   { code: "FR", active: lang === "fr", href: lang === "en" ? getAlternatePath(currentPath, "fr") : currentPath },
 ];
-const themeLinks = [
-  { n: "1", title: t("theme.manga"), href: currentPath, active: true },
-  { n: "2", title: t("theme.modern"), href: getThemePath(currentPath, "modern"), active: false },
-  { n: "3", title: t("theme.classic"), href: getThemePath(currentPath, "classic"), active: false },
-];
+const themeLinks = (
+  [
+    { n: "1", theme: "manga", title: t("theme.manga"), href: currentPath, active: true },
+    { n: "2", theme: "modern", title: t("theme.modern"), href: getThemePath(currentPath, "modern"), active: false },
+    { n: "3", theme: "classic", title: t("theme.classic"), href: getThemePath(currentPath, "classic"), active: false },
+  ] as const
+).filter(({ theme }) => isThemeEnabled(theme));
 const rssHref = lang === "fr" ? "/fr/rss.xml" : "/rss.xml";
 
 const line = css({ display: "none", md: { display: "block", flex: "1", h: "2.5px", bg: "border", minW: "16px" } });
@@ -119,18 +122,20 @@ const circle = css({ w: "24px", h: "24px", display: "grid", placeItems: "center"
   <span class={line}></span>
 
   <div class={css({ order: "2", ml: "auto", display: "flex", alignItems: "center", gap: "8px", md: { order: "0", ml: "0", gap: "12px" } })}>
-    <div class={css({ display: "flex", alignItems: "center", gap: "5px", fontFamily: "mono", fontWeight: "500", fontSize: "11px", color: "textMuted" })}>
-      <span class={css({ display: "none", md: { display: "inline" } })}>{t("theme.label")}</span>
-      {themeLinks.map(({ n, title, href, active }) =>
-        active ? (
-          <span class={cx(circle, css({ bg: "text", color: "inverse" }))} title={title}>{n}</span>
-        ) : (
-          <a href={href} title={title} class={cx(circle, css({ border: "1.5px solid {colors.hairline}", color: "textMuted", _hover: { borderColor: "border", color: "text" } }))}>
-            {n}
-          </a>
-        ),
-      )}
-    </div>
+    {themeLinks.length > 1 && (
+      <div class={css({ display: "flex", alignItems: "center", gap: "5px", fontFamily: "mono", fontWeight: "500", fontSize: "11px", color: "textMuted" })}>
+        <span class={css({ display: "none", md: { display: "inline" } })}>{t("theme.label")}</span>
+        {themeLinks.map(({ n, title, href, active }) =>
+          active ? (
+            <span class={cx(circle, css({ bg: "text", color: "inverse" }))} title={title}>{n}</span>
+          ) : (
+            <a href={href} title={title} class={cx(circle, css({ border: "1.5px solid {colors.hairline}", color: "textMuted", _hover: { borderColor: "border", color: "text" } }))}>
+              {n}
+            </a>
+          ),
+        )}
+      </div>
+    )}
 
     <div class={css({ display: "flex", p: "3px", gap: "2px", border: "2.5px solid {colors.border}" })}>
       {langs.map(({ code, active, href }) => (

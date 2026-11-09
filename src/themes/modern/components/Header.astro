@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { css, cx } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
 import { site } from "../../../data/site";
+import { isThemeEnabled } from "../../enabled";
 import {
   getLangFromUrl,
   useTranslations,
@@ -160,13 +161,15 @@ const circle = css({
         1
       </a>
       <span class={cx(circle, css({ bg: "text", color: "inverse" }))} title={t("theme.modern")}>2</span>
-      <a
-        href={classicUrl}
-        title={t("theme.classic")}
-        class={cx(circle, css({ border: "1px solid {colors.hairline}", color: "textMuted", _hover: { borderColor: "border", color: "text" } }))}
-      >
-        3
-      </a>
+      {isThemeEnabled("classic") && (
+        <a
+          href={classicUrl}
+          title={t("theme.classic")}
+          class={cx(circle, css({ border: "1px solid {colors.hairline}", color: "textMuted", _hover: { borderColor: "border", color: "text" } }))}
+        >
+          3
+        </a>
+      )}
     </div>
 
     <div class={css({ display: "flex", p: "3px", gap: "2px", border: "1.5px solid {colors.border}", rounded: "pill" })}>

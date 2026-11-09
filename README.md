@@ -37,6 +37,15 @@ Copy `.env.example` to `.env` and fill in your values.
 | `SPOTIFY_REFRESH_TOKEN` | No | Refresh token for your Spotify account (scopes `user-read-currently-playing`, `user-read-recently-played`). |
 | `UNDER_CONSTRUCTION` | No | Set to `true` to replace every page with an "under construction" page (modern theme, `noindex`, empty RSS, no sitemap). Read at build time: redeploy after changing it. |
 
+## Themes
+
+The site ships three themes. Only **manga** is live, at the root URLs. **modern** and **classic** are kept in the code for reuse:
+
+- enable them in `src/themes/enabled.ts`, e.g. `["manga", "modern", "classic"]`;
+- their pages live in `src/themes/<theme>/pages/{en,fr}` and are served under `/modern` and `/classic` (`/fr/modern`, `/fr/classic`);
+- the theme switcher appears in the header as soon as more than one theme is enabled;
+- while a theme is disabled, the build writes a `_redirects` file that sends its old URLs to the manga page.
+
 ## Docs
 
 - [Spotify "now playing"](./docs/spotify/README.md) - Worker endpoint, Spotify app setup, secrets
