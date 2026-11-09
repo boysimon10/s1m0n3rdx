@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { site } from "../../../data/site";
 import { css } from "../../../../styled-system/css";
 import IconRss from "iconoir/icons/regular/rss-feed.svg?raw";
+import { isThemeEnabled } from "../../enabled";
 import { getLangFromUrl, getThemeFromUrl, useTranslations, getAlternatePath, getNavLinks, getThemePath, localePath, cleanPath } from "../../../i18n";
 
 const lang = getLangFromUrl(Astro.url);
@@ -73,7 +74,7 @@ const classicUrl = getThemePath(currentPath, "classic");
     <a href={frUrl} class={css({ textStyle: "classic.label", color: lang === "fr" ? "accent" : "textMuted", _hover: { color: "text" } })}>FR</a>
     <span class={css({ textStyle: "classic.label", color: "border" })}>|</span>
     <a href={mangaUrl} title={t("theme.manga")} class={css({ textStyle: "classic.label", color: "textMuted", _hover: { color: "text" } })}>manga</a>
-    <a href={modernUrl} title={t("theme.modern")} class={css({ textStyle: "classic.label", color: theme === "modern" ? "accent" : "textMuted", _hover: { color: "text" } })}>modern</a>
+    {isThemeEnabled("modern") && <a href={modernUrl} title={t("theme.modern")} class={css({ textStyle: "classic.label", color: theme === "modern" ? "accent" : "textMuted", _hover: { color: "text" } })}>modern</a>}
     <a href={classicUrl} title={t("theme.classic")} class={css({ textStyle: "classic.label", color: theme === "classic" ? "accent" : "textMuted", _hover: { color: "text" } })}>classic</a>
   </div>
 

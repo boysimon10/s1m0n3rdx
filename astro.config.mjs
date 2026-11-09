@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import fs from "node:fs";
 import path from "node:path";
 import { loadEnv } from "vite";
+import { enabledThemes } from "./src/themes/enabled.ts";
 
 const { SITE_URL, UNDER_CONSTRUCTION } = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
 
@@ -76,6 +77,38 @@ function localized404() {
   };
 }
 
+/**
+ * Routes for the optional themes (src/themes/<theme>/pages/{en,fr}), injected only when enabled
+ * in src/themes/enabled.ts. Disabled themes redirect to the manga page instead.
+ * @returns {import('astro').AstroIntegration}
+ */
+function optionalThemes() {
+  const optional = /** @type {const} */ (["modern", "classic"]);
+  return {
+    name: "optional-themes",
+    hooks: {
+      "astro:config:setup": ({ injectRoute }) => {
+        for (const theme of optional.filter((t) => enabledThemes.includes(t))) {
+          for (const lang of ["en", "fr"]) {
+            const dir = path.resolve(`./src/themes/${theme}/pages/${lang}`);
+            for (const file of fs.readdirSync(dir, { recursive: true, encoding: "utf-8" }).filter((f) => f.endsWith(".astro"))) {
+              const route = file.replace(/\.astro$/, "").replace(/(^|\/)index$/, "");
+              const prefix = (lang === "fr" ? "/fr" : "") + `/${theme}`;
+              injectRoute({ pattern: route ? `${prefix}/${route}` : prefix, entrypoint: path.join(dir, file) });
+            }
+          }
+        }
+      },
+      "astro:build:done": ({ dir }) => {
+        const rules = optional
+          .filter((t) => !enabledThemes.includes(t))
+          .flatMap((t) => [`/${t} / 301`, `/${t}/* /:splat 301`, `/fr/${t} /fr 301`, `/fr/${t}/* /fr/:splat 301`]);
+        if (rules.length) fs.writeFileSync(new URL("_redirects", dir), rules.join("\n") + "\n");
+      },
+    },
+  };
+}
+
 export default defineConfig({
   site: SITE_URL,
   // one URL per page: /about, never /about/ (Cloudflare serves about.html at /about)
@@ -102,6 +135,7 @@ export default defineConfig({
             },
           }),
         ]),
+    optionalThemes(),
     translationValidator(),
     localized404(),
   ],
